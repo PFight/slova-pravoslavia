@@ -1,0 +1,25 @@
+{
+  "name": "slova-pravoslavia",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PFight/slova-pravoslavia.git"
+  },
+  "author": "PFight <PFight77@gmail.com> (https://github.com/PFight)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PFight/slova-pravoslavia/issues"
+  },
+  "homepage": "https://github.com/PFight/slova-pravoslavia#readme",
+  "dependencies": {
+    "@types/node": "^10.9.2",
+    "@types/parse5": "^5.0.0",
+    "parse5": "^5.1.0",
+    "typescript": "^3.0.1"
+  }
+}
