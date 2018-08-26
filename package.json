@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:vendor": "jspm bundle core-js + react + react-dom + @blueprintjs/core + tslib bundles/vendor.js --minify --skip-source-maps"
   },
   "repository": {
     "type": "git",
@@ -17,9 +17,25 @@
   },
   "homepage": "https://github.com/PFight/slova-pravoslavia#readme",
   "dependencies": {
+    "@blueprintjs/core": "^3.4.0",
     "@types/node": "^10.9.2",
     "@types/parse5": "^5.0.0",
+    "@types/react": "^16.4.11",
+    "@types/react-dom": "^16.0.7",
+    "core-js": "^2.5.7",
     "parse5": "^5.1.0",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "systemjs": "^0.21.4",
     "typescript": "^3.0.1"
+  },
+  "jspm": {
+    "dependencies": {
+      "@blueprintjs/core": "npm:@blueprintjs/core@^3.4.0",
+      "core-js": "npm:core-js@^2.5.7",
+      "react": "npm:react@^16.4.2",
+      "react-dom": "npm:react-dom@^16.4.2",
+      "tslib": "npm:tslib@^1.9.3"
+    }
   }
 }
