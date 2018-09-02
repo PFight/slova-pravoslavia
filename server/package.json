@@ -1,0 +1,21 @@
+{
+  "name": "slova-pravoslavia-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "node ./src/main.js"
+  },
+  "author": "PFight <PFight77@gmail.com> (https://github.com/PFight)",
+  "license": "MIT",
+  "dependencies": {
+    "@nestjs/common": "^5.3.0",
+    "@nestjs/core": "^5.3.0",
+    "ts-node": "^7.0.1",
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^10.9.4",
+    "typescript": "^3.0.3"
+  }
+}

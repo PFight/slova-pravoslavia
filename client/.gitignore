@@ -1,0 +1,4 @@
+node_modules
+src/**/*.js
+jspm_packages
+mongoose-free-6.9.exe

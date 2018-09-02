@@ -27,6 +27,7 @@
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "systemjs": "^0.21.4",
+    "tslib": "^1.9.3",
     "typescript": "^3.0.1"
   },
   "jspm": {
