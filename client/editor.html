@@ -3,15 +3,22 @@
   <head>
     <meta charset="utf-8">
     <title>Слова православия - редактор</title>    
-    <link type="text/stylesheet" src="" />
+    <link rel="stylesheet" type="text/css" href="bundles/goldenlayout-base.css" />
+    <link rel="stylesheet" type="text/css" href="bundles/goldenlayout-light-theme.css" />    
+    <link rel="stylesheet" type="text/css" href="src/editor/common.css" />
     <base href="" />
     <script src="jspm_packages\system.js" ></script>
     <script src="config.js" ></script>
   </head>
   <body>
     <div id="app"></div>    
-    <script src="bundles/vendor.js"></script>
+    <script src="bundles/vendor.js"></script>    
+    <script src="bundles/jquery.min.js"></script>
+    <script src="bundles/goldenlayout.min.js"></script>
     <script>
+      System.set('golden-layout', System.newModule({
+          "default": window.GoldenLayout
+      }));
       System.import("./src/editor/index");
     </script>
   </body>

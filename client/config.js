@@ -10,14 +10,16 @@ System.config({
   map: {
     "@blueprintjs/core": "npm:@blueprintjs/core@3.4.0",
     "core-js": "npm:core-js@2.5.7",
+    "jquery": "npm:jquery@3.3.1",
     "react": "npm:react@16.4.2",
     "react-dom": "npm:react-dom@16.4.2",
+    "styled-components": "npm:styled-components@3.4.5",
     "tslib": "npm:tslib@1.9.3",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
     },
     "github:jspm/nodelibs-buffer@0.1.1": {
-      "buffer": "npm:buffer@5.2.0"
+      "buffer": "npm:buffer@5.2.1"
     },
     "github:jspm/nodelibs-domain@0.1.0": {
       "domain-browser": "npm:domain-browser@1.2.0"
@@ -28,7 +30,7 @@ System.config({
     "github:jspm/nodelibs-http@1.7.1": {
       "Base64": "npm:Base64@0.2.1",
       "events": "github:jspm/nodelibs-events@0.1.1",
-      "inherits": "npm:inherits@2.0.1",
+      "inherits": "npm:inherits@2.0.3",
       "stream": "github:jspm/nodelibs-stream@0.1.0",
       "url": "github:jspm/nodelibs-url@0.1.0",
       "util": "github:jspm/nodelibs-util@0.1.0"
@@ -101,7 +103,7 @@ System.config({
       "readable-stream": "npm:readable-stream@2.3.6",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
-    "npm:buffer@5.2.0": {
+    "npm:buffer@5.2.1": {
       "base64-js": "npm:base64-js@1.3.0",
       "ieee754": "npm:ieee754@1.1.12"
     },
@@ -127,6 +129,15 @@ System.config({
       "prop-types": "npm:prop-types@15.6.2",
       "react": "npm:react@16.4.2"
     },
+    "npm:css-color-keywords@1.0.0": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
+    "npm:css-to-react-native@2.2.1": {
+      "css-color-keywords": "npm:css-color-keywords@1.0.0",
+      "fbjs": "npm:fbjs@0.8.17",
+      "postcss-value-parser": "npm:postcss-value-parser@3.3.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
     "npm:domain-browser@1.2.0": {
       "events": "github:jspm/nodelibs-events@0.1.1"
     },
@@ -143,6 +154,9 @@ System.config({
       "promise": "npm:promise@7.3.1",
       "setimmediate": "npm:setimmediate@1.0.5",
       "ua-parser-js": "npm:ua-parser-js@0.7.18"
+    },
+    "npm:has-flag@1.0.0": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:https-browserify@0.0.0": {
       "http": "github:jspm/nodelibs-http@1.7.1"
@@ -223,6 +237,9 @@ System.config({
       "react": "npm:react@16.4.2",
       "stream": "github:jspm/nodelibs-stream@0.1.0"
     },
+    "npm:react-is@16.4.2": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
     "npm:react-popper@1.0.2": {
       "babel-runtime": "npm:babel-runtime@6.26.0",
       "create-react-context": "npm:create-react-context@0.2.2",
@@ -252,7 +269,7 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.1",
       "core-util-is": "npm:core-util-is@1.0.2",
       "events": "github:jspm/nodelibs-events@0.1.1",
-      "inherits": "npm:inherits@2.0.1",
+      "inherits": "npm:inherits@2.0.3",
       "isarray": "npm:isarray@0.0.1",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "stream-browserify": "npm:stream-browserify@1.0.0",
@@ -286,7 +303,7 @@ System.config({
     },
     "npm:stream-browserify@1.0.0": {
       "events": "github:jspm/nodelibs-events@0.1.1",
-      "inherits": "npm:inherits@2.0.1",
+      "inherits": "npm:inherits@2.0.3",
       "readable-stream": "npm:readable-stream@1.1.14"
     },
     "npm:string_decoder@0.10.31": {
@@ -295,6 +312,30 @@ System.config({
     "npm:string_decoder@1.1.1": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.1",
       "safe-buffer": "npm:safe-buffer@5.1.2"
+    },
+    "npm:styled-components@3.4.5": {
+      "buffer": "npm:buffer@5.2.1",
+      "css-to-react-native": "npm:css-to-react-native@2.2.1",
+      "fbjs": "npm:fbjs@0.8.17",
+      "hoist-non-react-statics": "npm:hoist-non-react-statics@2.5.5",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "prop-types": "npm:prop-types@15.6.2",
+      "react": "npm:react@16.4.2",
+      "react-is": "npm:react-is@16.4.2",
+      "stream": "github:jspm/nodelibs-stream@0.1.0",
+      "stylis": "npm:stylis@3.5.3",
+      "stylis-rule-sheet": "npm:stylis-rule-sheet@0.0.10",
+      "supports-color": "npm:supports-color@3.2.3"
+    },
+    "npm:stylis-rule-sheet@0.0.10": {
+      "stylis": "npm:stylis@3.5.3"
+    },
+    "npm:stylis@3.5.3": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:supports-color@3.2.3": {
+      "has-flag": "npm:has-flag@1.0.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:ua-parser-js@0.7.18": {
       "process": "github:jspm/nodelibs-process@0.1.2",

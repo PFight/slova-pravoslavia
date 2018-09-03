@@ -1,45 +1,52 @@
 import * as React from "react";
-import { DataFileController} from "./data-file-controller";
-import { CatalogNode } from '@common/models/CatalogNode';
+import { HeaderContainer, BodyContainer } from './main-layout';
+import { Header } from './header/header';
+import GoldenLayout from "golden-layout";
+import { DEFAULT_CONFIG } from "./config/default-config";
+import { loadConfig } from "./config/config-store";
+import { PANELS, registerPanels } from './panels/panels';
+import ReactDOM from 'react-dom';
 
 interface IEditorAppState {
-  catalog: CatalogNode[];
-  newNodeText: string;
+  
 }
 
 export class EditorApp extends React.Component<{}, IEditorAppState> {
-  controller = new DataFileController();
+  layout: GoldenLayout | undefined;
   state = {} as IEditorAppState;
 
-  componentDidMount() { 
-      this.loadCatalog();
+  constructor(props: {}) {
+    super(props);
+
+    let config = DEFAULT_CONFIG;
   }
 
-  async loadCatalog() {
-    let catalog = await this.controller.getCatalog();
-    this.setState({ catalog: catalog });  
-  }
+  componentDidMount() {
+  } 
 
-  onAdd = async () => {
-    this.state.catalog.push({
-      id: this.state.newNodeText
-    } as any);
-    await this.controller.saveCatalog(this.state.catalog);
-    this.forceUpdate();
+  mountLayout = async (bodyElem: HTMLElement | null) => {
+    if (bodyElem) {
+      let config = await loadConfig();
+      this.layout = new GoldenLayout(config, bodyElem);
+      registerPanels(this.layout);
+      (window as any)["React"] = React;
+      (window as any)["ReactDOM"] = ReactDOM;
+      this.layout.init();
+      this.forceUpdate();
+    }
   }
 
   render() {
     return (
-      <div>
-        <h2>Hello there:</h2>
-        <ul>
-          {this.state.catalog && this.state.catalog.map(c => 
-            <li>{c.id}<span>{c.data && c.data.caption}</span></li>
-          )}
-        </ul>
-        <input value={this.state.newNodeText} onChange={(ev) => this.setState({newNodeText: ev.target.value})} />
-        <button onClick={this.onAdd}>Add</button>
-      </div>
+      <React.Fragment>
+        <HeaderContainer >
+          {this.layout && 
+            <Header layout={this.layout} panels={PANELS} /> }
+        </HeaderContainer>
+        <BodyContainer innerRef={this.mountLayout}> 
+
+        </BodyContainer>
+      </React.Fragment>
     );
   }
 }
