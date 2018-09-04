@@ -3,9 +3,9 @@ import * as GoldenLayout from "golden-layout";
 import { HeaderFill } from './header-fill';
 import { HeaderLogoIcon } from './header-logo-icon';
 import { PanelDescription } from "../panels/panel-description";
-import styled from 'styled-components';
 import { LogoWrapper } from './logo-wrapper';
 import { PanelWrapper } from './panel-wrapper';
+import { TitleLabel } from './title-label';
 
 
 export interface HeaderProps {
@@ -26,6 +26,7 @@ export class Header extends React.PureComponent<HeaderProps> {
         <LogoWrapper className="flex-static">
           <HeaderLogoIcon />
         </LogoWrapper>
+        <TitleLabel className="flex-static">Слова</TitleLabel>
         <div className="flex-spring"/>
         {this.props.panels && this.props.panels.map(x => 
           <PanelWrapper className="flex-static" title={x.description} 

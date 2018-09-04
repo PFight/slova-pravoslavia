@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:vendor": "jspm bundle core-js + react + react-dom + @blueprintjs/core + tslib bundles/vendor.js --minify --skip-source-maps"
+    "build:vendor": "jspm bundle core-js + react + react-dom + @blueprintjs/core + tslib bundles/vendor.js --minify --skip-source-maps",
+    "hmr": "npx chokidar-socket-emitter"
   },
   "repository": {
     "type": "git",
@@ -23,11 +24,14 @@
     "@types/parse5": "^5.0.0",
     "@types/react": "^16.4.11",
     "@types/react-dom": "^16.0.7",
+    "@types/shortid": "0.0.29",
+    "chokidar-socket-emitter": "^0.6.0",
     "core-js": "^2.5.7",
     "golden-layout": "^1.5.9",
     "parse5": "^5.1.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "shortid": "^2.2.13",
     "styled-components": "^3.4.5",
     "systemjs": "^0.21.4",
     "tslib": "^1.9.3",
@@ -40,8 +44,12 @@
       "jquery": "npm:jquery@^3.3.1",
       "react": "npm:react@^16.4.2",
       "react-dom": "npm:react-dom@^16.4.2",
+      "shortid": "npm:shortid@^2.2.13",
       "styled-components": "npm:styled-components@^3.4.5",
       "tslib": "npm:tslib@^1.9.3"
+    },
+    "devDependencies": {
+      "systemjs-hot-reloader": "npm:systemjs-hot-reloader@^1.1.0"
     }
   }
 }

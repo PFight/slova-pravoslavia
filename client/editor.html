@@ -5,6 +5,8 @@
     <title>Слова православия - редактор</title>    
     <link rel="stylesheet" type="text/css" href="bundles/goldenlayout-base.css" />
     <link rel="stylesheet" type="text/css" href="bundles/goldenlayout-light-theme.css" />    
+    <link rel="stylesheet" type="text/css" href="bundles/blueprint.css" />    
+    <link rel="stylesheet" type="text/css" href="bundles/blueprint-icons/lib/css/blueprint-icons.css" />    
     <link rel="stylesheet" type="text/css" href="src/editor/common.css" />
     <base href="" />
     <script src="jspm_packages\system.js" ></script>
@@ -19,7 +21,10 @@
       System.set('golden-layout', System.newModule({
           "default": window.GoldenLayout
       }));
-      System.import("./src/editor/index");
+      SystemJS.import('systemjs-hot-reloader').then(function(connect) {
+        connect()
+        System.import("./src/editor/index");
+      });
     </script>
   </body>
 </html>
