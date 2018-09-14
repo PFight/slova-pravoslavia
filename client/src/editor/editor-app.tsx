@@ -6,6 +6,7 @@ import { DEFAULT_CONFIG } from "./config/default-config";
 import { loadConfig } from "./config/config-store";
 import { PANELS, registerPanels } from './panels/panels';
 import ReactDOM from 'react-dom';
+import { initGlobalState } from "./global-state/global-state";
 
 interface IEditorAppState {
   
@@ -31,6 +32,7 @@ export class EditorApp extends React.Component<{}, IEditorAppState> {
       registerPanels(this.layout);
       (window as any)["React"] = React;
       (window as any)["ReactDOM"] = ReactDOM;
+      initGlobalState(this.layout.eventHub);
       this.layout.init();
       this.forceUpdate();
     }

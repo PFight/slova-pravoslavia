@@ -10,14 +10,19 @@ import {initEditModeButton} from "./init-edit-mode-button";
 import styled from 'styled-components';
 import shortid from 'shortid';
 import { MessageBox } from '../../utils/message-box';
+import { GLOBAL_STATE } from '../../global-state/global-state';
+import { OPEN_CATALOG_EVENT, OpenCatalogEvent } from '../../global-state/events/open-catalog';
+import { CLOSE_CATALOG_EVENT, CloseCatalogEvent } from '../../global-state/events/close-catalog';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
+  glEventHub: GoldenLayout.EventEmitter;
 }
 interface State {
   catalog: CatalogNode[];
   treeNodes: ITreeNode<CatalogNode>[];
   editMode: boolean;
+  catalogNumber: number;
 }
 const NEW_NODE_STUB_ID = 'new-node';
 
@@ -28,10 +33,24 @@ export class CatalogPanel extends React.Component<Props, State> {
 
   componentDidMount() {
     this.loadCatalog();
-    this.props.glContainer.on('tab', this.onTabCreated);
-    if (this.props.glContainer.tab) {
-      this.onTabCreated(this.props.glContainer.tab);
+    this.props.glContainer.on('tab', this.onTabCreated);    
+    let catalogNumber = 1;
+    while (GLOBAL_STATE.OpenCatalogs.indexOf(catalogNumber) >= 0) {
+      catalogNumber++;
     }
+    this.setState({ catalogNumber }, () => {
+      this.props.glEventHub.emit(OPEN_CATALOG_EVENT, { catalogNumber } as OpenCatalogEvent);
+      if (this.props.glContainer.tab) {
+        this.onTabCreated(this.props.glContainer.tab);
+      }
+      if (catalogNumber > 1) {
+        this.props.glContainer.setTitle(this.props.glContainer.parent.config.title + " " + catalogNumber);
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.glEventHub.emit(CLOSE_CATALOG_EVENT, { catalogNumber: this.state.catalogNumber } as CloseCatalogEvent)
   }
 
   onTabCreated = (tab: GoldenLayout.Tab) => {    

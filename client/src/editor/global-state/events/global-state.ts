@@ -1,0 +1,1 @@
+export const GLOBA_STATE_EVENT = "GLOBA_STATE_EVENT";
