@@ -9,8 +9,10 @@ import { CatalogPanel } from './catalog-panel/catalog-panel';
 import { ConditionsPanel } from './conditions-panel/conditions-panel';
 import { WorshipPanel } from './worship-panel/worship-panel';
 import { SourcePanel } from './source-panel/source-panel';
+import { CatalogItemDetailsPanel } from './catalog-item-details-panel/catalog-item-details-panel';
 
 export const CATALOG_COMPONENT_NAME = "catalog";
+export const CATALOG_ITEM_DETAILS_COMPONENT_NAME = "catalog-item-details";
 export const SOURCE_COMPONENT_NAME = "source";
 export const WORSHIP_COMPONENT_NAME = "worship";
 export const WORSHIP_CONDITIONS_COMPONENT_NAME = "worship-conditions";
@@ -18,10 +20,22 @@ export const WORSHIP_CONDITIONS_COMPONENT_NAME = "worship-conditions";
 export const CATALOG_PANEL: PanelDescription = {
   description: "Каталог богослужебных книг",
   config: {
-    component: CATALOG_COMPONENT_NAME,
-    title: "Каталог",
-    width: 20,    
-    type: "react-component"
+    type: "column",
+    width: 20,
+    content: [
+      {
+        component: CATALOG_COMPONENT_NAME,
+        title: "Каталог",
+        height: 80,
+        type: "react-component"
+      },
+      {
+        component: CATALOG_ITEM_DETAILS_COMPONENT_NAME,
+        title: "Содержимое элемента",
+        height: 20,    
+        type: "react-component"
+      }
+    ]
   },
   iconRender: () => <CatalogIcon />
 };
@@ -64,6 +78,7 @@ export const PANELS: PanelDescription[] = [
 
 export function registerPanels(layout: GoldenLayout) {
   layout.registerComponent(CATALOG_COMPONENT_NAME, CatalogPanel);
+  layout.registerComponent(CATALOG_ITEM_DETAILS_COMPONENT_NAME, CatalogItemDetailsPanel);
   layout.registerComponent(SOURCE_COMPONENT_NAME, SourcePanel);
   layout.registerComponent(WORSHIP_COMPONENT_NAME, WorshipPanel);
   layout.registerComponent(WORSHIP_CONDITIONS_COMPONENT_NAME, ConditionsPanel);
