@@ -6,8 +6,9 @@ import styled from 'styled-components';
 
 export interface Props {
   node: ITreeNode<CatalogNode>;
-  onAccept: (node: ITreeNode<CatalogNode>, newText: string) => Promise<void>;
-  onCancel: (node: ITreeNode<CatalogNode>) => void;
+  parent?: ITreeNode<CatalogNode>;
+  onAccept: (node: ITreeNode<CatalogNode>, newText: string, parent?: ITreeNode<CatalogNode>) => Promise<void>;
+  onCancel: (node: ITreeNode<CatalogNode>, parent?: ITreeNode<CatalogNode>) => void;
 }
 
 interface State {  
@@ -36,11 +37,11 @@ export class NodeNameEditor extends React.Component<Props, State> {
   }
 
   onAccept = () => {
-    this.save.go(() => this.props.onAccept(this.props.node, this.input && this.input.value || ''));
+    this.save.go(() => this.props.onAccept(this.props.node, this.input && this.input.value || '', this.props.parent));
   }
 
   onCancel = () => {
-    this.props.onCancel(this.props.node);
+    this.props.onCancel(this.props.node, this.props.parent);
   }
 
   editInput = styled.input`

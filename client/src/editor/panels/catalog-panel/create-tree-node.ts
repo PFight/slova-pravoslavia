@@ -1,7 +1,7 @@
 import { CatalogNode } from '@common/models/CatalogNode';
 import { ITreeNode } from "@blueprintjs/core";
 
-export function createTreeNode(catalogNode: CatalogNode, parentNode: ITreeNode<CatalogNode> | null): ITreeNode<CatalogNode> {
+export function createTreeNode(catalogNode: CatalogNode, parentNode?: ITreeNode<CatalogNode>): ITreeNode<CatalogNode> {
   let node: ITreeNode<CatalogNode> = {
     id: catalogNode.id,
     label: catalogNode.data && catalogNode.data.caption || '',

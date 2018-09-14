@@ -4,7 +4,7 @@ export function visitDeepWithResult<T, R>(node: T, parentResult: R | null, child
   let result = visitor(node, parentResult);
   if (node[childrenProp]) {
     for (let child of node[childrenProp] as any) {
-      visitDeepWithResult(child, parentResult, childrenProp,  visitor);
+      visitDeepWithResult(child, result, childrenProp,  visitor);
     }
   }
   return result;
