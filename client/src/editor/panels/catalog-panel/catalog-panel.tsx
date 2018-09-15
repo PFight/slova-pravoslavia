@@ -11,8 +11,7 @@ import styled from 'styled-components';
 import shortid from 'shortid';
 import { MessageBox } from '../../utils/message-box';
 import { GLOBAL_STATE } from '../../global-state/global-state';
-import { OPEN_CATALOG_EVENT, OpenCatalogEvent } from '../../global-state/events/open-catalog';
-import { CLOSE_CATALOG_EVENT, CloseCatalogEvent } from '../../global-state/events/close-catalog';
+import { CATALOG_OPEN_EVENT, PanelOpenClosesArgs, CATALOG_CLOSE_EVENT } from '../../global-state/events/panel-open-close';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -34,30 +33,27 @@ export class CatalogPanel extends React.Component<Props, State> {
   componentDidMount() {
     this.loadCatalog();
     this.props.glContainer.on('tab', this.onTabCreated);    
-    let catalogNumber = 1;
-    while (GLOBAL_STATE.OpenCatalogs.indexOf(catalogNumber) >= 0) {
-      catalogNumber++;
+    let panelNumber = 1;
+    while (GLOBAL_STATE.OpenCatalogs.indexOf(panelNumber) >= 0) {
+      panelNumber++;
     }
-    this.setState({ catalogNumber }, () => {
-      this.props.glEventHub.emit(OPEN_CATALOG_EVENT, { catalogNumber } as OpenCatalogEvent);
+    this.setState({ catalogNumber: panelNumber }, () => {
+      this.props.glEventHub.emit(CATALOG_OPEN_EVENT, { panelNumber } as PanelOpenClosesArgs);
       if (this.props.glContainer.tab) {
         this.onTabCreated(this.props.glContainer.tab);
       }
-      if (catalogNumber > 1) {
-        this.props.glContainer.setTitle(this.props.glContainer.parent.config.title + " " + catalogNumber);
+      if (panelNumber > 1) {
+        this.props.glContainer.setTitle(this.props.glContainer.parent.config.title + " " + panelNumber);
       }
     });
   }
 
   componentWillUnmount() {
-    this.props.glEventHub.emit(CLOSE_CATALOG_EVENT, { catalogNumber: this.state.catalogNumber } as CloseCatalogEvent)
+    this.props.glEventHub.emit(CATALOG_CLOSE_EVENT, { panelNumber: this.state.catalogNumber } as PanelOpenClosesArgs)
   }
 
   onTabCreated = (tab: GoldenLayout.Tab) => {    
-    let editModeButton = tab.header.controlsContainer[0].querySelector('.edit-mode-button') as HTMLElement;
-    if (!editModeButton) {
-      editModeButton = initEditModeButton(editModeButton, tab);
-    }
+    let editModeButton = initEditModeButton(tab, "edit-mode-button");
     editModeButton.addEventListener("click", () => {
       if (editModeButton) {
         this.setEditMode(editModeButton.dataset.editMode === "true"); 

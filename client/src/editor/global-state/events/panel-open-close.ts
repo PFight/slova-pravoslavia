@@ -1,0 +1,12 @@
+export const CATALOG_ITEM_DETAILS_OPEN_EVENT = "CATALOG_ITEM_DETAILS_OPEN";
+export const CATALOG_ITEM_DETAILS_CLOSE_EVENT = "CATALOG_ITEM_DETAILS_CLOSE";
+
+export const CATALOG_OPEN_EVENT = "CATALOG_OPEN";
+export const CATALOG_CLOSE_EVENT = "CATALOG_CLOSE";
+
+export const SOURCE_OPEN_EVENT = "SOURCE_OPEN";
+export const SOURCE_CLOSE_EVENT = "SOURCE_CLOSE";
+
+export interface PanelOpenClosesArgs {
+  panelNumber: number;
+}
