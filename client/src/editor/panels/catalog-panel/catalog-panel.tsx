@@ -4,7 +4,7 @@ import { ITreeNode, Tree, Button } from "@blueprintjs/core";
 import { DataFileController } from "../../data-file-controller";
 import { visitDeepWithResult, visitDeep } from "../../utils/visitors";
 import { createTreeNode } from "./create-tree-node";
-import { NodeNameEditor } from './node-name-editor';
+import { NodeNameEditor } from '../panels-common/node-name-editor';
 import * as GoldenLayout from "golden-layout";
 import {initEditModeButton} from "./init-edit-mode-button";
 import styled from 'styled-components';
@@ -12,6 +12,7 @@ import shortid from 'shortid';
 import { MessageBox } from '../../utils/message-box';
 import { GLOBAL_STATE } from '../../global-state/global-state';
 import { CATALOG_OPEN_EVENT, PanelOpenClosesArgs, CATALOG_CLOSE_EVENT } from '../../global-state/events/panel-open-close';
+import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT } from '../../global-state/events/catalog-item';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -21,7 +22,7 @@ interface State {
   catalog: CatalogNode[];
   treeNodes: ITreeNode<CatalogNode>[];
   editMode: boolean;
-  catalogNumber: number;
+  panelNumber: number;
 }
 const NEW_NODE_STUB_ID = 'new-node';
 
@@ -37,7 +38,7 @@ export class CatalogPanel extends React.Component<Props, State> {
     while (GLOBAL_STATE.OpenCatalogs.indexOf(panelNumber) >= 0) {
       panelNumber++;
     }
-    this.setState({ catalogNumber: panelNumber }, () => {
+    this.setState({ panelNumber: panelNumber }, () => {
       this.props.glEventHub.emit(CATALOG_OPEN_EVENT, { panelNumber } as PanelOpenClosesArgs);
       if (this.props.glContainer.tab) {
         this.onTabCreated(this.props.glContainer.tab);
@@ -46,10 +47,20 @@ export class CatalogPanel extends React.Component<Props, State> {
         this.props.glContainer.setTitle(this.props.glContainer.parent.config.title + " " + panelNumber);
       }
     });
+    this.props.glEventHub.on(CATALOG_ITEM_SOURCES_CHANGED_EVENT, (ev: CatalogItemArgs) => {
+      if (ev.panelNumber == this.state.panelNumber) {
+        visitDeep(this.state.catalog, "children", (node) => {
+          if (node.id == ev.node!.id) {
+            node.data!.sources = ev.node!.data!.sources;
+          }
+        });
+        this.dataFileController.saveCatalog(this.state.catalog);
+      }
+    });
   }
 
   componentWillUnmount() {
-    this.props.glEventHub.emit(CATALOG_CLOSE_EVENT, { panelNumber: this.state.catalogNumber } as PanelOpenClosesArgs)
+    this.props.glEventHub.emit(CATALOG_CLOSE_EVENT, { panelNumber: this.state.panelNumber } as PanelOpenClosesArgs)
   }
 
   onTabCreated = (tab: GoldenLayout.Tab) => {    
@@ -167,7 +178,12 @@ export class CatalogPanel extends React.Component<Props, State> {
       }
       this.endNodeEdit(node);
     }
-    nodeData.label = <NodeNameEditor node={nodeData} parent={parent} onAccept={accept} onCancel={cancel} />;
+    nodeData.label = 
+      <NodeNameEditor data={nodeData} 
+        initialText={nodeData.nodeData!.data!.caption || ""}
+        additionalData={parent} 
+        onAccept={accept} 
+        onCancel={cancel} />;
     this.editingNode = nodeData;
   }
 
@@ -186,6 +202,10 @@ export class CatalogPanel extends React.Component<Props, State> {
     if (nodeData) {
       nodeData.isSelected = originallySelected == null ? true : !originallySelected;
     }
+    this.props.glEventHub.trigger(CATALOG_ITEM_SELECTED_EVENT, {
+      node: nodeData && nodeData.nodeData || null,
+      panelNumber: this.state.panelNumber
+    } as CatalogItemArgs);
   }
 
   private onAddChildNode(parent: ITreeNode<CatalogNode>) {

@@ -5,10 +5,11 @@ import { AsyncAtion } from "../../utils/async-action";
 import styled from 'styled-components';
 
 export interface Props {
-  node: ITreeNode<CatalogNode>;
-  parent?: ITreeNode<CatalogNode>;
-  onAccept: (node: ITreeNode<CatalogNode>, newText: string, parent?: ITreeNode<CatalogNode>) => Promise<void>;
-  onCancel: (node: ITreeNode<CatalogNode>, parent?: ITreeNode<CatalogNode>) => void;
+  initialText: string;
+  data: any;
+  additionalData?: any;
+  onAccept: (data: any, newText: string, additionalData?: any) => Promise<void>;
+  onCancel: (data: any, additionalData?: any) => void;
 }
 
 interface State {  
@@ -21,9 +22,9 @@ export class NodeNameEditor extends React.Component<Props, State> {
 
   attachInput = (elem: HTMLInputElement) => {
     this.input = elem;
-    let node = this.props.node;
-    if (elem && node.nodeData && node.nodeData.data) {
-      elem.value = node.nodeData.data.caption || '';
+    let node = this.props.data;
+    if (elem) {
+      elem.value = this.props.initialText || '';
       elem.selectionStart = 0;
       elem.selectionEnd = elem.value.length;
       elem.focus();
@@ -37,11 +38,11 @@ export class NodeNameEditor extends React.Component<Props, State> {
   }
 
   onAccept = () => {
-    this.save.go(() => this.props.onAccept(this.props.node, this.input && this.input.value || '', this.props.parent));
+    this.save.go(() => this.props.onAccept(this.props.data, this.input && this.input.value || '', this.props.additionalData));
   }
 
   onCancel = () => {
-    this.props.onCancel(this.props.node, this.props.parent);
+    this.props.onCancel(this.props.data, this.props.additionalData);
   }
 
   editInput = styled.input`
