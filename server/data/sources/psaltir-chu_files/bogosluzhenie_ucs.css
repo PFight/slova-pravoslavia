@@ -1,0 +1,75 @@
+/* 
+*** contents
+h1 { color: #FF0000; text-align: left; font-variant:normal; font-size:18pt }
+h2 { text-align: left; text-indent: 0; margin: 0; font-family: Arial; font-size: 10pt; color: #FF0000; font-weight: bold }
+h3 { text-align: left; text-indent: 15; margin: 0; font-family: Arial; font-size: 10pt; color: #FF0000; font-weight: bold }
+h4 { text-align: left; text-indent: 40; margin: 0; font-family: Arial; font-size: 10pt; color: #FF0000; font-weight: bold }
+p { text-align="left"; margin-bottom: 0; margin-top:0; font-family: Arial; font-size:10pt }
+
+*** lex
+A:hover {color: #FF0000}
+h4           { color: #FF0000 }
+h2           { font-weight: 400; color: #FF0000; text-align: left; font-variant:normal; font-size:18pt; margin-bottom:0 }
+h1           { font-weight: 400; color: #FF0000; text-align: center; font-variant:normal; font-size:18pt }
+h3           { color: #FF0000; text-align: left; margin-top:0; margin-bottom:0; font-size:12pt }
+p            { text-align="left"; text-indent: 0; margin-bottom: 5; margin-top:0; font-family:Arial; font-size:10pt }
+
+
+*** index
+A:hover	{ color: #FF0000; }
+h1       { color: #FF0000; font-size: 16pt; }
+h2       { color: #FF0000; text-align: left; font-variant: normal; font-size: 16pt; margin-bottom: 0; }
+h3       { color: #FF0000; text-align: left; margin-top: 0; margin-bottom: 0; font-size: 12pt; }
+h4       { color: #FF0000; }
+p        { text-indent: 0; margin-bottom: 5; margin-top: 0; font-family: Arial; font-size: 11pt; }
+*/
+
+@font-face { font-family: 'triodion-ieUcs';
+  src: url('/bogosluzhenie/fonts/triodion-ieUcs.eot');
+  src: url('/bogosluzhenie/fonts/triodion-ieUcs.eot?#iefix') format('embedded-opentype'),
+       url('/bogosluzhenie/fonts/triodion-ieUcs.woff2') format('woff2'),
+       url('/bogosluzhenie/fonts/triodion-ieUcs.woff') format('woff'),
+       url('/bogosluzhenie/fonts/triodion-ieUcs.ttf') format('truetype'),
+       url('/bogosluzhenie/fonts/triodion-ieUcs.svg#triodion-ieUcs') format('svg');
+  font-weight: normal;
+  font-style: normal; }
+              
+/* SDS */
+hr { color: #D2BE8F; height: 1px; }
+form { margin: 0px; }
+body { background-color: #F1E9D6;  font-family: Arial, Helvetica, sans-serif;  font-size: 11pt }
+h1 { color: #FF0000; margin: 5px;  font-family: "Times New Roman", Times, serif; font-size:18pt }
+h2  { color: #FF0000; text-align: center; margin-top:40; margin-bottom:2; font-size:18pt; font-family: "triodion-ieUcs", "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8"; font-weight: normal }
+h3  { color: #FF0000; text-align: center; margin-top:20; margin-bottom:2; font-size:18pt; font-family: "triodion-ieUcs", "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8"; font-weight: normal }
+h4  { color: #000000; text-align: center; margin-top:3; margin-bottom:2; font-size:18pt; font-family: "triodion-ieUcs", "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8"; font-weight: normal }
+h5  { margin:5px; color:#000000; text-align: center; font-size:10pt; font-family: "Arial", Arial, "Times New Roman", Times, serif; font-weight: normal }
+h6  { margin:5px; color: #FF0000; text-align: left; font-size:18pt; font-family: "triodion-ieUcs", "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8"; font-weight: normal }
+p  { margin:5px; font-weight: normal; font-size: 18pt; font-family: "triodion-ieUcs", "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8"; text-align: justify; margin-top:5px; margin-bottom:7px }
+.a  { font-size: 10pt; font-family: "Arial", Arial, "Times New Roman", Times, serif; text-align: justify; margin-top:5px; margin-bottom:5px }
+.b  { color: #FF0000; font-size: 16pt; font-family: "Arial", Arial, "Times New Roman", Times, serif; text-align: justify; margin-top:5px; margin-bottom:5px }
+.z  { font-size: 16pt; font-family: "Arial", Arial, "Times New Roman", Times, serif; }
+.k { font-weight: normal; font-size: 16pt; color: #FF0000; font-family: "triodion-ieUcs", "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8" }
+.n { font-weight: normal; font-size: 10pt; color: #FF0000; font-family: "triodion-ieUcs", "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8" }
+.l { color: red }
+.letter  { font-family: "triodion-ieUcs", "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8";
+ 			font-size: 246%; /* Размер шрифта буквицы */
+ 			float: left; /* Выравнивание по левому краю */
+ 			color: #FF0000; /* Цвет буквицы */
+ 			padding-right: 3px; /* Отступ между буквицей и текстом */
+ 			line-height: 60px; /* Положение символа */ }
+#curpath { color: Red; font-size: 10pt; }
+table#curpath a { color: Blue; font-size: 10pt; }
+table#curpath a#curpath { color: Red; font-size: 10pt; }
+#path { color: Blue; font-size: 9pt; }
+#copyright { font-size: 8pt; }
+#filesize { font-size: 9pt; color: Green; }
+
+#left { text-align: left; }
+#right { text-align: right; }
+#center { text-align: center; }
+#just { text-align: justify; }
+
+
+/* debug */
+div { border: 1px dashed Yellow; }
+/* * { border: 1px solid #ff0000; } */

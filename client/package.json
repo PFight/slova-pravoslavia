@@ -19,6 +19,8 @@
   "homepage": "https://github.com/PFight/slova-pravoslavia#readme",
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
+    "@blueprintjs/select": "^3.2.0",
+    "@types/debounce": "^3.0.0",
     "@types/jquery": "^3.3.6",
     "@types/node": "^10.9.2",
     "@types/parse5": "^5.0.0",
@@ -27,6 +29,8 @@
     "@types/shortid": "0.0.29",
     "chokidar-socket-emitter": "^0.6.0",
     "core-js": "^2.5.7",
+    "debounce": "^1.2.0",
+    "get-selector": "^1.0.3",
     "golden-layout": "^1.5.9",
     "parse5": "^5.1.0",
     "react": "^16.4.2",
@@ -40,7 +44,11 @@
   "jspm": {
     "dependencies": {
       "@blueprintjs/core": "npm:@blueprintjs/core@^3.4.0",
+      "@blueprintjs/select": "npm:@blueprintjs/select@^3.2.0",
       "core-js": "npm:core-js@^2.5.7",
+      "css-selector-generator": "npm:css-selector-generator@^1.1.0",
+      "debounce": "npm:debounce@^1.2.0",
+      "get-selector": "npm:get-selector@^1.0.3",
       "jquery": "npm:jquery@^3.3.1",
       "react": "npm:react@^16.4.2",
       "react-dom": "npm:react-dom@^16.4.2",

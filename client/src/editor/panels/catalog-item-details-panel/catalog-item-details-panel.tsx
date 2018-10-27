@@ -56,9 +56,13 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
       }
       if (!item.data!.sources) {
         item.data!.sources = [];
-      }
+      }      
     }
-    this.setState({ catalogItem: item });
+    this.setState({ catalogItem: item }, () => {
+      if (item && item.data!.sources!.length > 0) {
+        this.selectRef(item.data!.sources![0]);
+      }
+    });
   }
 
   selectRef(ref: SourceRefSource) {
@@ -124,8 +128,8 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
               <this.itemCaption title={this.state.catalogItem!.data!.comment}>
                 {this.state.catalogItem!.data!.caption}
               </this.itemCaption>
-              {this.state.catalogItem!.data!.sources.map(ref => 
-                <this.sourceRef minimal title={ref.comment} onClick={() => this.selectRef(ref)} >
+              {this.state.catalogItem!.data!.sources.map((ref, i) => 
+                <this.sourceRef minimal key={i} title={ref.comment} onClick={() => this.selectRef(ref)} >
                   {ref.caption}
                 </this.sourceRef>
               )}

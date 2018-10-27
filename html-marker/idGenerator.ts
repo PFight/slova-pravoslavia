@@ -3,6 +3,6 @@ export class IdGenerator {
 
   next() {
     this.current++;
-    return this.current.toString();
+    return 'n' + this.current.toString();
   }
 }

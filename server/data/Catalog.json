@@ -2,13 +2,45 @@
   {
     "id": "ViNiikeoj",
     "data": {
-      "caption": "2 v2332"
+      "caption": "Псалтирь",
+      "sources": [
+        {
+          "language": "chu",
+          "format": "html",
+          "ranges": [
+            {
+              "sourceFileId": "psaltir-chu",
+              "beginNodeId": "{\"selector\":\"#n14\",\"childIndex\":0}",
+              "beginNodeStartShift": "1",
+              "endNodeId": "{\"selector\":\"#n6577\"}",
+              "endNodeFinishShift": "2"
+            }
+          ],
+          "caption": "psaltir-chu"
+        }
+      ]
     },
     "children": [
       {
         "id": "Rcfmj7i9m",
         "data": {
-          "caption": "esrtsf"
+          "caption": "Псалом 1",
+          "sources": [
+            {
+              "language": "chu",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "psaltir-chu",
+                  "beginNodeId": "{\"selector\":\"#n80\",\"childIndex\":0}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"#n91\",\"childIndex\":1}",
+                  "endNodeFinishShift": "62"
+                }
+              ],
+              "caption": "psaltir-chu"
+            }
+          ]
         }
       }
     ]
@@ -16,7 +48,7 @@
   {
     "id": "4r6GyUv2y",
     "data": {
-      "caption": "vxcv"
+      "caption": "Апостол"
     },
     "children": [
       {
@@ -36,11 +68,5 @@
         ]
       }
     ]
-  },
-  {
-    "id": "1Md3JpUJR",
-    "data": {
-      "caption": "dfs"
-    }
   }
 ]

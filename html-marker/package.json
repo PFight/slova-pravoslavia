@@ -1,0 +1,32 @@
+{
+  "name": "slova-pravoslavia",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./marker.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PFight/slova-pravoslavia.git"
+  },
+  "author": "PFight <PFight77@gmail.com> (https://github.com/PFight)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PFight/slova-pravoslavia/issues"
+  },
+  "homepage": "https://github.com/PFight/slova-pravoslavia#readme",
+  "dependencies": {
+    "@blueprintjs/core": "^3.4.0",
+    "@blueprintjs/select": "^3.2.0",
+    "@types/jquery": "^3.3.6",
+    "@types/node": "^10.9.2",
+    "@types/parse5": "^5.0.0",
+    "@types/shortid": "0.0.29",
+    "parse5": "^5.1.0",
+    "shortid": "^2.2.13",
+    "tslib": "^1.9.3",
+    "typescript": "^3.0.1"
+  }
+}

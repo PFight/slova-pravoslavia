@@ -9,7 +9,7 @@ export interface SourceRef {
 
 export interface SourceRefSource {
   /** Логическое название источника. Например, "Русский перевод". */
-  caption: string;
+  caption?: string;
   /** Комментарий к данной ссылке на источник */
   comment?: string;
   /** Русский, церковно-славянский, церковно-славянский в гражданском начертании */
@@ -24,7 +24,7 @@ export interface SourceRange {
   /** Идентификатор исходного файла */
   sourceFileId: string;
   /** Порядок в массиве {@see ranges} */
-  order: number;
+  order?: number;
   /** Идентификатор узла начала интервала. Тип зависит от источника. Может быть номер страницы и т.д. */
   beginNodeId: string;
   /** Смещение начала интервала в узле, указанном в {@see beginNodeId} */
