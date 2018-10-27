@@ -13,6 +13,11 @@ import { MessageBox } from '../../utils/message-box';
 import { GLOBAL_STATE } from '../../global-state/global-state';
 import { CATALOG_OPEN_EVENT, PanelOpenClosesArgs, CATALOG_CLOSE_EVENT } from '../../global-state/events/panel-open-close';
 import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT } from '../../global-state/events/catalog-item';
+import { SourceRef } from '@common/models/SourceRef';
+import { SelectedSourceRangeArgs, ASSIGN_TO_SELECTED_NODE, ADD_AS_CHILD, ADD_AS_SIBLING } from '../../global-state/events/source-range';
+import { assignNodeSource } from './assignNodeSource';
+import { findParent } from './findParent';
+import { getSourceCaption } from '../panels-common/getSourceCaption';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -23,6 +28,7 @@ interface State {
   treeNodes: ITreeNode<CatalogNode>[];
   editMode: boolean;
   panelNumber: number;
+  selectedNode: ITreeNode<CatalogNode> | null;
 }
 const NEW_NODE_STUB_ID = 'new-node';
 
@@ -57,6 +63,9 @@ export class CatalogPanel extends React.Component<Props, State> {
         this.dataFileController.saveCatalog(this.state.catalog);
       }
     });
+    this.props.glEventHub.on(ASSIGN_TO_SELECTED_NODE, (ev: SelectedSourceRangeArgs) => this.assignNodeSource(ev));
+    this.props.glEventHub.on(ADD_AS_CHILD, (ev: SelectedSourceRangeArgs) => this.addAsChild(ev));
+    this.props.glEventHub.on(ADD_AS_SIBLING, (ev: SelectedSourceRangeArgs) => this.addAsSibling(ev));
   }
 
   componentWillUnmount() {
@@ -105,6 +114,28 @@ export class CatalogPanel extends React.Component<Props, State> {
     this.setState({ catalog, treeNodes });
   }
 
+  private async assignNodeSource(args: SelectedSourceRangeArgs) {
+    if (args.panelNumber == this.state.panelNumber && this.state.selectedNode) {
+      assignNodeSource(this.state.selectedNode.nodeData!, args);
+      await this.dataFileController.saveCatalog(this.state.catalog);
+    }
+  }
+
+  private addAsChild(args: SelectedSourceRangeArgs) {
+    if (args.panelNumber == this.state.panelNumber && this.state.selectedNode) {
+      this.onAddNodeClick(this.state.selectedNode, undefined, { sources: [ args.source ] });
+    }
+  }
+
+  private addAsSibling(args: SelectedSourceRangeArgs) {
+    if (args.panelNumber == this.state.panelNumber && this.state.selectedNode) {
+      let { parent, indexInParent } = findParent(this.state.treeNodes, this.state.selectedNode);
+      if (parent) {
+        this.onAddNodeClick(parent, indexInParent + 1, { sources: [ args.source ] });
+      }
+    }
+  }
+
   private createTreeNode(catalogNode: CatalogNode, parent?: ITreeNode<CatalogNode>) {
     let treeNode = createTreeNode(catalogNode, parent);
     this.updateNodeView(treeNode);
@@ -132,17 +163,21 @@ export class CatalogPanel extends React.Component<Props, State> {
       this.forceUpdate();
   };
 
-  private onAddNodeClick = (parent?: ITreeNode<CatalogNode>) => {
+  private onAddNodeClick = (parent?: ITreeNode<CatalogNode>,  indexInParent?: number, sourceRef?: SourceRef) => {
     let catalogNode = {
       id: shortid.generate(),
       parentId: parent && parent.id || undefined,
-      data: {}
+      data: sourceRef || {}
     } as CatalogNode;
     let treeNode = this.createTreeNode(catalogNode, parent);
     if (parent) {
       parent.isExpanded = true;
       parent.nodeData!.children = parent.nodeData!.children || [];
-      parent.nodeData!.children!.push(catalogNode);
+      if (indexInParent !== undefined) {
+        parent.nodeData!.children!.splice(indexInParent, 0, catalogNode);
+      } else {
+        parent.nodeData!.children!.push(catalogNode);
+      }
       this.updateNodeView(parent);
     } else {
       this.state.treeNodes.push(treeNode);
@@ -159,6 +194,9 @@ export class CatalogPanel extends React.Component<Props, State> {
       node.label = newText;
       if (node.nodeData && node.nodeData.data) {
         node.nodeData.data.caption = newText;
+        if (node.nodeData.data.sources.length > 0) {
+          node.nodeData.data.sources[0].caption = getSourceCaption(node.nodeData, node.nodeData.data.sources[0]);
+        }
         if (node.id == NEW_NODE_STUB_ID) {
             this.state.catalog.push(node.nodeData);
           node.icon = this.createTreeNode(node.nodeData).icon;
@@ -206,6 +244,7 @@ export class CatalogPanel extends React.Component<Props, State> {
       node: nodeData && nodeData.nodeData || null,
       panelNumber: this.state.panelNumber
     } as CatalogItemArgs);
+    this.setState({ selectedNode: nodeData });
   }
 
   private onAddChildNode(parent: ITreeNode<CatalogNode>) {

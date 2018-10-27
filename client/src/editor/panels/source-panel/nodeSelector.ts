@@ -38,7 +38,7 @@ export function getNode(document: Document, nodeId: string) {
   if (nodeId) {
     let id = JSON.parse(nodeId) as INodeId;
     let elem = document.querySelector(id.selector);
-    if (elem && id.childIndex) {
+    if (elem && id.childIndex !== undefined) {
       return elem.childNodes[id.childIndex];
     } else {
       return elem;

@@ -10,7 +10,8 @@ import styled from 'styled-components';
 import { Button } from '@blueprintjs/core';
 import { SourceRefSource } from '@common/models/SourceRef';
 import { SELECTED_SOURCE_REF_EVENT, SelectedSourceRefArgs } from "../../global-state/events/source-ref";
-import { SELECTED_SOURCE_RANGE_EVENT } from '../../global-state/events/selected-source-range';
+import { SELECTED_SOURCE_RANGE_EVENT } from '../../global-state/events/source-range';
+import { getSourceCaption } from '../panels-common/getSourceCaption';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -74,6 +75,17 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
     } as  SelectedSourceRefArgs)
   }
 
+  onAddNewNode = async (text: string) => {
+    let selectedRange = GLOBAL_STATE.SelectedRange[this.state.panelNumber];
+    selectedRange!.caption = getSourceCaption(this.state.catalogItem!, selectedRange!);
+    this.setState({ addingNewRef: false});
+    this.state.catalogItem!.data!.sources.push(selectedRange!);
+    this.props.glEventHub.trigger(CATALOG_ITEM_SOURCES_CHANGED_EVENT, {
+      panelNumber: this.state.panelNumber,
+      node: this.state.catalogItem
+    } as CatalogItemArgs);
+  }
+
   noValueLabel = styled.div`
     font-style: italic;
     font-size: 90%;
@@ -98,17 +110,6 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
   wrapper = styled.div`
     margin: 7px;
   `;
-
-  onAddNewNode = async (text: string) => {
-    let selectedRange = GLOBAL_STATE.SelectedRange[this.state.panelNumber];
-    selectedRange!.caption = text;
-    this.setState({ addingNewRef: false});
-    this.state.catalogItem!.data!.sources.push(selectedRange!);
-    this.props.glEventHub.trigger(CATALOG_ITEM_SOURCES_CHANGED_EVENT, {
-      panelNumber: this.state.panelNumber,
-      node: this.state.catalogItem
-    } as CatalogItemArgs);
-  }
 
   renderNewSourceRef() {
     let selectedRange = GLOBAL_STATE.SelectedRange[this.state.panelNumber];

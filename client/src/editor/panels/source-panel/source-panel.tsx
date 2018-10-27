@@ -7,12 +7,13 @@ import React from "react";
 import styled from 'styled-components';
 import { DataFileController } from '../../data-file-controller';
 import { CATALOG_CLOSE_EVENT, PanelOpenClosesArgs, SOURCE_CLOSE_EVENT, SOURCE_OPEN_EVENT } from '../../global-state/events/panel-open-close';
-import { SelectedSourceRangeArgs, SELECTED_SOURCE_RANGE_EVENT } from '../../global-state/events/selected-source-range';
+import { SELECTED_SOURCE_RANGE_EVENT, ASSIGN_TO_SELECTED_NODE, ADD_AS_CHILD, ADD_AS_SIBLING } from '../../global-state/events/source-range';
 import { SelectedSourceRefArgs, SELECTED_SOURCE_REF_EVENT } from '../../global-state/events/source-ref';
 import { GLOBAL_STATE } from '../../global-state/global-state';
 import { generatePanelNumber } from '../panels-common/generatePanelNumber';
-import { getNodeId } from './nodeSelector';
 import { selectInFrame } from './selectInFrame';
+import { createSourceRangeEventArgs } from './createSourceRangeEventArgs';
+import { CATALOG_ITEM_SELECTED_EVENT } from '../../global-state/events/catalog-item';
 
 const SourceFileSelect = Select.ofType<SourceFileInfo>();
 
@@ -25,6 +26,7 @@ export interface State {
   sourceRef: SelectedSourceRefArgs | null;
   sourceFile: SourceFileInfo;
   sourceFiles: SourceFileInfo[];
+  selection: Selection | null;
 }
 export class SourcePanel extends React.Component<Props, State> {
   dataFileController = new DataFileController();
@@ -53,6 +55,7 @@ export class SourcePanel extends React.Component<Props, State> {
         this.setItem(ev);
       }
     });
+    this.props.glEventHub.on(CATALOG_ITEM_SELECTED_EVENT, () => this.forceUpdate());
     this.loadSources();
   }
 
@@ -108,22 +111,28 @@ export class SourcePanel extends React.Component<Props, State> {
   onTextSelect = (ev: Event) => {
     let selection = (ev.target as Document).getSelection();
     if (selection) {
-      this.props.glEventHub.emit(SELECTED_SOURCE_RANGE_EVENT, {
-        panelNumber: this.state.panelNumber,
-        source: {
-          language: this.state.sourceFile.language,
-          format: this.state.sourceFile.format,
-          ranges: [
-            {
-              sourceFileId: this.state.sourceFile.id,
-              beginNodeId: getNodeId(selection.anchorNode),
-              beginNodeStartShift: selection.anchorOffset.toString(),
-              endNodeId: getNodeId(selection.extentNode),
-              endNodeFinishShift: selection.extentOffset.toString()
-            }
-          ]
-        }
-      } as SelectedSourceRangeArgs);
+      this.props.glEventHub.emit(SELECTED_SOURCE_RANGE_EVENT, createSourceRangeEventArgs(
+        this.state.panelNumber, this.state.sourceFile, selection));
+    }
+    this.setState({ selection });
+  }
+
+  onAssingClick = () => {
+    if (this.state.selection) {
+      this.props.glEventHub.emit(ASSIGN_TO_SELECTED_NODE, createSourceRangeEventArgs(
+        this.state.panelNumber, this.state.sourceFile, this.state.selection));
+    }
+  }
+  onAddChildClick = () => {
+    if (this.state.selection) {
+      this.props.glEventHub.emit(ADD_AS_CHILD, createSourceRangeEventArgs(
+        this.state.panelNumber, this.state.sourceFile, this.state.selection));
+    }
+  }
+  onAddSiblingClick = () => {
+    if (this.state.selection) {
+      this.props.glEventHub.emit(ADD_AS_SIBLING, createSourceRangeEventArgs(
+        this.state.panelNumber, this.state.sourceFile, this.state.selection));
     }
   }
 
@@ -138,16 +147,26 @@ export class SourcePanel extends React.Component<Props, State> {
   `;
   
   render() {
+    let smthSelected = this.state.selection && !!this.state.selection.toString();
     return (
       <React.Fragment>
         <Navbar>
+          { GLOBAL_STATE.SelectedNode && this.state.sourceRef &&
+            <NavbarGroup align={Alignment.LEFT} >
+              <Button icon="menu-closed" onClick={this.onAssingClick} disabled={!smthSelected}  minimal text="Назначить" title="Сопоставить с выделенным узлом"  />
+              <Button icon="git-new-branch" onClick={this.onAddChildClick} disabled={!smthSelected}  minimal text="Новый подраздел" title="Добавить как дочерний узел"  />
+              <Button icon="new-link" onClick={this.onAddSiblingClick} disabled={!smthSelected}  minimal text="Новый раздел" title="Добавить как соседний узел"  />
+            </NavbarGroup>
+          }
           { this.state.sourceFiles && 
             <NavbarGroup align={Alignment.RIGHT}>
               <SourceFileSelect
                   disabled={!this.state.sourceFiles}
                   items={this.state.sourceFiles}
                   itemRenderer={(item: SourceFileInfo, itemProps: IItemRendererProps) => 
-                    <this.SourceFileMenuItem key={item.id} onClick={itemProps.handleClick}>{item.displayName || item.name}</this.SourceFileMenuItem> }
+                    <this.SourceFileMenuItem key={item.id} 
+                      onClick={itemProps.handleClick}>{item.displayName || item.name}
+                    </this.SourceFileMenuItem> }
                   noResults={<MenuItem disabled={true} text="Ничего не найдено" />}
                   onItemSelect={this.onSelectSource}
                   popoverProps={{ minimal: true }}>
@@ -167,3 +186,5 @@ export class SourcePanel extends React.Component<Props, State> {
     );
   }
 }
+
+

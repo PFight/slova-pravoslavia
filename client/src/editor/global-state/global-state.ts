@@ -6,7 +6,7 @@ import { CATALOG_OPEN_EVENT, CATALOG_CLOSE_EVENT, PanelOpenClosesArgs, CATALOG_I
 import { CatalogNode } from '@common/models/CatalogNode';
 import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs } from "./events/catalog-item";
 import { SourceRange, SourceRefSource } from '@common/models/SourceRef';
-import { SELECTED_SOURCE_RANGE_EVENT, SelectedSourceRangeArgs } from "./events/selected-source-range";
+import { SELECTED_SOURCE_RANGE_EVENT, SelectedSourceRangeArgs } from "./events/source-range";
 
 export type PanelValues<T> = { [panelNumber: number]: T };
 
