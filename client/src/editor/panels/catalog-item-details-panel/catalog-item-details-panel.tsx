@@ -5,7 +5,7 @@ import { CATALOG_ITEM_DETAILS_OPEN_EVENT, PanelOpenClosesArgs, CATALOG_ITEM_DETA
 import { generatePanelNumber } from "../panels-common/generatePanelNumber";
 import { initExtraButton, deinitExtraButton } from '../panels-common/init-extra-button';
 import { CatalogNode } from '@common/models/CatalogNode';
-import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT } from '../../global-state/events/catalog-item';
+import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT, CATALOG_ITEM_OPENED_EVENT } from '../../global-state/events/catalog-item';
 import styled from 'styled-components';
 import { Button } from '@blueprintjs/core';
 import { SourceRefSource } from '@common/models/SourceRef';
@@ -40,7 +40,14 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
     });
     this.props.glEventHub.on(CATALOG_ITEM_SELECTED_EVENT, (ev: CatalogItemArgs) => {
       if (ev.panelNumber == this.state.panelNumber) {
-        this.setItem(ev.node);
+        this.onCatalogItemSelected(ev.node);
+      }
+    });
+    this.props.glEventHub.on(CATALOG_ITEM_OPENED_EVENT, (ev: CatalogItemArgs) => {
+      if (ev.panelNumber == this.state.panelNumber) {
+        if (ev.node && ev.node.data!.sources!.length > 0) {
+          this.selectSourceRef(ev.node, ev.node.data!.sources![0]);
+        }
       }
     });
     this.props.glEventHub.on(SELECTED_SOURCE_RANGE_EVENT, () => this.forceUpdate());
@@ -50,7 +57,7 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
     this.props.glEventHub.emit(CATALOG_ITEM_DETAILS_CLOSE_EVENT, { panelNumber: this.state.panelNumber } as PanelOpenClosesArgs)
   }
 
-  setItem(item: CatalogNode | null) {
+  onCatalogItemSelected(item: CatalogNode | null) {
     if (item) {
       if (!item.data) {
         item.data = {} as any;
@@ -59,20 +66,20 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
         item.data!.sources = [];
       }      
     }
-    this.setState({ catalogItem: item }, () => {
-      if (item && item.data!.sources!.length > 0) {
-        this.selectRef(item.data!.sources![0]);
-      }
-    });
+    this.setState({ catalogItem: item });
   }
 
-  selectRef(ref: SourceRefSource) {
+  selectSourceRef(item: CatalogNode, ref: SourceRefSource) {
     this.props.glEventHub.trigger(SELECTED_SOURCE_REF_EVENT, {
       panelNumber: this.state.panelNumber,
-      catalogNodeId: this.state.catalogItem!.id,
-      ref: this.state.catalogItem!.data!,
-      sourceIndex: this.state.catalogItem!.data!.sources.indexOf(ref)
+      catalogNodeId: item.id,
+      ref: item.data!,
+      sourceIndex: item.data!.sources.indexOf(ref)
     } as  SelectedSourceRefArgs)
+  }
+
+  onSelectedRef(ref: SourceRefSource) {
+    this.selectSourceRef(this.state.catalogItem!, ref);
   }
 
   onAddNewNode = async (text: string) => {
@@ -130,7 +137,7 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
                 {this.state.catalogItem!.data!.caption}
               </this.itemCaption>
               {this.state.catalogItem!.data!.sources.map((ref, i) => 
-                <this.sourceRef minimal key={i} title={ref.comment} onClick={() => this.selectRef(ref)} >
+                <this.sourceRef minimal key={i} title={ref.comment} onClick={() => this.onSelectedRef(ref)} >
                   {ref.caption}
                 </this.sourceRef>
               )}

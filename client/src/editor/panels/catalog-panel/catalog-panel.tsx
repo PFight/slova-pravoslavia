@@ -12,7 +12,7 @@ import shortid from 'shortid';
 import { MessageBox } from '../../utils/message-box';
 import { GLOBAL_STATE } from '../../global-state/global-state';
 import { CATALOG_OPEN_EVENT, PanelOpenClosesArgs, CATALOG_CLOSE_EVENT } from '../../global-state/events/panel-open-close';
-import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT } from '../../global-state/events/catalog-item';
+import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT, CATALOG_ITEM_OPENED_EVENT } from '../../global-state/events/catalog-item';
 import { SourceRef } from '@common/models/SourceRef';
 import { SelectedSourceRangeArgs, ASSIGN_TO_SELECTED_NODE, ADD_AS_CHILD, ADD_AS_SIBLING } from '../../global-state/events/source-range';
 import { assignNodeSource } from './assignNodeSource';
@@ -144,14 +144,24 @@ export class CatalogPanel extends React.Component<Props, State> {
 
   private onNodeClick = (nodeData: ITreeNode<CatalogNode>, e: React.MouseEvent<HTMLElement>) => {
     if (this.state.editMode) {
-      if (!this.editingNode) {
-        this.beginNodeEdit(nodeData);
-      }
+      this.selectNode(nodeData, !e.shiftKey);
+      this.openNode(nodeData);
     } else {
       this.selectNode(nodeData, !e.shiftKey);
     }
     this.forceUpdate();
   };
+
+  private onNodeDoubleClick = (nodeData: ITreeNode<CatalogNode>, e: React.MouseEvent<HTMLElement>) => {
+    if (this.state.editMode) {
+      if (!this.editingNode) {
+        this.beginNodeEdit(nodeData);
+      }
+    } else {
+      this.openNode(nodeData);
+    }
+    this.forceUpdate();
+  }
 
   private onNodeCollapse = (nodeData: ITreeNode) => {
       nodeData.isExpanded = false;
@@ -247,6 +257,13 @@ export class CatalogPanel extends React.Component<Props, State> {
     this.setState({ selectedNode: nodeData });
   }
 
+  private openNode(nodeData: ITreeNode<CatalogNode> | null) {
+    this.props.glEventHub.trigger(CATALOG_ITEM_OPENED_EVENT, {
+      node: nodeData && nodeData.nodeData || null,
+      panelNumber: this.state.panelNumber
+    } as CatalogItemArgs);
+  }
+
   private onAddChildNode(parent: ITreeNode<CatalogNode>) {
     this.onAddNodeClick(parent);
   }
@@ -296,13 +313,22 @@ export class CatalogPanel extends React.Component<Props, State> {
     if (this.state.editMode && node.id != NEW_NODE_STUB_ID) {
       return (
         <div className="display-flex">
-          <span className="flex-spring margin-v-auto" onClick={(ev) => this.onNodeClick(node, ev)}>{text}</span>
+          <span className="flex-spring margin-v-auto" 
+            onClick={(ev) => this.onNodeClick(node, ev)} 
+            onDoubleClick={(ev) => this.onNodeDoubleClick(node, ev)}>
+            {text}
+          </span>
           <Button className="flex-static margin-v-auto" minimal icon="plus" onClick={() => this.onAddChildNode(node)} />
           <Button className="flex-static margin-v-auto" minimal icon="trash" onClick={() => this.onDeleteNode(node)} />
         </div>
       );
     } else {
-      return <div onClick={(ev) => this.onNodeClick(node, ev)}>{text}</div>;
+      return (
+        <div 
+          onClick={(ev) => this.onNodeClick(node, ev)} 
+          onDoubleClick={(ev) => this.onNodeDoubleClick(node, ev)}>
+          {text}
+        </div>);
     }
   }
 
