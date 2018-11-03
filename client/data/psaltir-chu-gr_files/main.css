@@ -1,0 +1,499 @@
+/* Global resets */
+a img                       {border: 0; outline:none;}
+form                        {margin: 0;padding: 0;}
+h1, h2, h3, h4, h5, h6      {font-weight: normal;margin: 0 0 1em;padding: 0;}
+input, select, textarea     {font-family: inherit;font-size: inherit;}
+p                           {margin: 0 0 1em 0;padding: 0; line-height: 1.5}
+ul                          {margin: 0; padding: 0;}
+/* - Global resets */
+
+
+
+
+/*html                        {font-size: 12pt;}*/
+
+body                        {font: 10pt/1.2em Arial, Helvetica, sans-serif; color: #000; margin: 0; background: #333;}
+
+.container                  {max-width: 1200px; margin: 0 auto; background: #fff;}
+.body_read                  {}
+.body_read .container       { max-width: 800px;}
+*html .body_read .container {width: 800px;}
+.clear                      {clear: both;}
+
+
+/*����� ����������*/
+.low_res                    {}
+.low_res .col50per,
+.low_res .list_books .item_book {width:100%; float:none; padding:0; clear: both;}
+.low_res .panel_leftcol     {width:200px; padding-left:10px;}
+.low_res .logo img          {width:200px; height:35px}
+.low_res .logo              {padding-left:10px}
+.low_res .panel_maincol     {margin-left:240px}
+.low_res .panel_head .icons {display: none;}
+.low_res .panel_listbook_goriz .item {width: 48%;}
+.low_res .panel_footer .col1    {width:190px; padding-left:20px;}
+.low_res h1                 {font-size:2em}
+
+
+
+/* ������ ��� */
+.body_black                 {background: #000; color: #fff;}
+.body_black .read_container,
+.body_black .container      {background: #000;}
+.body_black a               {color: #daeefe;}
+
+.body_black a:hover,
+.body_black .panel_parts a:hover,
+.body_black .show_alf .data a:hover,
+.body_black .panel_rubr li a.sel:hover,
+.body_black .item_book a.title:hover,
+.body_black .block_alf a:hover,
+.body_black .go_rubr a:hover,
+.body_black .panel_rubr li a:hover,
+.body_black a.gtetle:hover,
+.body_black a.h2:hover,
+.body_black .news_item a:hover  {color: #a5d7fe;}
+
+.body_black .pages a:hover      {color: #c9e6fd; background: none;}
+
+.body_black .title,
+.body_black .panel_rubr li a,
+.body_black .panel_rubr li a.sel,
+.body_black .news_item a,
+.body_black .item_book .title,
+.body_black .panel_parts a,
+.body_black .block_alf a,
+.body_black .go_rubr a,
+.body_black .pages a,
+.body_black .panel_buttons,
+.body_black .panel_rubr li.sub a    {color: #fff;}
+
+.panel_tools .container     {background: none;}
+
+
+
+.body_black .statblock .num {color: #fff; background: #000;}
+
+.body_black .show_alf .data a,
+.body_black .comment,
+.body_black .panel_listbook_goriz .author a,
+.body_black .nav,
+.body_black .item_book .data .author,
+.body_black .item_book .data .author a  {color: #ccc;}
+
+.body_black .alf a.sel,
+.body_black .alf a.sel:hover,
+.body_black .block_alf a.sel,
+.body_black .block_alf a.sel:hover  {color: #ffed28;}
+
+.body_black .panel_parts        {background: #000; color: #fff;}
+.body_black .show_alf_sel       {background: #333;}
+
+.body_black .panel_rubr li.sub  {border-color: #ddd;}
+
+.body_black .search_input,
+.body_black .search_input input {background: #fff;}
+
+.body_black .button         {color: #fff; background-image: url(../i/bbut_r.gif);}
+.body_black .button span    {background-image: url(../i/bbut_l.gif);}
+
+.body_black .trgray.trsel,
+.body_black .trsel          {background: #222;}
+.body_black .trgray         {background: #111}
+.body_black .panel_search,
+.body_black .block_alf      {background: #111;}
+
+.body_black .pages a.sel,
+.body_black .pages a.sel:hover  {background: #222; color: #fff;}
+
+.body_black .go_rubr a.dicon,
+.body_black .dicon  {text-indent: 0; text-align: center; background: none; color: #ffed28; font-size: 1em; width: auto; padding: 5px; height: auto;}
+.body_black .epub,
+.body_black .fb2,
+.body_black .mobi   {background: #222;}
+
+
+
+
+
+ul                          {margin-left: 30px;}
+li                          {padding: 5px;}
+
+a                           {color: #215ca4; text-decoration: underline;}
+a.dotted,
+a.dotted:hover              {text-decoration: none; border-bottom: 1px dotted #215ca4;}
+h1                          {font: 2.5em Georgia;  margin-bottom: 0.7em;}
+h2,.h2                      {font: 2em Georgia;  position:relative; text-decoration: none;}
+a.h2:hover                  {color: #215ca4; text-decoration: underline;}
+a.h2                        {text-decoration: underline;}
+h3,.h3                      {font: 1.8em Georgia;}
+h4,.h4                      {font: 1.4em Georgia;}
+h5,.h5                      {font: bold 1.2em Georgia;}
+
+.panel_tools                {background: #e8e8e8; border-bottom: 1px solid #aaa; padding-top: 2px; font: 12px/1.5em Arial;}
+.panel_tools .fr            {float: right;}
+.panel_tools span,
+.panel_tools a              {color: #000; text-decoration: none; display: block; float: left; margin-right: 5px;}
+
+.panel_tools .chbg          {float: left;  padding-top: 4px; padding-bottom:2px; }
+.panel_tools .chbg .black   {background: #000; width: 20px; height: 20px; margin: 1px; border: 1px solid #000; margin-top: -2px; margin-right: 5px;}
+.panel_tools .chbg .white   {background: #fff; width: 20px; height: 20px; margin: 1px; border: 1px solid #666; margin-top: -2px; margin-right: 5px;}
+.panel_tools .chbg .sel     {margin: 0; border: 2px solid #31B2DD; margin-top: -3px; margin-right: 6px;}
+
+
+.panel_tools .chfs          {float: left; padding-top: 1px; padding-bottom:2px; margin-left: 20px;}
+.panel_tools .chfs span     {padding-top:3px;}
+.panel_tools .chfs a        {height: 20px; width: 20px; padding: 2px; text-align: center;}
+.panel_tools .chfs a:hover  {background: #ccc;}
+.panel_tools .chfs .smal    {font-size: 12px;}
+.panel_tools .chfs .norm    {font-size: 16px;}
+.panel_tools .chfs .big     {font-size: 20px;}
+.panel_tools .chfs .sel,
+.panel_tools .chfs .sel:hover   {background: #000; color: #fff;}
+
+.panel_tools .chfnt         {padding-left: 30px;}
+.panel_tools .chfnt a       {margin-right: 15px; display: block; float: left; padding: 1px; border-bottom: 1px dashed #333; font-size: 12pt;}
+.panel_tools .chfnt a.sel   {font-weight: bold;}
+#fn_arial                   {font-family: Arial, Helvetica, sans-serif ;}
+#fn_times                   {font-family: "Times New Roman", Times, serif ;}
+
+
+.panel_head .h_fl           {margin-bottom: 20px;}
+.panel_head .search_input   {margin-top: 20px;}
+
+
+.panel_head                 {padding-top: 25px; padding-bottom: 40px;}
+.panel_head .logo           {padding-left: 25px; float: left;}
+.panel_head .top_menu       {padding-top: 5px; margin-left: 0;}
+.panel_head .top_menu ul    {list-style: none; margin: 0; padding: 0;}
+.panel_head .top_menu li    {display: block; float: left; margin: 0; padding: 0; margin-right: 10px;}
+.panel_head .top_menu a     {padding: 5px; padding-left: 0; display: block; font-size: 1.05em;}
+.panel_head .icons          {float: right; margin-right: 30px; padding-top: 5px;}
+.panel_head .icons a        {display: block; float: left; width: 16px; height: 16px; background-repeat: no-repeat; background-position:  0% 0%; margin: 5px; margin-left: 10px;}
+.twi                        {background-image: url(../i/twi.gif);}
+.face                       {background-image: url(../i/face.gif);}
+.vk                         {background-image: url(../i/vk.gif);}
+
+
+.td_min_icons               {float: right; padding-left: 10px;}
+
+
+
+
+.panel_middle               {}
+.panel_leftcol              {width: 300px; padding-left: 25px; float: left;}
+.panel_maincol              {margin-left: 360px;}
+.h_fl                       {float: left; width: 96%; padding-left: 0%; padding-right: 3%;}
+
+.panel_footer               {border-top: 1px solid #d9d9d9; padding-top: 20px; padding-bottom: 20px; font: .85em Tahoma; color: #444; margin-top: 20px;}
+.panel_footer .col1         {width: 300px; padding-left: 25px; float: left;}
+.panel_footer .panel_maincol a       {margin-right: 10px; margin-left: 0px;}
+.panel_footer p             {line-height: 1em;}
+.panel_footer .ml           {margin-left: -11px;}
+
+
+table                       {margin-top: 20px;}
+th,
+td                          {padding: 7px 10px 7px 10px; text-align: left; /*border-bottom: 1px solid #eee;*/ vertical-align: top;}
+th                          {font-weight: normal; background: #333; color: #fff; padding: 10px;}
+.comment                    {font: 0.85em/1em Tahoma; color: #666;}
+.r                          {text-align: right;}
+.c                          {text-align: center;}
+.l                          {text-align: center;}
+
+input, select, textarea     {padding: 5px; font: 1em Arial;  color: #333; border: 1px solid #eee;}
+#search {margin-right: 10px; border: 1px solid #000;}
+.gtetle                     {font: 1.3em Georgia; color: #222; text-decoration: none;}
+a.gtetle:hover              {text-decoration: underline; color: #215ca4;}
+
+.trgray.trsel,
+.trsel                      {background: #eee;}
+.trgray                     {background: #fafafa;}
+
+.pages                      {margin-top: 15px;}
+.pages a                    {display: block; float: left; padding: 5px; margin-right: 3px; text-decoration: none; color: #333; font-size: 1.2em; font-weight: bold;}
+.pages a:hover              {background: #f5f5f5; }
+.pages a.sel                {background: #2C9CC1; color: #fff;}
+
+
+
+.panel_rubr                 {padding-bottom: 20px;}
+.panel_rubr ul              {list-style: none; margin: 0; padding: 0;}
+.panel_rubr li              {padding: 14px 7px 3px 25px; margin: 0;}
+.panel_rubr .title          {font: 2.5em Georgia; margin: 0; margin-bottom: 10px;}
+.panel_rubr li a            {color: #222; text-decoration: none; font: 1.0em Arial; }
+.panel_rubr li a:hover      {color: #215ca4; text-decoration: underline;}
+.panel_rubr li.sub a        {font: 0.85em Arial; color: #444;}
+.panel_rubr a.sel           {color: #000; font-weight: bold;}
+.panel_rubr a.sel:hover     {color: #000;}
+.panel_rubr li.sub          {padding: 10px 7px 7px 10px; border-left: 1px solid #b0d7e5; margin-left: 25px;}
+
+
+
+.cblock                     {padding-bottom: 70px;}
+.panel_listbook_goriz       {padding-top: 10px;}
+.panel_listbook_goriz .item {width: 23%; padding-right: 2%; float: left;}
+.panel_listbook_goriz img   {/*border: 1px solid #ddd;*/ margin-bottom: 5px;}
+.panel_listbook_goriz p     {margin: 0;}
+.panel_listbook_goriz .author{font-size: .85em; color: #666;}
+.panel_listbook_goriz .author a  {color: #666; text-decoration: none;}
+.panel_listbook_goriz .author a:hover    {text-decoration: underline;}
+
+
+.panel_share                {margin-top: 15px;}
+
+.list_books                 {padding-top: 40px;}
+.list_books .item_book      {width: 45%; float: left; padding-right: 5%; margin-bottom: 20px;}
+
+
+.item_book                  {padding-bottom: 25px}
+.item_book .img             {float: left; display: block;}
+.item_book .img img         {width: 87px; /*border: 1px solid #ddd;*/}
+.item_book a.title          {font: 1.5em/1em Georgia; color: #333; text-decoration: none;}
+.item_book a.title:hover    {color: #215CA4; text-decoration: underline;}
+.item_book .data            {margin-left: 100px;}
+.item_book .data p          {font-size: .85em; font-family: Tahoma; margin-top: 1em;}
+.item_book .data .author    {color: #666; margin: 0; margin-bottom: -0.5em;}
+.item_book .data .author a  {color: #666; text-decoration: none;}
+.item_book .data .author a:hover    {text-decoration: underline;}
+
+.author    {color: #666; margin: 0; font-size:.85em; margin-bottom:1em;}
+.author a  {color: #666; text-decoration: none;}
+
+
+
+.comment                    {color: #555;}
+.ml                         {margin-left: -0px;}
+p.more                      {margin-left: -9px; padding-left: 9px; background: url(../i/pic.gif) no-repeat 0% 50%; margin-top: -10px; font-size: .9em;}
+ul.more                     {margin: 0; padding: 0; margin-left: -9px; list-style: none; margin-top: -10px;}
+ul.more li                  {padding: 5px; padding-left: 9px; background: url(../i/pic.gif) no-repeat 0% 50%; font-size: .9em;}
+
+.col50per                   {float: left; width: 45%; padding-right: 5%; }
+.ml                         {margin-top:-10px; margin-bottom: 25px;  }
+
+
+.lblock                     {padding-top: 20px; padding-left: 20px;}
+.lblock2                    {padding-top: 20px; padding-left: 0px;}
+.lblock2 .h2                {margin-left: 0;}
+
+.search_input               {padding: 0; margin: 0; float: left; width: 260px;}
+.search_input input#search        {border: 1px; padding: 3px 15px 3px 15px; margin: 0; float: left; display: block;  height: 18px; width: 150px; color:#666;}
+
+.show_alf                   {}
+.show_alf p a               {padding-bottom: 1px; border-bottom: 1px dotted #215ca4; text-decoration: none;}
+.show_alf .data             {display: none;}
+.show_alf .data a           {text-decoration: none; border: none; font: 2em Georgia; text-transform: uppercase; color: #848484; margin-right: 5px;}
+.show_alf .data a:hover     {color: #215ca4; text-decoration: underline;}
+.show_alf_sel               {background: #f2f2f2; margin: -13px; padding: 13px; position: relative; margin-bottom: 20px;}
+.show_alf_sel .data         {display: block; }
+
+.news_item                  {font: .85em/1.5em Tahoma; margin-bottom: 20px;}
+.news_item a                {color: #333; text-decoration: none;}
+.news_item a:hover          {text-decoration: underline; color: #215ca4;}
+.news_item .date            {position: absolute; display: block; margin-left: -47px; width: 40px; text-align: right; color: #888;}
+
+.fl                         {float: left;}
+.fr                         {float: right;}
+.dicon                      {display: block; float: left; width: 84px; height: 29px; background-repeat: no-repeat; background-position: 0% 0%; margin-right: 10px; text-indent: -10000px;}
+.epub                       {background-image: url(../i/icons/epub.gif)}
+.fb2                        {background-image: url(../i/icons/fb2.gif)}
+.html                       {background-image: url(../i/icons/html.gif)}
+.mobi                       {background-image: url(../i/icons/mobi.gif);}
+.doc                        {background-image: url(../i/icons/doc.gif);}
+.pdf                        {background-image: url(../i/icons/pdf.gif);}
+.audio                      {background-image: url(../i/icons/audio.gif);}
+
+.button                     {background: url(../i/but_r.gif) no-repeat 100% 0%; display: block; float: left; padding: 0; margin: 0; margin-bottom: 20px; text-decoration: none;  color: #fff;}
+.button span                {display: block; float: left; cursor: pointer; background: url(../i/but_l.gif) no-repeat 0% 0%; padding: 8px 15px 8px 15px; height: 21px; font: bold 12pt Arial; text-decoration: none;}
+
+
+.nav                        {font: 0.85em Tahoma; color: #666; padding-bottom: 10px;}
+.nav a                      {color:#666; text-decoration: none; margin-right: 0.2em; margin-left: 0.2em;}
+.nav a:hover                {color: #000; text-decoration: underline;}
+.nav p                      {margin: 0; margin-bottom: 0.7em;}
+
+
+.book .img                  {float: left; padding-right: 20px;}
+.book .img img              {width: 87px;}
+.book .data                 {margin-left: 110px;}
+
+.book h1                    {margin-bottom: 1em;}
+.book h1 a                  {text-decoration: none;}
+.book .author               {margin-left: 0px; font: 1em Arial; color: #444; margin-bottom: 0em; margin-top: 1em;}
+.book .author a             {text-decoration: none; color: #666; font-size: 8pt;}
+.book .author a:hover       {text-decoration: underline;}
+
+
+.panel_buttons              {padding-top: 20px; margin-bottom: 20px; color: #333;}
+.panel_buttons span         {display: block; float: left; font: 14pt Georgia; padding-right: 10px; }
+.panel_cats                 {padding-bottom: 50px; padding-top: 30px;}
+.panel_cats a               {font: 1em Georgia; text-decoration: underline; padding-left: 13px; background: url(../i/catpic.gif) no-repeat 0% 50%; margin-right: 5px;}
+.panel_cats a:hover         {text-decoration: underline; color: #215ca4;}
+
+
+.panel_parts                {padding: 20px; background: #f6f2ec; margin-top: 20px;}
+.panel_parts .title         {margin-top: 0.3em;}
+.panel_parts ul             {list-style: none; margin: 0; padding: 0; margin-left: 10px;}
+.panel_parts li             {padding: 7px;}
+.panel_parts a              {text-decoration: none; color:#333333;}
+.panel_parts a:hover        {text-decoration: underline; color: #215ca4; }
+.panel_parts .lvl1          {font: 1em Arial;}
+.panel_parts .lvl1 a        {}
+.panel_parts .lvl2          {padding-left: 30px; font: 1em Arial;}
+.panel_parts .lvl3          {padding-left: 80px; font: 1em Arial;}
+
+.title                      {font: 2em Georgia; color: #333; margin-top: 30px;}
+.book_read                  {padding-top: 30px; max-width: 750px; font-family: "Times New Roman", Times, serif; font-size: 1.2em;}
+.book_read h1,
+.book_read h2               {margin-left: 0; font-size: 2em; margin-top: 40px; margin-bottom: 20px; text-indent: 0;}
+.book_read h3               {margin-left: 0; font-size: 1.6em; margin-top: 30px; margin-bottom: 20px; text-indent: 0;}
+.book_read h4               {margin-left: 0; font-size: 1.2em; margin-top: 30px; margin-bottom: 20px; text-indent: 0;}
+
+#sh_parts a                 {text-decoration: none; padding-bottom: 1px; border-bottom: 1px dashed #215ca4; font-size: 1.1em;}
+
+
+.pabel_book_content         {padding: 20px 30px 20px 30px; }
+.pabel_book_content .panel_buttons  {padding-top: 20px;}
+.pabel_book_content .author     {margin-left: 0;}
+.pabel_book_content h1          {margin-left: 0;}
+
+
+.go_rubr                    {padding-bottom: 30px;}
+.go_rubr a                  {font:1em Arial; color: #333; margin-right: 20px;}
+.go_rubr a:hover            {color: #215ca4; text-decoration: underline;}
+
+.go_rubr .panel_buttons     {float: right; padding-top: 0px;}
+.go_rubr .panel_buttons a   {margin-right: 10px;}
+
+
+.panel_comment              {padding-bottom: 10px; border-bottom: 1px solid #ddd; margin-bottom: 20px; color: #666;}
+.ndate                      {padding: 3px; font-size: 0.85em; background: #215CA4; color: #fff;}
+
+
+.news_list                  {padding-top: 40px; padding-left: 40px; padding-right: 20%;}
+.news_item2                 {padding-bottom: 25px;}
+.news_item2 a               {color: #333; text-decoration: none;}
+.news_item2 a:hover         {text-decoration: underline; color: #215CA4;}
+
+
+.block_alf                  {padding: 15px 10px 15px 10px; background: #F2F2F2;}
+.block_alf a                {text-decoration: none; border: none; font: 1.5em Georgia; text-transform: uppercase; color: #848484; margin-right: 5px;}
+.block_alf a:hover          {color: #215ca4; text-decoration: underline;}
+.block_alf a.sel,
+.block_alf a.sel:hover      {color: #000; text-decoration: none;}
+
+
+.panel_search               {padding: 15px 10px 5px 10px; background: #f2f2f2;}
+.panel_search .search_but   {background: #2DA0C6; color: #fff; padding: 5px 10px 5px 10px; font-weight: bold;}
+
+
+.statblock                  {padding-right: 30px;}
+.statblock .num             {float: right; font-size: 1.5em; font-weight: bold; margin-top: 0px; background: #fff; padding-left: 3px; padding-bottom: 3px;}
+.statblock p                {display: block; clear: both; margin-left: 20px; border-bottom: 1px dotted #aaa}
+.statblock .h2              {margin-left: 0; border: none;}
+
+
+.panel_info                 {padding: 20px; margin-top: 10px; margin-bottom: 10px; background: #3ba4c8; color: #fff;}
+.panel_info a               {color: #fff;}
+.panel_info .title          {font: 1.5em Arial; margin: 0;}
+
+
+.alf                        { font: 1.4em Georgia; padding: 5px 0px 5px 0px;}
+.alf a                      {text-decoration: none; border: none; text-transform: uppercase; color: #848484; margin-right: 5px;}
+.alf a:hover                {color: #215ca4; text-decoration: underline;}
+.alf span                   {display: block; float: left; width: 5.5em;}
+.alf a.sel,
+.alf a.sel:hover            {color: #000; text-decoration: none;}
+
+.cinfo                      {margin-left: 37px; width: 500px; margin-top: 15px;}
+.cinfo a                    {color: #222; text-decoration: none;}
+.cinfo a:hover              {color: #215ca4; text-decoration: underline;}
+
+
+.top_infoblock              {padding: 7px 10px 7px 10px; background: #fff588; margin-bottom: 10px; margin-top: 5px;}
+.top_infoblock p            {margin: 0;}
+.ebook_infoblock            { background-color:#CCFE9F; }
+
+.block_visible,
+.block_hidden               {padding: 10px;}
+.bgcolor                    {background: #F6F2EC;}
+.show_block                 {margin-top: 10px;}
+
+
+td .comment                 {margin-bottom: 0.4em; margin-top: 0.8em;}
+
+/*.top_infoblock a            {color: #000; text-decoration: none;}
+.top_infoblock a:hover      {text-decoration: underline;}*/
+
+/* Slavic fonts */
+@font-face {
+    font-family: greek_font;
+    font-style: normal;
+    font-weight: normal;
+    src: url('/fonts/lsans.ttf');
+}
+
+@font-face {
+    font-family: greek_font;
+    font-style: italic;
+    font-weight: normal;
+    src: url('/fonts/lsansi.ttf');
+}
+
+@font-face {
+    font-family: greek_font;
+    font-style: normal;
+    font-weight: bold;
+    src: url('/fonts/lsansd.ttf');
+}
+
+@font-face {
+    font-family: greek_font;
+    font-style: italic;
+    font-weight: bold;
+    src: url('/fonts/lsansdi.ttf');
+}
+
+@font-face {
+    font-family: slavonic_font;
+    font-style: normal;
+    font-weight: normal;
+    src: url('/fonts/HirmUcs8.ttf');
+}
+
+@font-face {
+    font-family: slavonic_font_ie;
+    font-style: normal;
+    font-weight: normal;
+    src: url('/fonts/HirmIEUcs8.eot');
+}
+
+@font-face {
+    font-family: slavonic_font;
+    font-style: italic;
+    font-weight: normal;
+    src: url('/fonts/HirmSoUcs8.ttf');
+}
+
+@font-face {
+    font-family: slavonic_font_ie;
+    font-style: italic;
+    font-weight: normal;
+    src: url('/fonts/HirmSoIEUcs8.eot');
+}
+div.slavic {
+    font-family: "Hirmos ieUcs", slavonic_font, slavonic_font_ie;
+    font-size: 18px;
+}
+
+div.slavic span {color:red;}
+div.slavic .kinovar {color:red;}
+div.slavic .slavic_gray {color:gray;}
+span.slavic_greek {font-family: 10pt/1.2em Arial, Helvetica, sans-serif;}
+.copyright {
+text-align: center;
+padding: 10px 0px;
+font-size: 8pt;
+color: #838D94;
+}
+.copyright  a {color:#fff;}

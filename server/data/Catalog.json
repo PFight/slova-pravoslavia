@@ -22,6 +22,44 @@
     },
     "children": [
       {
+        "id": "afPey1DAM",
+        "parentId": "ViNiikeoj",
+        "data": {
+          "sources": [
+            {
+              "language": "chu",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "psaltir-chu",
+                  "beginNodeId": "{\"selector\":\"#n27\",\"childIndex\":0}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"#n71\",\"childIndex\":2}",
+                  "endNodeFinishShift": "85"
+                }
+              ],
+              "caption": "Начальные молитвы (chu) / psaltir-chu.html"
+            },
+            {
+              "language": "chu-gr",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "psaltir-chu-gr",
+                  "beginNodeId": "{\"selector\":\"#part_43841 > h2:nth-child(1)\",\"childIndex\":1}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"#part_43841 > p:nth-child(18)\",\"childIndex\":1}",
+                  "endNodeFinishShift": "264"
+                }
+              ],
+              "caption": "Начальные молитвы (chu-gr) / psaltir-chu-gr.html"
+            }
+          ],
+          "caption": "Начальные молитвы"
+        },
+        "defaultExpanded": false
+      },
+      {
         "id": "Rcfmj7i9m",
         "data": {
           "caption": "Псалом 1",
@@ -32,41 +70,33 @@
               "ranges": [
                 {
                   "sourceFileId": "psaltir-chu",
-                  "beginNodeId": "{\"selector\":\"#n80\"}",
+                  "beginNodeId": "{\"selector\":\"#n80\",\"childIndex\":0}",
                   "beginNodeStartShift": "0",
                   "endNodeId": "{\"selector\":\"#n91\",\"childIndex\":1}",
                   "endNodeFinishShift": "62"
                 }
               ],
-              "caption": "Псалом 1 [chu] - psaltir-chu.html"
+              "caption": "Псалом 1 (chu) / psaltir-chu.html"
+            },
+            {
+              "language": "ru",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "psaltir-ru",
+                  "beginNodeId": "{\"selector\":\"html > body > h3:nth-child(7) > a:nth-child(1)\",\"childIndex\":0}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"html > body > p:nth-child(14)\",\"childIndex\":1}",
+                  "endNodeFinishShift": "62"
+                }
+              ],
+              "caption": "Псалом 1 (ru) / psaltir-ru.html"
             }
           ]
         },
-        "children": [
-          {
-            "id": "dBLbeNtRP",
-            "parentId": "Rcfmj7i9m",
-            "data": {
-              "sources": [
-                {
-                  "language": "chu",
-                  "format": "html",
-                  "ranges": [
-                    {
-                      "sourceFileId": "psaltir-chu",
-                      "beginNodeId": "{\"selector\":\"#n80\",\"childIndex\":0}",
-                      "beginNodeStartShift": "0",
-                      "endNodeId": "{\"selector\":\"#n80\",\"childIndex\":0}",
-                      "endNodeFinishShift": "41"
-                    }
-                  ],
-                  "caption": "Заголовок [chu] - psaltir-chu.html"
-                }
-              ],
-              "caption": "Заголовок"
-            }
-          }
-        ]
+        "children": [],
+        "parentId": "ViNiikeoj",
+        "defaultExpanded": false
       },
       {
         "id": "8yb4nL56E",
@@ -85,7 +115,7 @@
                   "endNodeFinishShift": "151"
                 }
               ],
-              "caption": "Псалом 2 [chu] - psaltir-chu.html"
+              "caption": "Псалом 2 (chu) / psaltir-chu.html"
             },
             {
               "language": "chu",
@@ -103,36 +133,18 @@
             }
           ],
           "caption": "Псалом 2"
-        }
-      },
-      {
-        "id": "afPey1DAM",
-        "parentId": "ViNiikeoj",
-        "data": {
-          "sources": [
-            {
-              "language": "chu",
-              "format": "html",
-              "ranges": [
-                {
-                  "sourceFileId": "psaltir-chu",
-                  "beginNodeId": "{\"selector\":\"#n27\",\"childIndex\":0}",
-                  "beginNodeStartShift": "0",
-                  "endNodeId": "{\"selector\":\"#n71\",\"childIndex\":2}",
-                  "endNodeFinishShift": "85"
-                }
-              ]
-            }
-          ],
-          "caption": "Начальные молитвы"
-        }
+        },
+        "children": [],
+        "defaultExpanded": false
       }
-    ]
+    ],
+    "defaultExpanded": true
   },
   {
     "id": "4r6GyUv2y",
     "data": {
-      "caption": "Апостол"
+      "caption": "Апостол",
+      "sources": []
     },
     "children": [
       {
@@ -147,10 +159,13 @@
             "parentId": "oDv2Y_u3-",
             "data": {
               "caption": "sdf"
-            }
+            },
+            "defaultExpanded": false
           }
-        ]
+        ],
+        "defaultExpanded": false
       }
-    ]
+    ],
+    "defaultExpanded": false
   }
 ]

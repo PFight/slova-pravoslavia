@@ -1,0 +1,86 @@
+/* 
+*** contents
+h1 { color: #FF0000; text-align: left; font-variant:normal; font-size:18pt }
+h2 { text-align: left; text-indent: 0; margin: 0; font-family: Arial; font-size: 10pt; color: #FF0000; font-weight: bold }
+h3 { text-align: left; text-indent: 15; margin: 0; font-family: Arial; font-size: 10pt; color: #FF0000; font-weight: bold }
+h4 { text-align: left; text-indent: 40; margin: 0; font-family: Arial; font-size: 10pt; color: #FF0000; font-weight: bold }
+p { text-align="left"; margin-bottom: 0; margin-top:0; font-family: Arial; font-size:10pt }
+
+*** lex
+A:hover {color: #FF0000}
+h4           { color: #FF0000 }
+h2           { font-weight: 400; color: #FF0000; text-align: left; font-variant:normal; font-size:18pt; margin-bottom:0 }
+h1           { font-weight: 400; color: #FF0000; text-align: center; font-variant:normal; font-size:18pt }
+h3           { color: #FF0000; text-align: left; margin-top:0; margin-bottom:0; font-size:12pt }
+p            { text-align="left"; text-indent: 0; margin-bottom: 5; margin-top:0; font-family:Arial; font-size:10pt }
+
+
+*** index
+A:hover	{ color: #FF0000; }
+h1       { color: #FF0000; font-size: 16pt; }
+h2       { color: #FF0000; text-align: left; font-variant: normal; font-size: 16pt; margin-bottom: 0; }
+h3       { color: #FF0000; text-align: left; margin-top: 0; margin-bottom: 0; font-size: 12pt; }
+h4       { color: #FF0000; }
+p        { text-indent: 0; margin-bottom: 5; margin-top: 0; font-family: Arial; font-size: 11pt; }
+*/
+
+/* SDS */
+body { background-color: #F1E9D6;  font-family: Arial, Helvetica, sans-serif;  font-size: 11pt;   }
+h1, h2 { color: Red; margin: 5px;  font-family: "Times New Roman", Times, serif;   }
+h3 { color: Red; text-align: left;  margin: 5px;  font-family: "Times New Roman", Times, serif;   }
+h4 { color: Red; text-align: center; margin-top:25px  font-family: "Times New Roman", Times, serif;   }
+h5  { margin:5px; color:#000000; text-align: center; font-size:10pt; font-family: "Arial", Arial, "Times New Roman", Times, serif; font-weight: normal }
+hr { color: #D2BE8F; height: 1px; }
+form { margin: 0px; }
+p { font-size: 14pt; font-family: "Arial", Arial, "Times New Roman", Times, serif; margin: 5px; text-align:justify }
+.og  { text-align:left; margin-left:300px; margin-right:5px; margin-top:5px; margin-bottom:5px }
+.k { font-weight: bold; font-size: 11pt; color: #FF0000 }
+.ks { font-weight: normal; font-size: 16pt; color: #FF0000; font-family: "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8" }
+.n { font-weight: normal; font-size: 10pt; color: #FF0000; font-family: "Arial", Times, serif }
+.l { color: #FF0000 }
+.n { font-weight: normal; font-size: 10pt; color: #FF0000; font-family: "Arial", Times, serif }
+.s  { font-weight: normal; font-size: 18pt; font-family: "Irmologion ieUcs", "Irmologion Ucs", "Triodion ieUcs", "Triodion Ucs", "Orthodox.tt ieUcs8", "Orthodox.tt Ucs8"; text-align: justify }
+.z  { font-weight: bold; font-size: 12pt; font-family: "Arial", "Times New Roman", Times, serif }
+.letter  { font-family: "Times New Roman", Times, serif;
+ 			font-size: 277%; /* Размер шрифта буквицы */
+ 			float: left; /* Выравнивание по левому краю */
+ 			color: #FF0000; /* Цвет буквицы */
+ 			padding-right: 3px; /* Отступ между буквицей и текстом */
+ 			line-height: 44px; /* Положение символа */ }
+#curpath { color: Red; font-size: 10pt; }
+table#curpath p { font-size: 10pt; }
+table#curpath a { color: Blue; font-size: 10pt; }
+table#curpath a#curpath { color: Red; font-size: 10pt; }
+#path { color: Blue; font-size: 9pt; }
+#copyright { font-size: 10pt; }
+#filesize { font-size: 9pt; color: Green; }
+
+#left { text-align: left; }
+#right { text-align: right; }
+#center { text-align: center; }
+#just { text-align: justify; }
+
+
+/* debug */
+div { border: 1px; }
+/* * { border: 1px solid #ff0000; } */
+
+@media screen and (max-width: 479px){
+	body table:first-child img {
+		width:200px;
+		height: 20px;
+	}
+	img[src*="images/pb.png"] {
+		width:200px;
+		height: 20px;
+	}
+	body table:first-child {
+		width:100%; 
+	}
+	table td p[align="center"] a {
+		display:block;
+	}
+	select[name="sel"] {
+		width: 155px;
+	}
+}

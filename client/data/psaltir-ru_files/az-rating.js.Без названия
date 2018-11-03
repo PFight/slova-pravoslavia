@@ -1,0 +1,80 @@
+var start_rate_index, rating_voted, rating_method;
+
+jQuery( document ).ready(function() {
+//	start_rate_index =  Math.round(parseFloat(jQuery( "#rating_average" ).html()));
+	start_rate_index =  parseFloat(jQuery( "#rating_average" ).html());
+	rating_voted = (jQuery( "#rating_average" ).attr("voted")=='voted')?true:false;
+	rating_method = jQuery( "#rate-box" ).attr("method");
+	
+	InitRatingState(start_rate_index, rating_voted);
+	if (rating_method=='ajax') SendRating(0);
+
+	jQuery( "#rate-box li" ).mouseover(function() {
+		if(!rating_voted){
+			InitRatingState(jQuery( this ).index()+1, rating_voted);	
+		}
+	});
+
+	jQuery( "#rate-box" ).mouseout(function() {
+		if(!rating_voted){
+			InitRatingState(start_rate_index, rating_voted);	
+		}
+	});
+	jQuery( "#rate-box li" ).click(function() {
+		if(!rating_voted){
+			rating_voted = true;
+			jQuery( "#rate-box li" ).css('cursor', 'default');
+			SendRating(jQuery( this ).index()+1);
+		}
+	});
+});
+function InitRatingState(sindex, voted){
+	if(!voted) jQuery( "#rate-box li" ).css('cursor', 'pointer');	
+	else jQuery( "#rate-box li" ).css('cursor', 'default');	 
+	star = parseInt(jQuery( "#rate-box li" ).css('height')); /* высота звездочки */
+	jQuery( "#rate-box li" ).css('background-position', '0px '+star+'px');
+	jQuery( "#rate-box li" ).each(function( index ) {
+		n=sindex-sindex%1;
+		if(index < n){
+			//jQuery(this).css('background-position', '0px '+5*star+'px');
+			jQuery(this).css('background-position', '0px 98px');
+		}
+		else if (sindex-index > 0) {
+			p=star*(Math.round(4*(sindex-index))+1);
+			jQuery(this).css('background-position', '0px '+p+'px');
+		}
+	});
+}
+function SendRating(sindex) {
+	jQuery.ajax({
+		url:     bg_rating.ajaxurl,  
+		type:     "POST",  
+		dataType: "html",  
+		cache: false,
+		async: true,									// Асинхронный запрос
+		data: {
+			action: 'bg_rating',
+			nonce : bg_rating.nonce,
+			index: sindex,
+			page: bg_rating.pageurl
+		},
+		success: function(response) {
+			if (!response) return;
+			rating_result = jQuery.parseJSON(response);
+			m = rating_result.votes % 10; 
+			j = rating_result.votes % 100;
+			if(m==0 || m>=5 || (j>=10 && j<=20)) txt_votes = bg_rating.votes5;
+			else if(m>=2 && m<=4) txt_votes = bg_rating.votes2; 
+			else txt_votes = bg_rating.vote1;
+			jQuery('#rating_votes').html(rating_result.votes);
+			jQuery('#votes').html(txt_votes);
+			jQuery('#rating_average').html(rating_result.average);
+			rating_voted = (rating_result.voted=='voted')?true:false;
+			start_rate_index = parseFloat(rating_result.average);
+			InitRatingState(start_rate_index, rating_voted);	
+		},
+		error: function(response) {  
+//			alert("Ошибка при отправке рейтинга");
+		}
+	});
+}

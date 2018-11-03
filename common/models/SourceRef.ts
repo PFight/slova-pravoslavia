@@ -13,7 +13,7 @@ export interface SourceRefSource {
   /** Комментарий к данной ссылке на источник */
   comment?: string;
   /** Русский, церковно-славянский, церковно-славянский в гражданском начертании */
-  language: "ru" | "chu" | "chu-g" | string;
+  language: "ru" | "chu" | "chu-gr" | string;
   format: "html" | "pdf" | "djvu" | "pic";
 
   /** Интервалы выделения в исходном файле */

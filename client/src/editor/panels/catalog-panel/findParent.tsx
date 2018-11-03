@@ -1,11 +1,11 @@
 import { CatalogNode } from '@common/models/CatalogNode';
-import { ITreeNode } from "@blueprintjs/core";
 import { visitDeep } from "../../utils/visitors";
+import { ReactTreeNode } from './ReactTreeNode';
 
-export function findParent(treeNodes: ITreeNode<CatalogNode>[], selectedNode: ITreeNode<CatalogNode>) {
-  let parent: ITreeNode<CatalogNode> | null = null;
+export function findParent(treeNodes: ReactTreeNode<CatalogNode>[], selectedNode: ReactTreeNode<CatalogNode>) {
+  let parent: ReactTreeNode<CatalogNode> | null = null;
   let indexInParent: number = 0;
-  visitDeep(treeNodes, "childNodes", n => {
+  visitDeep(treeNodes, "children", n => {
     if (n.nodeData!.children) {
       let index = n.nodeData!.children!.indexOf(selectedNode.nodeData!);
       if (index >= 0) {

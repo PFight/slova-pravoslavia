@@ -1,0 +1,219 @@
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.hh-pravmir-projects {
+  height: 30px;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAeCAIAAABi9+OQAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADVJREFUeNqEiTEKACAMxI4I7f+faP9RzsFFRHAICUSziowkImCALCwhGfthe/+f7z7o7iXAAG/2IudJ1UVkAAAAAElFTkSuQmCC);
+}
+.hh-pravmir-projects__limiter {
+  position: relative;
+  width: 1000px;
+  margin: 0 auto;
+  padding-top: 2px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.hh-pravmir-projects__list {
+  float: left;
+  position: relative;
+}
+.hh-pravmir-projects .hh-item {
+  float: left;
+}
+.hh-pravmir-projects .hh-item.hh-active {
+  background-color: #fff;
+  -webkit-border-radius: 2px 2px 0 0;
+  -moz-border-radius: 2px 2px 0 0;
+  border-radius: 2px 2px 0 0;
+}
+.hh-pravmir-projects .hh-item.hh-active a {
+  color: #000;
+}
+.hh-pravmir-projects__block {
+  padding: 8px 6px;
+}
+.hh-pravmir-projects__block a {
+  display: block;
+  color: #636466;
+  font-size: 11px;
+  line-height: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.hh-pravmir-projects__block a:hover {
+  color: #000;
+}
+.hh-triangle-icon:after {
+  content: "";
+  float: right;
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 5px 0 0 3px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #0074c1;
+  vertical-align: bottom;
+}
+/* =========================================
+   Переключатель видимости меню "проектов Правмира" на мобильных устройсвах
+   ======================================== */
+.hh-pravmir-projects__mobile-nav-switcher {
+  float: left;
+  display: none;
+}
+/* =========================================
+   Context styles
+   ======================================== */
+ul.hh-pravmir-projects__list {
+  margin: 0;
+  list-style-type: none;
+}
+.hh-pravmir-projects__limiter * {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+/* =========================================
+   Responsive
+   ======================================== */
+@media only screen and (max-width: 1020px) {
+  .hh-pravmir-projects__limiter {
+    width: 750px;
+  }
+  .hh-pravmir-projects .hh-item a {
+    font-size: 9px;
+  }
+  .hh-pravmir-projects .hh-item.hh-active a {
+    font-size: 11px;
+  }
+}
+@media only screen and (max-width: 750px) {
+  .hh-pravmir-projects__limiter {
+    width: 420px;
+  }
+  .hh-pravmir-projects__mobile-nav-switcher {
+    display: block;
+  }
+  .hh-pravmir-projects__list {
+    display: none;
+    border: #1f93df 1px solid;
+    border-top-width: 5px;
+    padding: 5px 0;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    z-index: 1000;
+    background-color: #fff;
+  }
+  .hh-pravmir-projects .hh-item a {
+    font-size: 10px;
+  }
+}
+@media only screen and (max-width: 470px) {
+  .hh-pravmir-projects__limiter {
+    width: 300px;
+  }
+}
+@media only screen and (max-width: 320px) {
+  .hh-pravmir-projects__limiter {
+    width: 100%;
+  }
+}
+.hh-pravmir-projects__right_block {
+  float: right;
+  position: relative;
+}
+.hh-dropdown__block {
+  display: none;
+  border: #1f93df 1px solid;
+  border-top-width: 5px;
+  padding: 5px 0;
+  position: absolute;
+  right: -4px;
+  top: 28px;
+  z-index: 999;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #fff;
+}
+.hh-dropdown__block .hh-dropdown__header {
+  padding: 3px 15px 3px 30px;
+  color: #000;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+.hh-dropdown__block .input {
+  padding: 0.2em 0.4em;
+  width: 96%;
+  border: #0075c1 1px solid;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.hh-dropdown__block .button-primary {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAAAjCAMAAADxJyUkAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMBQTFRFD2m4EGi3Dmq4Emi2E2e1DWu5FGa1DGy6Cm27FWW0GGOyCW67FmSzCG+8GWKyB3C9BnC9GmGxHGCwBXG+G2CwBHK+HV+vA3K/Hl6vAnTAA3O/H16uH12uAXTAIFytIVytIVusAXXBAHXBLm23+vz92OTy6vL5FnzEq8jlOYrIb6rXR5TNdaTT4ez2grHaxd7wnsflRX/AvNDoRnq9RobFWobCYZnNXZzQIYPHDXO/Hmm2OpPOfLfehajUm7fb////cfPorAAAAEB0Uk5T////////////////////////////////////////////////////////////////////////////////////AMJ7sUQAAADpSURBVHja1NlZQsIwFIXhg4JYQaWKIiCitrUCFRwZFM3+d4UdaJMl/N8OzsO9SU70CPRsbHoAil+cCCOin9CO0Efa2hEGTAsrQo9p/VRFuGLqzcpx0CXVtIzQwXrdRzjH2hQjrVOsVpyPtFpgkyyDjskm6VpSEy1drWqwrUKjA7ipEVxNc9Xo5jqES4zqbMv/cT5C+0yXqkcWpMez2lzed5RdME7A8jJGZ1h+Uly2fay34umpLlWw78N0QfVevp2voX6rEuaG6aOqJDVkiqw27xbpz+5U74i+nHJ+DBS4/wv3QO4vz06AAQBCMuxwJIo4AAAAAABJRU5ErkJggg==);
+  border: none;
+  padding: 0.3em 2em;
+  text-shadow: 1px 1px 1px #004d7f;
+  filter: dropshadow(color=#004d7f, offx=1, offy=1);
+  color: #fff;
+}
+.hh-dropdown__block .button-primary:focus,
+.hh-dropdown__block .button-primary:hover {
+  text-shadow: 1px 1px 1px #57a4d6;
+  filter: dropshadow(color=#57a4d6, offx=1, offy=1);
+}
+/* =========================================
+   Блок "О портале"
+   ======================================== */
+.hh-about-site .hh-dropdown__block {
+  width: 150px;
+}
+.hh-about-site .hh-dropdown__header {
+  display: none;
+}
+.hh-about-menu__list {
+  margin: 0;
+  list-style-type: none;
+}
+.hh-about-menu__list-item {
+  padding: 0 6px;
+}
+.hh-about-menu__list-item a {
+  padding: 9px 15px 9px 30px;
+  font-size: 13px;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+.hh-library-settings .hh-dropdown__block {
+  width: 220px;
+  padding: 10px 0;
+  background-color: #e7e7e7;
+}
+.hh-library-settings .panel_tools {
+  border-bottom-width: 0;
+  padding: 0 10px;
+  background-color: transparent;
+}
+.hh-library-settings .panel_tools .chbg {
+  padding: 5px 0;
+}
+.hh-library-settings .panel_tools .chfs {
+  padding: 5px 0;
+  margin-left: 0;
+}
+.hh-library-settings .panel_tools .chfnt {
+  padding: 5px 0;
+}
+/* =========================================
+   JS helpers
+   ======================================== */
+.js-visible {
+  display: block;
+}

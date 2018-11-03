@@ -1,0 +1,214 @@
+$(document).ready(function(){
+    //$(document).pngFix();
+
+
+    
+    if ($("body").width() > 800) {
+        $(".read_container").css({
+            'width':'800px'
+        });
+    }
+
+
+    
+    
+
+
+
+    $(".show_alf p a").click(function(){
+        $(".show_alf").removeClass("show_alf_sel");
+        $(this).parent("p").parent("div").toggleClass("show_alf_sel");
+        return false;
+    });
+
+
+
+    var show_parts = false;
+    $("#sh_parts a").click(function(){
+
+        if (show_parts == false) {
+            $("#list_parts").css({
+                'display':'block'
+            });
+
+            show_parts = true;
+            $(this).text("Скрыть содержание");
+
+        }else{
+            $("#list_parts").css({
+                'display':'none'
+            });
+
+            show_parts = false;
+            $(this).text("Показать содержание");
+        }
+
+
+        return false;
+    });
+
+
+
+    $("table tr::nth-child(odd)").addClass("trgray");
+
+    $("table tr").hover(
+        function(){
+            $(this).addClass("trsel")
+        },
+        function(){
+            $(this).removeClass("trsel")
+        }
+        );
+
+
+
+
+
+    if ($("body").width() < 850) {
+        
+        $("body").addClass("low_res");
+
+        $(".panel_listbook_goriz .item:eq(2),.panel_listbook_goriz .item:eq(3)").css({
+            'display':'none'
+        })
+    }
+
+
+ 
+    function SetStyles() {
+        
+        $(".panel_tools a").removeClass("sel");
+        
+        var body_bg = $.cookie("body_bg");
+        var body_size = $.cookie("body_size");
+        var body_font = $.cookie("body_font");
+        
+        if (!body_bg) body_bg = 'white';
+        if (!body_size) body_size = 'norm';
+        if (!body_font) body_font = 'times';
+        
+        
+        if (body_bg == 'black') {
+            $("body").addClass("body_black");
+            $(".logo img").attr('src','/i/logo_black1.gif');
+            $("#bg_black").addClass("sel");
+        }
+        if (body_bg == 'white') {
+            $("body").removeClass("body_black");
+            $(".logo img").attr('src','/i/logo1.gif');
+            $("#bg_white").addClass("sel");
+        }
+    
+   
+        if (body_size == 'big') {
+            $("#size_big").addClass("sel");
+            $("body").css({
+                'font-size': '13pt'
+            })
+        }
+        if (body_size == 'small') {
+            $("#size_small").addClass("sel");
+            $("body").css({
+                'font-size': '8pt'
+            })
+        }
+        if (body_size == 'norm') {
+            $("#size_norm").addClass("sel");
+            $("body").css({
+                'font-size': '10pt'
+            })
+        }
+        
+        
+        if (body_font == 'arial') {
+            $("#fn_arial").addClass("sel");
+            $(".book_read").css({
+                'font-family': 'Arial, Helvetica, sans-serif '
+            })
+        }
+        
+        if (body_font == 'times') {
+            $("#fn_times").addClass("sel");
+            $(".book_read").css({
+                'font-family': '"Times New Roman", Times, serif'
+            })
+        }
+    }
+
+    
+        
+    SetStyles();
+    
+
+
+    //Фон
+    $("#bg_black").click(function(){
+        $.cookie("body_bg",'black',  {
+            'expires': 7
+        } );
+        SetStyles();
+        return false;
+    });
+    
+    $("#bg_white").click(function(){
+        $.cookie("body_bg",'white',  {
+            'expires': 7
+        } );
+        SetStyles();
+        return false;
+    });
+    
+    
+    //Семейство шрифта
+    $("#fn_arial").click(function(){
+        $.cookie("body_font",'arial',  {
+            'expires': 7
+        } );
+        SetStyles();
+        return false;
+    });
+    
+    $("#fn_times").click(function(){
+        $.cookie("body_font",'times',  {
+            'expires': 7
+        } );
+        SetStyles();
+        return false;
+    });
+    
+    
+    
+    //Размер шрифта
+    $("#size_norm").click(function(){
+        $.cookie("body_size",'norm',  {
+            'expires': 7
+        } );
+        SetStyles();
+        return false;
+    });
+    
+    $("#size_small").click(function(){
+        $.cookie("body_size",'small',  {
+            'expires': 7
+        } );
+        SetStyles();
+        return false;
+    });
+
+
+
+    $("#size_big").click(function(){
+        $.cookie("body_size",'big', {
+            'expires': 7
+        } );
+        SetStyles();
+        return false;
+    });
+    
+    
+   
+    
+
+
+
+});

@@ -1,6 +1,8 @@
 import React from "react";
 import { CatalogNode } from '@common/models/CatalogNode';
-import { ITreeNode, Tree, Button } from "@blueprintjs/core";
+import { Button } from "@blueprintjs/core";
+// @ts-ignore
+import Tree from 'react-ui-tree';
 import { DataFileController } from "../../data-file-controller";
 import { visitDeepWithResult, visitDeep } from "../../utils/visitors";
 import { createTreeNode } from "./create-tree-node";
@@ -18,6 +20,11 @@ import { SelectedSourceRangeArgs, ASSIGN_TO_SELECTED_NODE, ADD_AS_CHILD, ADD_AS_
 import { assignNodeSource } from './assignNodeSource';
 import { findParent } from './findParent';
 import { getSourceCaption } from '../panels-common/getSourceCaption';
+import { ReactTreeNode } from './ReactTreeNode';
+import { ReactUiTreeType } from './react-ui-tree';
+
+
+var ReactUiTree = Tree as (typeof ReactUiTreeType);
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -25,17 +32,19 @@ export interface Props {
 }
 interface State {
   catalog: CatalogNode[];
-  treeNodes: ITreeNode<CatalogNode>[];
+  root: ReactTreeNode<CatalogNode>;
   editMode: boolean;
   panelNumber: number;
-  selectedNode: ITreeNode<CatalogNode> | null;
+  selectedNode: ReactTreeNode<CatalogNode> | null;
 }
 const NEW_NODE_STUB_ID = 'new-node';
 
 export class CatalogPanel extends React.Component<Props, State> {
   state = {} as State;
   dataFileController = new DataFileController();
-  editingNode: ITreeNode<CatalogNode> | undefined;
+  editingNode: ReactTreeNode<CatalogNode> | undefined;
+  uiTree: ReactUiTreeType | undefined;
+  dragStartOrig: any;
 
   componentDidMount() {
     this.loadCatalog();
@@ -86,10 +95,10 @@ export class CatalogPanel extends React.Component<Props, State> {
       this.selectNode(null, true);
       this.addNewNodeStub();
     } else {
-      this.state.treeNodes.splice(this.state.treeNodes.length - 1);
+      this.state.root.children!.splice(this.state.root.children!.length - 1);
     }
     this.setState({ editMode }, () => {
-      visitDeep(this.state.treeNodes, "childNodes", n => this.updateNodeView(n));
+      visitDeep(this.state.root.children!, "children", n => this.updateNodeView(n));
       this.forceUpdate();
     });
   }
@@ -101,17 +110,18 @@ export class CatalogPanel extends React.Component<Props, State> {
         caption: "<добавить>"
       }
     } as CatalogNode;
-    let treeNode = this.createTreeNode(catalogNode);
-    treeNode.icon = "new-text-box";
-    this.state.treeNodes.push(treeNode);
+    let ReactTreeNode = this.createTreeNode(catalogNode);
+    ReactTreeNode.icon = "new-text-box";
+    this.state.root.children!.push(ReactTreeNode);
   }
 
   async loadCatalog() {
     let catalog = await this.dataFileController.getCatalog();
-    let treeNodes = catalog.map(x => 
-      visitDeepWithResult<CatalogNode, ITreeNode<CatalogNode>>(x, null, "children", this.createTreeNode.bind(this))
+    let reactTreeNodes = catalog.map(x => 
+      visitDeepWithResult<CatalogNode, ReactTreeNode<CatalogNode>>(x, null, "children", this.createTreeNode.bind(this))
     );
-    this.setState({ catalog, treeNodes });
+    let root = { module: "root", label:"Каталог", children: reactTreeNodes, nodeData: {} as any, leaf: false, collapsed: false};
+    this.setState({ catalog, root });
   }
 
   private async assignNodeSource(args: SelectedSourceRangeArgs) {
@@ -129,20 +139,23 @@ export class CatalogPanel extends React.Component<Props, State> {
 
   private addAsSibling(args: SelectedSourceRangeArgs) {
     if (args.panelNumber == this.state.panelNumber && this.state.selectedNode) {
-      let { parent, indexInParent } = findParent(this.state.treeNodes, this.state.selectedNode);
+      let { parent, indexInParent } = findParent(this.state.root.children!, this.state.selectedNode);
       if (parent) {
         this.onAddNodeClick(parent, indexInParent + 1, { sources: [ args.source ] });
       }
     }
   }
 
-  private createTreeNode(catalogNode: CatalogNode, parent?: ITreeNode<CatalogNode>) {
-    let treeNode = createTreeNode(catalogNode, parent);
-    this.updateNodeView(treeNode);
-    return treeNode;
+  private createTreeNode(catalogNode: CatalogNode, parent?: ReactTreeNode<CatalogNode>) {
+    let ReactTreeNode = createTreeNode(catalogNode, parent);
+    this.updateNodeView(ReactTreeNode);
+    return ReactTreeNode;
   }
 
-  private onNodeClick = (nodeData: ITreeNode<CatalogNode>, e: React.MouseEvent<HTMLElement>) => {
+  private onNodeClick = (nodeData: ReactTreeNode<CatalogNode>, e: React.MouseEvent<HTMLElement>) => {
+    if (nodeData.module == "root")
+      return;
+
     if (this.state.editMode) {
       this.selectNode(nodeData, !e.shiftKey);
       this.openNode(nodeData);
@@ -152,7 +165,10 @@ export class CatalogPanel extends React.Component<Props, State> {
     this.forceUpdate();
   };
 
-  private onNodeDoubleClick = (nodeData: ITreeNode<CatalogNode>, e: React.MouseEvent<HTMLElement>) => {
+  private onNodeDoubleClick = (nodeData: ReactTreeNode<CatalogNode>, e: React.MouseEvent<HTMLElement>) => {
+    if (nodeData.module == "root")
+      return;
+
     if (this.state.editMode) {
       if (!this.editingNode) {
         this.beginNodeEdit(nodeData);
@@ -163,25 +179,15 @@ export class CatalogPanel extends React.Component<Props, State> {
     this.forceUpdate();
   }
 
-  private onNodeCollapse = (nodeData: ITreeNode) => {
-      nodeData.isExpanded = false;
-      this.forceUpdate();
-  };
-
-  private onNodeExpand = (nodeData: ITreeNode) => {
-      nodeData.isExpanded = true;
-      this.forceUpdate();
-  };
-
-  private onAddNodeClick = (parent?: ITreeNode<CatalogNode>,  indexInParent?: number, sourceRef?: SourceRef) => {
+  private onAddNodeClick = (parent?: ReactTreeNode<CatalogNode>,  indexInParent?: number, sourceRef?: SourceRef) => {
     let catalogNode = {
       id: shortid.generate(),
-      parentId: parent && parent.id || undefined,
+      parentId: parent && parent.module || undefined,
       data: sourceRef || {}
     } as CatalogNode;
-    let treeNode = this.createTreeNode(catalogNode, parent);
+    let ReactTreeNode = this.createTreeNode(catalogNode, parent);
     if (parent) {
-      parent.isExpanded = true;
+      parent.collapsed = false;
       parent.nodeData!.children = parent.nodeData!.children || [];
       if (indexInParent !== undefined) {
         parent.nodeData!.children!.splice(indexInParent, 0, catalogNode);
@@ -190,37 +196,37 @@ export class CatalogPanel extends React.Component<Props, State> {
       }
       this.updateNodeView(parent);
     } else {
-      this.state.treeNodes.push(treeNode);
+      this.state.root.children!.push(ReactTreeNode);
     }
-    this.beginNodeEdit(treeNode, parent, true);
+    this.beginNodeEdit(ReactTreeNode, parent, true);
     this.forceUpdate();
   }
 
-  private beginNodeEdit(nodeData: ITreeNode<CatalogNode>, parent?: ITreeNode<CatalogNode>, newNode?: boolean) {
+  private beginNodeEdit(nodeData: ReactTreeNode<CatalogNode>, parent?: ReactTreeNode<CatalogNode>, newNode?: boolean) {
     if (this.editingNode) {
       this.endNodeEdit(this.editingNode);
     }    
-    let accept = async (node: ITreeNode<CatalogNode>, newText: string) => {
+    let accept = async (node: ReactTreeNode<CatalogNode>, newText: string) => {
       node.label = newText;
       if (node.nodeData && node.nodeData.data) {
         node.nodeData.data.caption = newText;
-        if (node.nodeData.data.sources.length > 0) {
+        if (node.nodeData.data.sources && node.nodeData.data.sources.length > 0) {
           node.nodeData.data.sources[0].caption = getSourceCaption(node.nodeData, node.nodeData.data.sources[0]);
         }
-        if (node.id == NEW_NODE_STUB_ID) {
+        if (node.module == NEW_NODE_STUB_ID) {
             this.state.catalog.push(node.nodeData);
           node.icon = this.createTreeNode(node.nodeData).icon;
-          node.id = shortid.generate();
-          node.nodeData.id = node.id;
+          node.module = shortid.generate();
+          node.nodeData.id = node.module;
           this.addNewNodeStub();
         } 
         await this.dataFileController.saveCatalog(this.state.catalog);
       }
       this.endNodeEdit(node);
     };
-    let cancel = (node: ITreeNode<CatalogNode>) => {
-      if (newNode && parent && parent.childNodes) {
-        parent.childNodes!.splice(parent.childNodes.indexOf(node), 1);
+    let cancel = (node: ReactTreeNode<CatalogNode>) => {
+      if (newNode && parent && parent.children) {
+        parent.children!.splice(parent.children.indexOf(node), 1);
         parent.nodeData!.children!.splice(parent.nodeData!.children!.indexOf(node.nodeData!), 1);
         this.updateNodeView(parent);
       }
@@ -235,41 +241,44 @@ export class CatalogPanel extends React.Component<Props, State> {
     this.editingNode = nodeData;
   }
 
-  private endNodeEdit(node: ITreeNode<CatalogNode>) {
+  private endNodeEdit(node: ReactTreeNode<CatalogNode>) {
     this.updateNodeView(node);
     this.forceUpdate(() => {
       this.editingNode = undefined;
     });
   }
 
-  private selectNode(nodeData: ITreeNode<CatalogNode> | null, unselectOthers: boolean) {
-    const originallySelected = nodeData && nodeData.isSelected;
+  private selectNode(node: ReactTreeNode<CatalogNode> | null, unselectOthers: boolean) {
     if (unselectOthers) {
-      visitDeep(this.state.treeNodes, "childNodes", n => (n.isSelected = false));
+      visitDeep(this.state.root.children!, "children", n => {
+        (n.isSelected = false);
+        this.updateNodeView(n);
+      });
     }
-    if (nodeData) {
-      nodeData.isSelected = originallySelected == null ? true : !originallySelected;
+    if (node) {
+      node.isSelected = true;
+      this.updateNodeView(node);
     }
     this.props.glEventHub.trigger(CATALOG_ITEM_SELECTED_EVENT, {
-      node: nodeData && nodeData.nodeData || null,
+      node: node && node.nodeData || null,
       panelNumber: this.state.panelNumber
     } as CatalogItemArgs);
-    this.setState({ selectedNode: nodeData });
+    this.setState({ selectedNode: node });
   }
 
-  private openNode(nodeData: ITreeNode<CatalogNode> | null) {
+  private openNode(nodeData: ReactTreeNode<CatalogNode> | null) {
     this.props.glEventHub.trigger(CATALOG_ITEM_OPENED_EVENT, {
       node: nodeData && nodeData.nodeData || null,
       panelNumber: this.state.panelNumber
     } as CatalogItemArgs);
   }
 
-  private onAddChildNode(parent: ITreeNode<CatalogNode>) {
+  private onAddChildNode(parent: ReactTreeNode<CatalogNode>) {
     this.onAddNodeClick(parent);
   }
 
-  private async onDeleteNode(node: ITreeNode<CatalogNode>) {
-    if (node.childNodes && node.childNodes.length > 0) {
+  private async onDeleteNode(node: ReactTreeNode<CatalogNode>) {
+    if (node.children && node.children.length > 0) {
       await MessageBox.ShowConfirmation("Вы действительно хотите удалить узел со всеми его дочерними узлами?");
     } else {
       await MessageBox.ShowConfirmation("Вы действительно хотите удалить узел?");
@@ -277,77 +286,149 @@ export class CatalogPanel extends React.Component<Props, State> {
 
     if (node.nodeData && node.nodeData.parentId) {
       // Find parent node
-      let parent: ITreeNode<CatalogNode> | undefined;
-      visitDeep(this.state.treeNodes, "childNodes", n => {
-        if (n.id == node.nodeData!.parentId) {
+      let parent: ReactTreeNode<CatalogNode> | undefined;
+      visitDeep(this.state.root.children!, "children", n => {
+        if (n.module == node.nodeData!.parentId) {
           parent = n;
         }
       });
       // remove node
       if (parent) {
-        parent.childNodes!.splice(parent.childNodes!.indexOf(node), 1);
+        parent.children!.splice(parent.children!.indexOf(node), 1);
         parent.nodeData!.children!.splice(parent.nodeData!.children!.indexOf(node.nodeData), 1);
         this.updateNodeView(parent);
       }
     } else {
-      this.state.treeNodes.splice(this.state.treeNodes.indexOf(node), 1);
+      this.state.root.children!.splice(this.state.root.children!.indexOf(node), 1);
       this.state.catalog.splice(this.state.catalog.indexOf(node.nodeData!), 1);
     }
     this.forceUpdate();
     await this.dataFileController.saveCatalog(this.state.catalog);
   }
 
-  updateNodeView(node: ITreeNode<CatalogNode>) {
-    node.label = this.renderLabel(node);
-    node.icon = createTreeNode(node.nodeData!).icon;
-    if (node.childNodes && node.childNodes.length == 0) {
-      node.childNodes = undefined;
+  applyNodesOrder = async (tree: ReactTreeNode<CatalogNode>) => {
+    if (this.state.editMode) {
+      this.state.root = tree;
+      visitDeep(this.state.root.children!, "children", (node) => {
+        node.nodeData.defaultExpanded = !node.collapsed;
+        if (node.children) {
+          node.nodeData.children = node.children.map(x => x.nodeData);
+          for (let child of node.children) {
+            child.nodeData.parentId = node.nodeData.id;
+          }          
+        }
+      });
+      await this.dataFileController.saveCatalog(this.state.catalog);
     }
   }
 
-  renderLabel(node: ITreeNode<CatalogNode>) {
+  attachTree = (el: ReactUiTreeType) => {
+    // Prevent drag and drop by primary mouse button and in view mode
+    this.uiTree = el;
+    let that = this;
+    if (el) {
+      let dragStartOrig = (el as any).dragStart as Function;
+      (el as any).dragStart = function(id: string, dom: any, ev: MouseEvent) {
+        if (ev.button != 0 && that.state.editMode) {
+          let evCopy = {...ev};
+          evCopy.button = 0;
+          dragStartOrig.apply(this, [id, dom, evCopy]);
+        }
+      }
+    }
+  }
+
+  updateNodeView(node: ReactTreeNode<CatalogNode>) {
+    node.label = this.renderLabel(node);
+    node.icon = createTreeNode(node.nodeData!).icon;
+    if (node.children && node.children.length == 0) {
+      node.children = undefined;
+      node.leaf = true;
+    } else {
+      node.leaf = false;
+    }
+  }
+
+  NodeIcon = styled.span`
+    margin-right: 5px;
+  `;
+
+  Node = styled.div`
+    ${ (props: {selected: boolean} ) => `
+      padding: 4px 0 4px 5px;
+      &:hover {
+        background-color: ${props.selected? '#9cacc1;' : 'lightgray;'};
+      }
+      
+        background-color: ${props.selected? 'lightsteelblue;' : 'none;'}
+    `}
+  `;
+
+  EditNode = styled(this.Node)`
+    padding: 3px 0 3px 5px;
+  `;
+
+  NodeButton = styled(Button)`
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: auto;
+  `;
+
+  renderLabel(node: ReactTreeNode<CatalogNode>) {
     let text = "";
     if (node.nodeData && node.nodeData.data) {
       text = node.nodeData.data.caption || "<узел без названия>";
     }
-    if (this.state.editMode && node.id != NEW_NODE_STUB_ID) {
+    const NodeComponent = this.Node;
+    if (this.state.editMode && node.module != NEW_NODE_STUB_ID) {
       return (
-        <div className="display-flex">
+        <this.EditNode className="display-flex" selected={node.isSelected!}>
+          <this.NodeIcon className="flex-static margin-v-auto">{node.icon}</this.NodeIcon>
           <span className="flex-spring margin-v-auto" 
             onClick={(ev) => this.onNodeClick(node, ev)} 
             onDoubleClick={(ev) => this.onNodeDoubleClick(node, ev)}>
             {text}
           </span>
-          <Button className="flex-static margin-v-auto" minimal icon="plus" onClick={() => this.onAddChildNode(node)} />
-          <Button className="flex-static margin-v-auto" minimal icon="trash" onClick={() => this.onDeleteNode(node)} />
-        </div>
+          <this.NodeButton className="flex-static margin-v-auto" minimal icon="plus" onClick={() => this.onAddChildNode(node)} />
+          <this.NodeButton className="flex-static margin-v-auto" minimal icon="trash" onClick={() => this.onDeleteNode(node)} />
+        </this.EditNode>
       );
     } else {
       return (
-        <div 
+        <this.Node className="display-flex" selected={node.isSelected!}
           onClick={(ev) => this.onNodeClick(node, ev)} 
           onDoubleClick={(ev) => this.onNodeDoubleClick(node, ev)}>
-          {text}
-        </div>);
+          <this.NodeIcon className="flex-static margin-v-auto">{node.icon}</this.NodeIcon>
+          <span className="flex-spring margin-v-auto">
+            {text}
+          </span>
+        </this.Node>);
     }
   }
 
+
+
   render() {
       return (
-        this.state.treeNodes ?
+        this.state.root ?
           this.renderTree()
         :
         <div>Loading...</div>
     );
   }
 
+  renderNode = (node: ReactTreeNode<CatalogNode>) => {
+    return node.label;
+  }
+
   private renderTree() {
     return (
       <React.Fragment>
-        <Tree contents={this.state.treeNodes}  
-          onNodeCollapse={this.onNodeCollapse} 
-          onNodeExpand={this.onNodeExpand} >
-        </Tree>
+        <ReactUiTree  ref={this.attachTree}
+          tree={this.state.root}  
+          renderNode={this.renderNode}
+          onChange={this.applyNodesOrder} >
+        </ReactUiTree>
       </React.Fragment>
     );
   }

@@ -6,5 +6,21 @@
     "localUrl": "data/psaltir-chu.html",
     "language": "chu",
     "format": "html"
+  },
+   {
+    "name": "Псальтирь на церковно-славянском гражданским шрифтом",
+    "id": "psaltir-chu-gr",
+    "url": "",
+    "localUrl": "data/psaltir-chu-gr.html",
+    "language": "chu-gr",
+    "format": "html"
+  },
+  {
+    "name": "Псальтирь в синодальном переводе",
+    "id": "psaltir-ru",
+    "url": "",
+    "localUrl": "data/psaltir-ru.html",
+    "language": "ru",
+    "format": "html"
   }
 ]
