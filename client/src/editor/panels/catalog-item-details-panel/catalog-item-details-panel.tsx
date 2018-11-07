@@ -46,7 +46,7 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
     this.props.glEventHub.on(CATALOG_ITEM_OPENED_EVENT, (ev: CatalogItemArgs) => {
       if (ev.panelNumber == this.state.panelNumber) {
         if (ev.node && ev.node.data!.sources!.length > 0) {
-          this.selectSourceRef(ev.node, ev.node.data!.sources![0]);
+          this.selectSourceRef(ev.node);
         }
       }
     });
@@ -69,12 +69,12 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
     this.setState({ catalogItem: item });
   }
 
-  selectSourceRef(item: CatalogNode, ref: SourceRefSource) {
+  selectSourceRef(item: CatalogNode, ref?: SourceRefSource) {
     this.props.glEventHub.trigger(SELECTED_SOURCE_REF_EVENT, {
       panelNumber: this.state.panelNumber,
       catalogNodeId: item.id,
       ref: item.data!,
-      sourceIndex: item.data!.sources.indexOf(ref)
+      sourceIndex: ref ? item.data!.sources.indexOf(ref) : undefined
     } as  SelectedSourceRefArgs)
   }
 

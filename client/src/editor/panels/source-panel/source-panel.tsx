@@ -14,8 +14,10 @@ import { generatePanelNumber } from '../panels-common/generatePanelNumber';
 import { selectInFrame } from './selectInFrame';
 import { createSourceRangeEventArgs } from './createSourceRangeEventArgs';
 import { CATALOG_ITEM_SELECTED_EVENT } from '../../global-state/events/catalog-item';
+import { SourceRefSource } from '@common/models/SourceRef';
 
 const SourceFileSelect = Select.ofType<SourceFileInfo>();
+const LangSelect = Select.ofType<string>();
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -24,9 +26,11 @@ export interface Props {
 export interface State {
   panelNumber: number;
   sourceRef: SelectedSourceRefArgs | null;
+  source: SourceRefSource;
   sourceFile: SourceFileInfo;
   sourceFiles: SourceFileInfo[];
   selection: Selection | null;
+  lang: string;
 }
 export class SourcePanel extends React.Component<Props, State> {
   dataFileController = new DataFileController();
@@ -68,18 +72,18 @@ export class SourcePanel extends React.Component<Props, State> {
     if (frame) {
       if (frame.contentWindow) {
         frame.contentWindow.document.addEventListener("selectionchange", debounce(this.onTextSelect.bind(this), 300));
-        this.selectSourceRef(this.state.sourceRef);
+        this.selectSourceRef(this.state.source);
       } 
       frame.onload = () => {
         frame.contentWindow!.document.addEventListener("selectionchange", debounce(this.onTextSelect.bind(this), 300));
-        this.selectSourceRef(this.state.sourceRef);
+        this.selectSourceRef(this.state.source);
       }      
     }
   }
 
-  selectSourceRef = (sourceRef: SelectedSourceRefArgs | null) => {
-    if (this.frame && sourceRef) {
-      selectInFrame(this.frame, sourceRef.ref.sources[sourceRef.sourceIndex]);
+  selectSourceRef = (source: SourceRefSource | null) => {
+    if (this.frame && source) {
+      selectInFrame(this.frame, source);
     }
   }  
 
@@ -91,13 +95,26 @@ export class SourcePanel extends React.Component<Props, State> {
   }
 
   setItem(sourceRef: SelectedSourceRefArgs | null) {
-    if ( this.state.sourceFiles && sourceRef && sourceRef.ref.sources && sourceRef.sourceIndex >= 0) {
-      let sourceFileId = sourceRef.ref.sources[sourceRef.sourceIndex].ranges[0].sourceFileId;
-      let sourceFile = this.state.sourceFiles.find(x => x.id == sourceFileId);
-      if (sourceFile) {
-        this.setState({ sourceRef, sourceFile }, () => {
-          this.selectSourceRef(sourceRef);
-        });
+    if ( this.state.sourceFiles && sourceRef && sourceRef.ref.sources &&  sourceRef.ref.sources.length > 0) {
+      let selectedSource: SourceRefSource | undefined;
+      if (sourceRef.sourceIndex) {
+        selectedSource = sourceRef.ref.sources[sourceRef.sourceIndex];
+      } else {
+        if (this.state.lang) {
+          selectedSource = sourceRef.ref.sources!.find(x => x.language == this.state.lang);
+        }
+        if (!selectedSource) {
+          selectedSource = sourceRef.ref.sources[0];
+        }
+      }
+
+      if (selectedSource) {
+        let sourceFile = this.state.sourceFiles.find(x => x.id == selectedSource!.ranges[0].sourceFileId);
+        if (sourceFile) {
+          this.setState({ sourceRef, sourceFile, source: selectedSource }, () => {
+            this.selectSourceRef(selectedSource!);
+          });
+        }
       }
     }    
   }
@@ -105,6 +122,20 @@ export class SourcePanel extends React.Component<Props, State> {
   onSelectSource = (source: SourceFileInfo) => {
     this.setState({
       sourceFile: source
+    });
+  }
+
+  onSelectLang = (lang: string) => {
+    let sourceFile = this.state.sourceFile;
+    if (sourceFile && lang && sourceFile.language != lang) {
+      let newSource = this.state.sourceRef!.ref.sources.find(x => x.language == lang);
+      if (newSource &&  newSource!.ranges &&  newSource!.ranges.length > 0) {
+        sourceFile = this.state.sourceFiles.find(x => x.id == newSource!.ranges[0].sourceFileId)!;
+      }
+    }
+    this.setState({
+      lang: lang,
+      sourceFile: sourceFile
     });
   }
 
@@ -141,13 +172,21 @@ export class SourcePanel extends React.Component<Props, State> {
     height: calc(100% - 50px);
   `;
 
-  SourceFileMenuItem = styled.div`
+  MenuItem = styled.div`
     padding: 3px 7px;
     cursor: pointer;
+    &:hover {
+      background-color: lightgray;
+    }
   `;
   
   render() {
     let smthSelected = this.state.selection && !!this.state.selection.toString();
+    const langNames = {
+      "chu": "Церковно-славянский",
+      "chu-gr": "Церковно-славянский в гражданском  начертании",
+      "ru": "Русский"
+    } as any;
     return (
       <React.Fragment>
         <Navbar>
@@ -162,11 +201,11 @@ export class SourcePanel extends React.Component<Props, State> {
             <NavbarGroup align={Alignment.RIGHT}>
               <SourceFileSelect
                   disabled={!this.state.sourceFiles}
-                  items={this.state.sourceFiles}
+                  items={this.state.sourceFiles.filter(x => x.language == this.state.lang || !this.state.lang)}
                   itemRenderer={(item: SourceFileInfo, itemProps: IItemRendererProps) => 
-                    <this.SourceFileMenuItem key={item.id} 
+                    <this.MenuItem key={item.id} 
                       onClick={itemProps.handleClick}>{item.displayName || item.name}
-                    </this.SourceFileMenuItem> }
+                    </this.MenuItem> }
                   noResults={<MenuItem disabled={true} text="Ничего не найдено" />}
                   onItemSelect={this.onSelectSource}
                   popoverProps={{ minimal: true }}>
@@ -176,6 +215,24 @@ export class SourcePanel extends React.Component<Props, State> {
                           rightIcon="caret-down"
                           text={this.state.sourceFile ? `${this.state.sourceFile.displayName || this.state.sourceFile.name}` : "(источник не выбран)"} />
               </SourceFileSelect>
+              <div style={{width: 5}} />
+              <LangSelect 
+                disabled={!this.state.sourceFiles}
+                items={["", "chu", "chu-gr", "ru"]}
+                itemRenderer={(item: string, itemProps: IItemRendererProps) =>
+                  <this.MenuItem title={langNames[item]} onClick={itemProps.handleClick}>
+                    {(langNames[item] || 'Любой') + ' (' + (item || '-') + ')'}
+                  </this.MenuItem>
+                }
+                onItemSelect={this.onSelectLang}
+                filterable={false}
+                popoverProps={{ minimal: true }}>
+                <Button
+                    loading={!this.state.sourceFiles}
+                    rightIcon="caret-down"
+                    title="Предпочитаемый язык текстов, отображаемых в данной панели"
+                    text={this.state.lang || "-"} />
+              </LangSelect>
             </NavbarGroup>
           }
         </Navbar>

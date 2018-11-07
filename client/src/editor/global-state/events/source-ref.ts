@@ -6,5 +6,5 @@ export interface SelectedSourceRefArgs {
   panelNumber: number;
   catalogNodeId: string;
   ref: SourceRef;
-  sourceIndex: number;
+  sourceIndex: number | undefined;
 }
