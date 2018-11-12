@@ -31,6 +31,7 @@ export interface State {
   sourceFiles: SourceFileInfo[];
   selection: Selection | null;
   lang: string;
+  title: string | undefined;
 }
 export class SourcePanel extends React.Component<Props, State> {
   dataFileController = new DataFileController();
@@ -47,13 +48,18 @@ export class SourcePanel extends React.Component<Props, State> {
         setTimeout(() => this.props.glContainer.close());
       }
     });
+    this.state.title = this.props.glContainer.parent.config.title;
     let panelNumber = generatePanelNumber(GLOBAL_STATE.OpenSources);
-    if (this.state.panelNumber > 1) {
-      this.props.glContainer.setTitle(this.props.glContainer.parent.config.title + " " + this.state.panelNumber);
+    this.setPanelNumber(panelNumber);
+
+    if (this.props.glContainer.tab) {
+      this.props.glContainer.tab.element.on('click', () => this.togglePanelNumber())
+    } else {
+      this.props.glContainer.on( 'tab', (tab: GoldenLayout.Tab) => {
+          tab.element.on('click', () => this.togglePanelNumber())
+      });
     }
-    this.setState({ panelNumber }, () => {
-      this.props.glEventHub.emit(SOURCE_OPEN_EVENT, { panelNumber } as PanelOpenClosesArgs);     
-    });
+    
     this.props.glEventHub.on(SELECTED_SOURCE_REF_EVENT, (ev: SelectedSourceRefArgs) => {
       if (ev.panelNumber == this.state.panelNumber) {
         this.setItem(ev);
@@ -61,6 +67,24 @@ export class SourcePanel extends React.Component<Props, State> {
     });
     this.props.glEventHub.on(CATALOG_ITEM_SELECTED_EVENT, () => this.forceUpdate());
     this.loadSources();
+  }
+
+  private setPanelNumber(panelNumber: number) {
+    this.props.glContainer.setTitle(this.state.title + " " + 
+        (panelNumber > 1 ? panelNumber : ''));
+    this.setState({ panelNumber }, () => {
+      this.props.glEventHub.emit(SOURCE_OPEN_EVENT, { panelNumber } as PanelOpenClosesArgs);
+    });
+  }
+
+  togglePanelNumber() {
+    let catalogs = GLOBAL_STATE.OpenCatalogs.sort();
+    let next = catalogs.find(x => x > this.state.panelNumber);
+    if (next) {
+      this.setPanelNumber(next);
+    } else {
+      this.setPanelNumber(catalogs[0]);
+    }
   }
 
   componentWillUnmount() {

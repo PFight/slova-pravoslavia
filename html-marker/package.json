@@ -24,9 +24,11 @@
     "@types/node": "^10.9.2",
     "@types/parse5": "^5.0.0",
     "@types/shortid": "0.0.29",
+    "glob-fs": "^0.1.7",
     "parse5": "^5.1.0",
     "shortid": "^2.2.13",
     "tslib": "^1.9.3",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.1",
+    "windows-1251": "^1.0.0"
   }
 }
