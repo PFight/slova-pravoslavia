@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build:vendor": "jspm bundle core-js + react + react-dom + @blueprintjs/core + tslib bundles/vendor.js --minify --skip-source-maps",
-    "build": "jspm bundle ./src/editor/index - golden-layout.js - golden-layout ./bundles/editor.min.js",
+    "build": "jspm bundle ./src/editor/index - golden-layout.js - golden-layout ./bundles/editor.min.js --minify",
     "hmr": "npx chokidar-socket-emitter"
   },
   "repository": {
