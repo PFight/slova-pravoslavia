@@ -167,5 +167,164 @@
       }
     ],
     "defaultExpanded": false
+  },
+  {
+    "id": "kjEW9P3oD",
+    "data": {
+      "caption": "Евангелие",
+      "sources": []
+    },
+    "children": [
+      {
+        "id": "xDDp4Z-ud",
+        "parentId": "kjEW9P3oD",
+        "data": {
+          "caption": "От Матфея",
+          "sources": [
+            {
+              "language": "ru",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "evangelie-sinodaln",
+                  "beginNodeId": "{\"selector\":\"#n14\",\"childIndex\":0}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"#n7211\",\"childIndex\":0}",
+                  "endNodeFinishShift": "1"
+                }
+              ],
+              "caption": "От Матфея (ru) / evangelie-sinodaln.html"
+            },
+            {
+              "language": "chu",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "evangelie-ucs",
+                  "beginNodeId": "{\"selector\":\"#n11\",\"childIndex\":0}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"#n9685\",\"childIndex\":0}",
+                  "endNodeFinishShift": "1"
+                }
+              ],
+              "caption": "От Матфея (chu) / evangelie-ucs.html"
+            }
+          ]
+        },
+        "children": [
+          {
+            "id": "_INtNDDDL",
+            "parentId": "xDDp4Z-ud",
+            "data": {
+              "sources": [
+                {
+                  "language": "ru",
+                  "format": "html",
+                  "ranges": [
+                    {
+                      "sourceFileId": "evangelie-sinodaln",
+                      "beginNodeId": "{\"selector\":\"#n480\",\"childIndex\":0}",
+                      "beginNodeStartShift": "0",
+                      "endNodeId": "{\"selector\":\"#n481\",\"childIndex\":1}",
+                      "endNodeFinishShift": "2109"
+                    }
+                  ],
+                  "caption": "Зачало 1 (ru) / evangelie-sinodaln.html"
+                },
+                {
+                  "language": "chu",
+                  "format": "html",
+                  "ranges": [
+                    {
+                      "sourceFileId": "evangelie-ucs",
+                      "beginNodeId": "{\"selector\":\"#n966\",\"childIndex\":0}",
+                      "beginNodeStartShift": "0",
+                      "endNodeId": "{\"selector\":\"#n969\",\"childIndex\":0}",
+                      "endNodeFinishShift": "2220"
+                    }
+                  ],
+                  "caption": "Зачало 1 (chu) / evangelie-ucs.html"
+                }
+              ],
+              "caption": "Зачало 1"
+            }
+          },
+          {
+            "id": "XQCGBRX5o",
+            "parentId": "xDDp4Z-ud",
+            "data": {
+              "sources": [
+                {
+                  "language": "ru",
+                  "format": "html",
+                  "ranges": [
+                    {
+                      "sourceFileId": "evangelie-sinodaln",
+                      "beginNodeId": "{\"selector\":\"#n489\",\"childIndex\":0}",
+                      "beginNodeStartShift": "0",
+                      "endNodeId": "{\"selector\":\"#n492\"}",
+                      "endNodeFinishShift": "0"
+                    }
+                  ],
+                  "caption": "зачало 2 (ru) / evangelie-sinodaln.html"
+                },
+                {
+                  "language": "chu",
+                  "format": "html",
+                  "ranges": [
+                    {
+                      "sourceFileId": "evangelie-ucs",
+                      "beginNodeId": "{\"selector\":\"#n976\",\"childIndex\":0}",
+                      "beginNodeStartShift": "0",
+                      "endNodeId": "{\"selector\":\"#n979\",\"childIndex\":0}",
+                      "endNodeFinishShift": "823"
+                    }
+                  ],
+                  "caption": "зачало 2 (chu) / evangelie-ucs.html"
+                }
+              ],
+              "caption": "зачало 2"
+            }
+          },
+          {
+            "id": "vWmcGM8r-",
+            "parentId": "xDDp4Z-ud",
+            "data": {
+              "sources": [
+                {
+                  "language": "ru",
+                  "format": "html",
+                  "ranges": [
+                    {
+                      "sourceFileId": "evangelie-sinodaln",
+                      "beginNodeId": "{\"selector\":\"#n498\",\"childIndex\":0}",
+                      "beginNodeStartShift": "0",
+                      "endNodeId": "{\"selector\":\"#n499\",\"childIndex\":1}",
+                      "endNodeFinishShift": "1228"
+                    }
+                  ],
+                  "caption": "зачало 3 (ru) / evangelie-sinodaln.html"
+                },
+                {
+                  "language": "chu",
+                  "format": "html",
+                  "ranges": [
+                    {
+                      "sourceFileId": "evangelie-ucs",
+                      "beginNodeId": "{\"selector\":\"#n988\",\"childIndex\":0}",
+                      "beginNodeStartShift": "0",
+                      "endNodeId": "{\"selector\":\"#n991\",\"childIndex\":0}",
+                      "endNodeFinishShift": "1267"
+                    }
+                  ],
+                  "caption": "зачало 3 (chu) / evangelie-ucs.html"
+                }
+              ],
+              "caption": "зачало 3"
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

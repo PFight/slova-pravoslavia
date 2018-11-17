@@ -7,7 +7,7 @@ async function bootstrap() {
   app.enableCors({
       origin: "*"
   });
-  app.useStaticAssets(join(__dirname, '..', 'data', 'sources'));
-  await app.listen(3000);
+  app.useStaticAssets(join(__dirname, '..', '..', 'client'));
+  await app.listen(80);
 }
 bootstrap();

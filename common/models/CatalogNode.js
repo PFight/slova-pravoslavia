@@ -5,8 +5,11 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            CatalogNode = class CatalogNode {
-            };
+            CatalogNode = /** @class */ (function () {
+                function CatalogNode() {
+                }
+                return CatalogNode;
+            }());
             exports_1("CatalogNode", CatalogNode);
         }
     };

@@ -14,16 +14,21 @@
     <script src="config.js" ></script>
   </head>
   <body>
-    <div id="app"></div>    
-    <script src="bundles/vendor.js"></script>    
+    <div id="app"></div>  
     <script src="bundles/jquery.min.js"></script>
-    <script src="bundles/goldenlayout.min.js"></script>
+    <script src="bundles/goldenlayout.min.js"></script>    
     <script>
+      System.set('golden-layout.js', System.newModule({
+          "default": window.GoldenLayout
+      }));   
       System.set('golden-layout', System.newModule({
           "default": window.GoldenLayout
-      }));
+      }));       
+    </script>
+    <script src="bundles/editor.min.js"></script>
+    <script>
       SystemJS.import('systemjs-hot-reloader').then(function(connect) {
-        connect()
+        // connect()
         System.import("./src/editor/index");
       });
     </script>

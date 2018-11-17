@@ -10,8 +10,8 @@ function bootstrap() {
         app.enableCors({
             origin: "*"
         });
-        app.useStaticAssets(path_1.join(__dirname, '..', 'data', 'sources'));
-        yield app.listen(3000);
+        app.useStaticAssets(path_1.join(__dirname, '..', '..', 'client'));
+        yield app.listen(80);
     });
 }
 bootstrap();
