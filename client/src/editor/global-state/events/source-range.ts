@@ -7,5 +7,6 @@ export const ADD_AS_SIBLING = "ADD_AS_SIBLING";
 
 export interface SelectedSourceRangeArgs {
   panelNumber: number;
+  header?: string;
   source: SourceRefSource;
 }

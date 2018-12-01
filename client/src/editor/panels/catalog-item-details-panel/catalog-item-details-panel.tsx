@@ -70,12 +70,7 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
   }
 
   selectSourceRef(item: CatalogNode, ref?: SourceRefSource) {
-    this.props.glEventHub.trigger(SELECTED_SOURCE_REF_EVENT, {
-      panelNumber: this.state.panelNumber,
-      catalogNodeId: item.id,
-      ref: item.data!,
-      sourceIndex: ref ? item.data!.sources.indexOf(ref) : undefined
-    } as  SelectedSourceRefArgs)
+    this.props.glEventHub.trigger(SELECTED_SOURCE_REF_EVENT, 
   }
 
   onSelectedRef(ref: SourceRefSource) {

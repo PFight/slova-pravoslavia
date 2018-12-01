@@ -1,9 +1,10 @@
 import { SourceFileInfo } from '@common/models/SourceFileInfo';
 import { SelectedSourceRangeArgs } from '../../global-state/events/source-range';
 import { getNodeId } from './nodeSelector';
-export function createSourceRangeEventArgs(panelNumber: number, sourceFile: SourceFileInfo, selection: Selection): SelectedSourceRangeArgs {
+export function createSourceRangeEventArgs(panelNumber: number, sourceFile: SourceFileInfo, selection: Selection, header?: string): SelectedSourceRangeArgs {
   return {
-    panelNumber: panelNumber,
+    panelNumber,
+    header,
     source: {
       language: sourceFile.language,
       format: sourceFile.format,

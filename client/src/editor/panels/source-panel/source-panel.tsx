@@ -13,8 +13,10 @@ import { GLOBAL_STATE } from '../../global-state/global-state';
 import { generatePanelNumber } from '../panels-common/generatePanelNumber';
 import { selectInFrame } from './selectInFrame';
 import { createSourceRangeEventArgs } from './createSourceRangeEventArgs';
-import { CATALOG_ITEM_SELECTED_EVENT } from '../../global-state/events/catalog-item';
+import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs } from '../../global-state/events/catalog-item';
 import { SourceRefSource } from '@common/models/SourceRef';
+import { showSelectNameDialog } from './select-name-dialog';
+import { getSelectionHtml } from '../panels-common/get-selection-html';
 
 const SourceFileSelect = Select.ofType<SourceFileInfo>();
 const LangSelect = Select.ofType<string>();
@@ -65,7 +67,19 @@ export class SourcePanel extends React.Component<Props, State> {
         this.setItem(ev);
       }
     });
-    this.props.glEventHub.on(CATALOG_ITEM_SELECTED_EVENT, () => this.forceUpdate());
+    this.props.glEventHub.on(CATALOG_ITEM_SELECTED_EVENT, (ev: CatalogItemArgs) => {
+      this.forceUpdate();
+      if (ev.panelNumber == this.state.panelNumber) {
+        if (ev.node && ev.node.data!.sources!.length > 0) {
+          this.setItem({
+            panelNumber: ev.panelNumber,
+            catalogNodeId: ev.node.id,
+            ref: ev.node.data!,
+            sourceIndex: undefined
+          } as  SelectedSourceRefArgs);
+        }
+      }
+    });
     this.loadSources();
   }
 
@@ -96,10 +110,12 @@ export class SourcePanel extends React.Component<Props, State> {
     if (frame) {
       if (frame.contentWindow) {
         frame.contentWindow.document.addEventListener("selectionchange", debounce(this.onTextSelect.bind(this), 300));
+        frame.contentWindow.document.addEventListener("keydown", this.onFrameKeyDown);
         this.selectSourceRef(this.state.source);
       } 
       frame.onload = () => {
         frame.contentWindow!.document.addEventListener("selectionchange", debounce(this.onTextSelect.bind(this), 300));
+        frame.contentWindow!.document.addEventListener("keydown", this.onFrameKeyDown);
         this.selectSourceRef(this.state.source);
       }      
     }
@@ -120,32 +136,41 @@ export class SourcePanel extends React.Component<Props, State> {
 
   setItem(sourceRef: SelectedSourceRefArgs | null) {
     if ( this.state.sourceFiles && sourceRef && sourceRef.ref.sources &&  sourceRef.ref.sources.length > 0) {
+      // Выбран ссылка, которая может содержать множество источников. Нужно выбрать какой из них наш.
       let selectedSource: SourceRefSource | undefined;
+      // Явно указан источник
       if (sourceRef.sourceIndex) {
-        selectedSource = sourceRef.ref.sources[sourceRef.sourceIndex];
+        if (!this.state.lang || sourceRef.ref.sources[sourceRef.sourceIndex].language == this.state.lang) {
+          selectedSource = sourceRef.ref.sources[sourceRef.sourceIndex];
+        } else {
+          // Выбран не наш язык - игнорируем
+        }
       } else {
+        // Ищем источник на нашем яызыке
         if (this.state.lang) {
           selectedSource = sourceRef.ref.sources!.find(x => x.language == this.state.lang);
         }
-        if (!selectedSource) {
+        // Если не нашлось, выбираем первый попавшийся
+        if (!this.state.lang && !selectedSource) {
           selectedSource = sourceRef.ref.sources[0];
         }
       }
-
-      if (selectedSource) {
-        let sourceFile = this.state.sourceFiles.find(x => x.id == selectedSource!.ranges[0].sourceFileId);
-        if (sourceFile) {
-          this.setState({ sourceRef, sourceFile, source: selectedSource }, () => {
-            this.selectSourceRef(selectedSource!);
-          });
-        }
+   
+      let sourceFile = selectedSource && this.state.sourceFiles.find(x => x.id == selectedSource!.ranges[0].sourceFileId);
+      if (selectedSource && sourceFile) {
+        this.setState({ sourceRef, sourceFile, source: selectedSource }, () => {
+          this.selectSourceRef(selectedSource!);
+        });
+      } else {
+        this.setState({ sourceRef });
       }
     }    
   }
 
   onSelectSource = (source: SourceFileInfo) => {
     this.setState({
-      sourceFile: source
+      sourceFile: source,
+      selection: null
     });
   }
 
@@ -171,6 +196,12 @@ export class SourcePanel extends React.Component<Props, State> {
     }
     this.setState({ selection });
   }
+  
+  onFrameKeyDown = (ev: KeyboardEvent) => {
+    if (ev.keyCode == 13) {
+      this.onAddSiblingClick();
+    }
+  }
 
   onAssingClick = () => {
     if (this.state.selection) {
@@ -178,16 +209,18 @@ export class SourcePanel extends React.Component<Props, State> {
         this.state.panelNumber, this.state.sourceFile, this.state.selection));
     }
   }
-  onAddChildClick = () => {
+  onAddChildClick = async () => {
     if (this.state.selection) {
+      let additionalData = await showSelectNameDialog(getSelectionHtml(this.state.selection, this.frame!.contentDocument!));
       this.props.glEventHub.emit(ADD_AS_CHILD, createSourceRangeEventArgs(
-        this.state.panelNumber, this.state.sourceFile, this.state.selection));
+        this.state.panelNumber, this.state.sourceFile, this.state.selection, additionalData.header));
     }
   }
-  onAddSiblingClick = () => {
+  onAddSiblingClick = async () => {
     if (this.state.selection) {
-      this.props.glEventHub.emit(ADD_AS_SIBLING, createSourceRangeEventArgs(
-        this.state.panelNumber, this.state.sourceFile, this.state.selection));
+      let additionalData = await showSelectNameDialog(getSelectionHtml(this.state.selection, this.frame!.contentDocument!));
+      this.props.glEventHub.emit(ADD_AS_SIBLING,
+         createSourceRangeEventArgs(this.state.panelNumber, this.state.sourceFile, this.state.selection, additionalData.header));
     }
   }
 
@@ -205,22 +238,20 @@ export class SourcePanel extends React.Component<Props, State> {
   `;
   
   render() {
-    let smthSelected = this.state.selection && !!this.state.selection.toString();
+    let smthSelected = GLOBAL_STATE.SelectedNode && (this.state.selection && !!this.state.selection.toString());
     const langNames = {
       "chu": "Церковно-славянский",
-      "chu-gr": "Церковно-славянский в гражданском  начертании",
+      "chu-gr": "Церковно-славянский в гражданском начертании",
       "ru": "Русский"
     } as any;
     return (
       <React.Fragment>
-        <Navbar>
-          { GLOBAL_STATE.SelectedNode && this.state.sourceRef &&
-            <NavbarGroup align={Alignment.LEFT} >
-              <Button icon="menu-closed" onClick={this.onAssingClick} disabled={!smthSelected}  minimal text="Назначить" title="Сопоставить с выделенным узлом"  />
-              <Button icon="git-new-branch" onClick={this.onAddChildClick} disabled={!smthSelected}  minimal text="Новый подраздел" title="Добавить как дочерний узел"  />
-              <Button icon="new-link" onClick={this.onAddSiblingClick} disabled={!smthSelected}  minimal text="Новый раздел" title="Добавить как соседний узел"  />
-            </NavbarGroup>
-          }
+        <Navbar>       
+          <NavbarGroup align={Alignment.LEFT} >
+            <Button icon="menu-closed" onClick={this.onAssingClick} disabled={!smthSelected}  minimal text="в текущий" title="Сопоставить с выделенным узлом"  />
+            <Button icon="git-new-branch" onClick={this.onAddChildClick} disabled={!smthSelected}  minimal text="+ подраздел" title="Добавить как дочерний узел"  />
+            <Button icon="new-link" onClick={this.onAddSiblingClick} disabled={!smthSelected}  minimal text="+ раздел" title="Добавить как соседний узел"  />
+          </NavbarGroup>          
           { this.state.sourceFiles && 
             <NavbarGroup align={Alignment.RIGHT}>
               <SourceFileSelect
