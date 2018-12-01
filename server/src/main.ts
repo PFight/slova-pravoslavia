@@ -7,6 +7,9 @@ async function bootstrap() {
   const keyFile  = fs.readFileSync(__dirname + '/../ssl/slova-pravoslavia.ru.key');
   const certFile = fs.readFileSync(__dirname + '/../ssl/slova-pravoslavia.ru.crt');
 
+  console.info('Key length:' + keyFile.length);
+  console.info('Cert length:' + certFile.length);
+
   const app = await NestFactory.create(AppModule, {
       httpsOptions: {
         key: keyFile,

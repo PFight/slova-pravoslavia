@@ -9,6 +9,8 @@ function bootstrap() {
         const fs = require('fs');
         const keyFile = fs.readFileSync(__dirname + '/../ssl/slova-pravoslavia.ru.key');
         const certFile = fs.readFileSync(__dirname + '/../ssl/slova-pravoslavia.ru.crt');
+        console.info('Key length:' + keyFile.length);
+        console.info('Cert length:' + certFile.length);
         const app = yield core_1.NestFactory.create(app_module_1.AppModule, {
             httpsOptions: {
                 key: keyFile,
