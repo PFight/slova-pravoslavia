@@ -3,7 +3,16 @@ import { AppModule } from './app.module';
 import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const fs = require('fs');
+  const keyFile  = fs.readFileSync(__dirname + '/../ssl/slova-pravoslavia.ru.key');
+  const certFile = fs.readFileSync(__dirname + '/../ssl/slova-pravoslavia.ru.crt');
+
+  const app = await NestFactory.create(AppModule, {
+      httpsOptions: {
+        key: keyFile,
+        cert: certFile,
+      }
+  });
   app.enableCors({
       origin: "*"
   });
