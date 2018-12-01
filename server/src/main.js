@@ -6,17 +6,19 @@ const app_module_1 = require("./app.module");
 const path_1 = require("path");
 function bootstrap() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        /*
         const fs = require('fs');
-        const keyFile = fs.readFileSync(__dirname + '/../ssl/slova-pravoslavia.ru.key');
+        const keyFile  = fs.readFileSync(__dirname + '/../ssl/slova-pravoslavia.ru.key');
         const certFile = fs.readFileSync(__dirname + '/../ssl/slova-pravoslavia.ru.crt');
         console.info('Key length:' + keyFile.length);
         console.info('Cert length:' + certFile.length);
-        const app = yield core_1.NestFactory.create(app_module_1.AppModule, {
+        */
+        const app = yield core_1.NestFactory.create(app_module_1.AppModule); /*, {
             httpsOptions: {
-                key: keyFile,
-                cert: certFile,
+              key: keyFile,
+              cert: certFile,
             }
-        });
+        });*/
         app.enableCors({
             origin: "*"
         });
