@@ -1,3 +1,2 @@
 node_modules/
-client/bundles/editor.min.js
-client/bundles/editor.min.js.map
+server/ssl
