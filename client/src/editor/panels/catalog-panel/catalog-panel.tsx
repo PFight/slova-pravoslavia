@@ -438,15 +438,20 @@ export class CatalogPanel extends React.Component<Props, State> {
     return node.label;
   }
 
+  scrollContainer = styled.div`
+    overflow-y: auto;
+    height: 100%;
+  `;
+
   private renderTree() {
     return (
-      <React.Fragment>
+      <this.scrollContainer>
         <ReactUiTree  ref={this.attachTree}
           tree={this.state.root}  
           renderNode={this.renderNode}
           onChange={this.applyNodesOrder} >
         </ReactUiTree>
-      </React.Fragment>
+      </this.scrollContainer>
     );
   }
 }
