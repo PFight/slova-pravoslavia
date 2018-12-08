@@ -127,6 +127,7 @@ export class CatalogPanel extends React.Component<Props, State> {
   private async assignNodeSource(args: SelectedSourceRangeArgs) {
     if (args.panelNumber == this.state.panelNumber && this.state.selectedNode) {
       assignNodeSource(this.state.selectedNode.nodeData!, args);
+      this.triggerNodeSelected(this.state.selectedNode);
       await this.dataFileController.saveCatalog(this.state.catalog);
     }
   }
@@ -276,11 +277,15 @@ export class CatalogPanel extends React.Component<Props, State> {
       node.isSelected = true;
       this.updateNodeView(node);
     }
+    this.triggerNodeSelected(node);
+    this.setState({ selectedNode: node });
+  }
+
+  private triggerNodeSelected(node: ReactTreeNode<CatalogNode> | null) {
     this.props.glEventHub.trigger(CATALOG_ITEM_SELECTED_EVENT, {
       node: node && node.nodeData || null,
       panelNumber: this.state.panelNumber
     } as CatalogItemArgs);
-    this.setState({ selectedNode: node });
   }
 
   private openNode(nodeData: ReactTreeNode<CatalogNode> | null) {
