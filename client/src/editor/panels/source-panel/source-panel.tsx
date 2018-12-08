@@ -51,8 +51,8 @@ export class SourcePanel extends React.Component<Props, State> {
       }
     });
     this.state.title = this.props.glContainer.parent.config.title;
-    let panelNumber = generatePanelNumber(GLOBAL_STATE.OpenSources);
-    this.setPanelNumber(panelNumber);
+    this.state.panelNumber = GLOBAL_STATE.OpenSources.reduce((prev, cur) => cur > prev ? cur : prev, Number.MIN_VALUE);
+    this.togglePanelNumber();
 
     if (this.props.glContainer.tab) {
       this.props.glContainer.tab.element.on('click', () => this.togglePanelNumber())
