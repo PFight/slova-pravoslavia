@@ -32,10 +32,10 @@ export interface Props {
 }
 interface State {
   catalog: CatalogNode[];
-  root: ReactTreeNode<CatalogNode>;
+  
   editMode: boolean;
   panelNumber: number;
-  selectedNode: ReactTreeNode<CatalogNode> | null;
+  
 }
 const NEW_NODE_STUB_ID = 'new-node';
 
@@ -45,6 +45,8 @@ export class CatalogPanel extends React.Component<Props, State> {
   editingNode: ReactTreeNode<CatalogNode> | undefined;
   uiTree: ReactUiTreeType | undefined;
   dragStartOrig: any;
+  root: ReactTreeNode<CatalogNode> | null = null;
+  selectedNode: ReactTreeNode<CatalogNode> | null = null;
 
   componentDidMount() {
     this.loadCatalog();
@@ -95,10 +97,10 @@ export class CatalogPanel extends React.Component<Props, State> {
       this.selectNode(null, true);
       this.addNewNodeStub();
     } else {
-      this.state.root.children!.splice(this.state.root.children!.length - 1);
+      this.root!.children!.splice(this.root!.children!.length - 1);
     }
     this.setState({ editMode }, () => {
-      visitDeep(this.state.root.children!, "children", n => this.updateNodeView(n));
+      visitDeep(this.root!.children!, "children", n => this.updateNodeView(n));
       this.forceUpdate();
     });
   }
@@ -112,7 +114,7 @@ export class CatalogPanel extends React.Component<Props, State> {
     } as CatalogNode;
     let ReactTreeNode = this.createTreeNode(catalogNode);
     ReactTreeNode.icon = "new-text-box";
-    this.state.root.children!.push(ReactTreeNode);
+    this.root!.children!.push(ReactTreeNode);
   }
 
   async loadCatalog() {
@@ -120,21 +122,22 @@ export class CatalogPanel extends React.Component<Props, State> {
     let reactTreeNodes = catalog.map(x => 
       visitDeepWithResult<CatalogNode, ReactTreeNode<CatalogNode>>(x, null, "children", this.createTreeNode.bind(this))
     );
-    let root = { module: "root", label:"Каталог", children: reactTreeNodes, nodeData: {} as any, leaf: false, collapsed: false};
-    this.setState({ catalog, root });
+    this.root = { module: "root", label:"Каталог", children: reactTreeNodes, nodeData: {} as any, leaf: false, collapsed: false};
+    this.state.catalog = catalog;
+    this.forceUpdate();    
   }
 
   private async assignNodeSource(args: SelectedSourceRangeArgs) {
-    if (args.panelNumber == this.state.panelNumber && this.state.selectedNode) {
-      assignNodeSource(this.state.selectedNode.nodeData!, args);
-      this.triggerNodeSelected(this.state.selectedNode);
+    if (args.panelNumber == this.state.panelNumber && this.selectedNode) {
+      assignNodeSource(this.selectedNode.nodeData!, args);
+      this.triggerNodeSelected(this.selectedNode);
       await this.dataFileController.saveCatalog(this.state.catalog);
     }
   }
 
   private addAsChild(args: SelectedSourceRangeArgs) {
-    if (args.panelNumber == this.state.panelNumber && this.state.selectedNode) {
-      let node = this.onAddNode(this.state.selectedNode, undefined, { sources: [ args.source ] }, !args.header);
+    if (args.panelNumber == this.state.panelNumber && this.selectedNode) {
+      let node = this.onAddNode(this.selectedNode, undefined, { sources: [ args.source ] }, !args.header);
       if (args.header) {
         node.nodeData!.data!.caption = args.header;
         this.updateNodeView(node);
@@ -146,8 +149,8 @@ export class CatalogPanel extends React.Component<Props, State> {
   }
 
   private addAsSibling(args: SelectedSourceRangeArgs) {
-    if (args.panelNumber == this.state.panelNumber && this.state.selectedNode) {
-      let { parent, indexInParent } = findParent(this.state.root.children!, this.state.selectedNode);
+    if (args.panelNumber == this.state.panelNumber && this.selectedNode) {
+      let { parent, indexInParent } = findParent(this.root!.children!, this.selectedNode);
       if (parent) {
         let node = this.onAddNode(parent, indexInParent + 1, { sources: [ args.source ] }, !args.header);
         if (args.header) {
@@ -211,7 +214,7 @@ export class CatalogPanel extends React.Component<Props, State> {
       }
       this.updateNodeView(parent);
     } else {
-      this.state.root.children!.push(reactTreeNode);
+      this.root!.children!.push(reactTreeNode);
     }
     if (startEdit) {
       this.beginNodeEdit(reactTreeNode, parent, true);
@@ -268,7 +271,7 @@ export class CatalogPanel extends React.Component<Props, State> {
 
   private selectNode(node: ReactTreeNode<CatalogNode> | null, unselectOthers: boolean) {
     if (unselectOthers) {
-      visitDeep(this.state.root.children!, "children", n => {
+      visitDeep(this.root!.children!, "children", n => {
         (n.isSelected = false);
         this.updateNodeView(n);
       });
@@ -278,7 +281,8 @@ export class CatalogPanel extends React.Component<Props, State> {
       this.updateNodeView(node);
     }
     this.triggerNodeSelected(node);
-    this.setState({ selectedNode: node });
+    this.selectedNode = node;
+    this.forceUpdate();
   }
 
   private triggerNodeSelected(node: ReactTreeNode<CatalogNode> | null) {
@@ -309,7 +313,7 @@ export class CatalogPanel extends React.Component<Props, State> {
     if (node.nodeData && node.nodeData.parentId) {
       // Find parent node
       let parent: ReactTreeNode<CatalogNode> | undefined;
-      visitDeep(this.state.root.children!, "children", n => {
+      visitDeep(this.root!.children!, "children", n => {
         if (n.module == node.nodeData!.parentId) {
           parent = n;
         }
@@ -321,7 +325,7 @@ export class CatalogPanel extends React.Component<Props, State> {
         this.updateNodeView(parent);
       }
     } else {
-      this.state.root.children!.splice(this.state.root.children!.indexOf(node), 1);
+      this.root!.children!.splice(this.root!.children!.indexOf(node), 1);
       this.state.catalog.splice(this.state.catalog.indexOf(node.nodeData!), 1);
     }
     this.forceUpdate();
@@ -330,8 +334,8 @@ export class CatalogPanel extends React.Component<Props, State> {
 
   applyNodesOrder = async (tree: ReactTreeNode<CatalogNode>) => {
     if (this.state.editMode) {
-      this.state.root = tree;
-      visitDeep(this.state.root.children!, "children", (node) => {
+      this.root = tree;
+      visitDeep(this.root!.children!, "children", (node) => {
         node.nodeData.defaultExpanded = !node.collapsed;
         if (node.children) {
           node.nodeData.children = node.children.map(x => x.nodeData);
@@ -432,7 +436,7 @@ export class CatalogPanel extends React.Component<Props, State> {
 
   render() {
       return (
-        this.state.root ?
+        this.root ?
           this.renderTree()
         :
         <div>Loading...</div>
@@ -452,7 +456,7 @@ export class CatalogPanel extends React.Component<Props, State> {
     return (
       <this.scrollContainer>
         <ReactUiTree  ref={this.attachTree}
-          tree={this.state.root}  
+          tree={this.root!}  
           renderNode={this.renderNode}
           onChange={this.applyNodesOrder} >
         </ReactUiTree>

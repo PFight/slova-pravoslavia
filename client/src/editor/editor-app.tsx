@@ -28,7 +28,18 @@ export class EditorApp extends React.Component<{}, IEditorAppState> {
   mountLayout = async (bodyElem: HTMLElement | null) => {
     if (bodyElem) {
       let config = await loadConfig();
-      this.layout = new GoldenLayout(config, bodyElem);
+      const SAVED_STATE_KEY = 'savedState';
+      var savedState = localStorage.getItem(SAVED_STATE_KEY);
+      if( savedState !== null ) {
+         this.layout = new GoldenLayout(JSON.parse(savedState), bodyElem);
+      } else {
+         this.layout = new GoldenLayout(config, bodyElem);
+      }
+      this.layout.on('stateChanged', () => {
+          var state = JSON.stringify(this.layout!.toConfig());
+          localStorage.setItem(SAVED_STATE_KEY, state );
+      });
+
       registerPanels(this.layout);
       (window as any)["React"] = React;
       (window as any)["ReactDOM"] = ReactDOM;

@@ -47,7 +47,7 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
       if (ev.panelNumber == this.state.panelNumber) {
         if (ev.node && ev.node.data!.sources!.length > 0) {
           this.selectSourceRef(ev.node);
-        }
+        } 
       }
     });
     this.props.glEventHub.on(SELECTED_SOURCE_RANGE_EVENT, () => this.forceUpdate());
@@ -70,7 +70,12 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
   }
 
   selectSourceRef(item: CatalogNode, ref?: SourceRefSource) {
-    this.props.glEventHub.trigger(SELECTED_SOURCE_REF_EVENT, 
+    this.props.glEventHub.trigger(SELECTED_SOURCE_REF_EVENT, { 
+      catalogNodeId: item.id,  
+      panelNumber: this.state.panelNumber,
+      sourceIndex: ref ? item.data!.sources.indexOf(ref) : undefined,
+      ref: item.data
+     } as SelectedSourceRefArgs); 
   }
 
   onSelectedRef(ref: SourceRefSource) {
