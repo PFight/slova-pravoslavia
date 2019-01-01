@@ -28,8 +28,8 @@ export class Header extends React.PureComponent<HeaderProps> {
         </LogoWrapper>
         <TitleLabel className="flex-static">Слова</TitleLabel>
         <div className="flex-spring"/>
-        {this.props.panels && this.props.panels.map(x => 
-          <PanelWrapper key={x.config.id as any} className="flex-static" title={x.description} 
+        {this.props.panels && this.props.panels.map((x, i) => 
+          <PanelWrapper key={i} className="flex-static" title={x.description} 
             innerRef={(el) => this.attachDragSource(el, x)}>
             {x.iconRender()}
           </PanelWrapper>

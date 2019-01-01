@@ -278,7 +278,7 @@ export class SourcePanel extends React.Component<Props, State> {
                   itemPredicate={(q, x) => (x.displayName || x.name).includes(q)}
                   items={this.state.sourceFiles.filter(x => x.language == this.state.lang || !this.state.lang)}
                   itemRenderer={(item: SourceFileInfo, itemProps: IItemRendererProps) => 
-                    <this.MenuItem key={item.id} 
+                    <this.MenuItem key={item.id || item.name} 
                       onClick={itemProps.handleClick}>{item.displayName || item.name}
                     </this.MenuItem> }
                   noResults={<MenuItem disabled={true} text="Ничего не найдено" />}
@@ -295,7 +295,7 @@ export class SourcePanel extends React.Component<Props, State> {
                 disabled={!this.state.sourceFiles}
                 items={["", "chu", "chu-gr", "ru"]}
                 itemRenderer={(item: string, itemProps: IItemRendererProps) =>
-                  <this.MenuItem title={langNames[item]} onClick={itemProps.handleClick}>
+                  <this.MenuItem title={langNames[item]} onClick={itemProps.handleClick} key={item}>
                     {(langNames[item] || 'Любой') + ' (' + (item || '-') + ')'}
                   </this.MenuItem>
                 }
