@@ -29,7 +29,7 @@ export interface State {
   panelNumber: number;
   sourceRef: SelectedSourceRefArgs | null;
   source: SourceRefSource;
-  sourceFile: SourceFileInfo;
+  sourceFile: SourceFileInfo | null;
   sourceFiles: SourceFileInfo[];
   selection: Selection | null;
   lang: string;
@@ -176,10 +176,18 @@ export class SourcePanel extends React.Component<Props, State> {
 
   onSelectLang = (lang: string) => {
     let sourceFile = this.state.sourceFile;
-    if (sourceFile && lang && sourceFile.language != lang) {
-      let newSource = this.state.sourceRef!.ref.sources.find(x => x.language == lang);
-      if (newSource &&  newSource!.ranges &&  newSource!.ranges.length > 0) {
-        sourceFile = this.state.sourceFiles.find(x => x.id == newSource!.ranges[0].sourceFileId)!;
+    if (lang && (!sourceFile || (sourceFile && sourceFile.language != lang))) {
+      // Если был выбран источник текущего выделенного узла
+      if (!sourceFile || this.state.sourceRef!.ref.sources.some(x => x.ranges[0].sourceFileId == sourceFile!.id)) {
+        // Если в текущем узле есть источник для выбранного языка
+        let newSource = this.state.sourceRef!.ref.sources.find(x => x.language == lang);
+        if (newSource &&  newSource!.ranges &&  newSource!.ranges.length > 0) {
+          sourceFile = this.state.sourceFiles.find(x => x.id == newSource!.ranges[0].sourceFileId)!;
+        } else {
+          sourceFile = null;
+        }
+      } else {
+        sourceFile = null;
       }
     }
     this.setState({
@@ -192,7 +200,7 @@ export class SourcePanel extends React.Component<Props, State> {
     let selection = (ev.target as Document).getSelection();
     if (selection) {
       this.props.glEventHub.emit(SELECTED_SOURCE_RANGE_EVENT, createSourceRangeEventArgs(
-        this.state.panelNumber, this.state.sourceFile, selection));
+        this.state.panelNumber, this.state.sourceFile!, selection));
     }
     this.setState({ selection });
   }
@@ -206,21 +214,21 @@ export class SourcePanel extends React.Component<Props, State> {
   onAssingClick = () => {
     if (this.state.selection) {
       this.props.glEventHub.emit(ASSIGN_TO_SELECTED_NODE, createSourceRangeEventArgs(
-        this.state.panelNumber, this.state.sourceFile, this.state.selection));
+        this.state.panelNumber, this.state.sourceFile!, this.state.selection));
     }
   }
   onAddChildClick = async () => {
     if (this.state.selection) {
       let additionalData = await showSelectNameDialog(getSelectionHtml(this.state.selection, this.frame!.contentDocument!));
       this.props.glEventHub.emit(ADD_AS_CHILD, createSourceRangeEventArgs(
-        this.state.panelNumber, this.state.sourceFile, this.state.selection, additionalData.header));
+        this.state.panelNumber, this.state.sourceFile!, this.state.selection, additionalData.header));
     }
   }
   onAddSiblingClick = async () => {
     if (this.state.selection) {
       let additionalData = await showSelectNameDialog(getSelectionHtml(this.state.selection, this.frame!.contentDocument!));
       this.props.glEventHub.emit(ADD_AS_SIBLING,
-         createSourceRangeEventArgs(this.state.panelNumber, this.state.sourceFile, this.state.selection, additionalData.header));
+         createSourceRangeEventArgs(this.state.panelNumber, this.state.sourceFile!, this.state.selection, additionalData.header));
     }
   }
 
@@ -292,7 +300,7 @@ export class SourcePanel extends React.Component<Props, State> {
           }
         </Navbar>
         <this.SourceFrame 
-          src={this.state.sourceFile && (this.state.sourceFile.localUrl)} innerRef={this.attachFrame}>
+          src={this.state.sourceFile && (this.state.sourceFile.localUrl) || undefined} innerRef={this.attachFrame}>
         </this.SourceFrame>
       </React.Fragment>
     );
