@@ -164,9 +164,9 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
                 {this.state.catalogItem!.data!.caption}
               </this.itemCaption>
               {this.state.catalogItem!.data!.sources.map((ref, i) => 
-                <this.refLine>
-                  <this.sourceRef minimal key={i} title={ref.comment} onClick={() => this.onSelectedRef(ref)} >
-                    {ref.caption}
+                <this.refLine key={i}>
+                  <this.sourceRef minimal title={ref.comment} onClick={() => this.onSelectedRef(ref)} >
+                    {ref.caption || getSourceCaption(this.state.catalogItem!, ref)}
                   </this.sourceRef>
                   <this.refDeleteButton minimal icon="small-cross" onClick={() => this.onDeleteRefClick(ref)} />
                 </this.refLine>
