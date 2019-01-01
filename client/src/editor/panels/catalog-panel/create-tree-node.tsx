@@ -3,7 +3,7 @@ import { Icon } from "@blueprintjs/core";
 import React from 'react';
 import { ReactTreeNode } from './ReactTreeNode';
 
-export function createTreeNode(catalogNode: CatalogNode, parentNode?: ReactTreeNode<CatalogNode>): ReactTreeNode<CatalogNode> {
+export function createTreeNode(catalogNode: CatalogNode, parentNode?: ReactTreeNode<CatalogNode> | null): ReactTreeNode<CatalogNode> {
   let node: ReactTreeNode<CatalogNode> = {
     module: catalogNode.id,
     nodeData: catalogNode,

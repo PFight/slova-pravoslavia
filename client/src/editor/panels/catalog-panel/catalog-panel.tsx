@@ -164,7 +164,7 @@ export class CatalogPanel extends React.Component<Props, State> {
     }
   }
 
-  private createTreeNode(catalogNode: CatalogNode, parent?: ReactTreeNode<CatalogNode>) {
+  private createTreeNode(catalogNode: CatalogNode, parent?: ReactTreeNode<CatalogNode> | null) {
     let ReactTreeNode = createTreeNode(catalogNode, parent);
     this.updateNodeView(ReactTreeNode);
     return ReactTreeNode;
