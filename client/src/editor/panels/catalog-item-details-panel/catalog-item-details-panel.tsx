@@ -12,6 +12,7 @@ import { SourceRefSource } from '@common/models/SourceRef';
 import { SELECTED_SOURCE_REF_EVENT, SelectedSourceRefArgs } from "../../global-state/events/source-ref";
 import { SELECTED_SOURCE_RANGE_EVENT } from '../../global-state/events/source-range';
 import { getSourceCaption } from '../panels-common/getSourceCaption';
+import { MessageBox } from '../../utils/message-box';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -87,10 +88,22 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
     selectedRange!.caption = getSourceCaption(this.state.catalogItem!, selectedRange!);
     this.setState({ addingNewRef: false});
     this.state.catalogItem!.data!.sources.push(selectedRange!);
+    this.triggerItemSourcesChanged();
+  }
+
+  private triggerItemSourcesChanged() {
     this.props.glEventHub.trigger(CATALOG_ITEM_SOURCES_CHANGED_EVENT, {
       panelNumber: this.state.panelNumber,
       node: this.state.catalogItem
     } as CatalogItemArgs);
+  }
+
+  async onDeleteRefClick(ref: SourceRefSource) {
+    await MessageBox.ShowConfirmation(`Удалить ссылку ${ref.caption}?`);
+    let index = this.state.catalogItem!.data!.sources.findIndex(x => x == ref);
+    this.state.catalogItem!.data!.sources.splice(index, 1);
+    this.triggerItemSourcesChanged();
+    this.forceUpdate();
   }
 
   noValueLabel = styled.div`
@@ -106,6 +119,18 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
   sourceRef = styled(Button)`
     text-decoration: underline;
     color: blue;
+    flex: 1 1 0%;
+    min-width: 0;
+    justify-content: start;
+  `;
+
+  refLine = styled.div`
+    display: flex;
+    align-items: center;
+  `;
+
+  refDeleteButton = styled(Button)`
+    flex: 0 0 auto;
   `;
 
   newSourceRef = styled(Button)`
@@ -116,6 +141,8 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
 
   wrapper = styled.div`
     margin: 7px;
+    overflow-y: auto;
+    height: 100%;
   `;
 
   renderNewSourceRef() {
@@ -137,9 +164,12 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
                 {this.state.catalogItem!.data!.caption}
               </this.itemCaption>
               {this.state.catalogItem!.data!.sources.map((ref, i) => 
-                <this.sourceRef minimal key={i} title={ref.comment} onClick={() => this.onSelectedRef(ref)} >
-                  {ref.caption}
-                </this.sourceRef>
+                <this.refLine>
+                  <this.sourceRef minimal key={i} title={ref.comment} onClick={() => this.onSelectedRef(ref)} >
+                    {ref.caption}
+                  </this.sourceRef>
+                  <this.refDeleteButton minimal icon="small-cross" onClick={() => this.onDeleteRefClick(ref)} />
+                </this.refLine>
               )}
               {this.renderNewSourceRef()}
             </div>
