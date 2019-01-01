@@ -264,6 +264,7 @@ export class SourcePanel extends React.Component<Props, State> {
             <NavbarGroup align={Alignment.RIGHT}>
               <SourceFileSelect
                   disabled={!this.state.sourceFiles}
+                  itemPredicate={(q, x) => (x.displayName || x.name).includes(q)}
                   items={this.state.sourceFiles.filter(x => x.language == this.state.lang || !this.state.lang)}
                   itemRenderer={(item: SourceFileInfo, itemProps: IItemRendererProps) => 
                     <this.MenuItem key={item.id} 
