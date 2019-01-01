@@ -46,6 +46,7 @@ export class EditorApp extends React.Component<{}, IEditorAppState> {
       initGlobalState(this.layout.eventHub);
       this.layout.init();
       this.forceUpdate();
+      window.addEventListener("resize", () => this.layout!.updateSize());
     }
   }
 
