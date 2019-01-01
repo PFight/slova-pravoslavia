@@ -34,6 +34,7 @@ export interface State {
   selection: Selection | null;
   lang: string;
   title: string | undefined;
+  emptyTitle: string | undefined;
 }
 export class SourcePanel extends React.Component<Props, State> {
   dataFileController = new DataFileController();
@@ -50,7 +51,7 @@ export class SourcePanel extends React.Component<Props, State> {
         setTimeout(() => this.props.glContainer.close());
       }
     });
-    this.state.title = this.props.glContainer.parent.config.title;
+    this.state.title = this.state.emptyTitle = this.props.glContainer.parent.config.title;
     this.state.panelNumber = GLOBAL_STATE.OpenSources.reduce((prev, cur) => cur > prev ? cur : prev, Number.MIN_VALUE);
     this.togglePanelNumber();
 
@@ -84,9 +85,8 @@ export class SourcePanel extends React.Component<Props, State> {
   }
 
   private setPanelNumber(panelNumber: number) {
-    this.props.glContainer.setTitle(this.state.title + " " + 
-        (panelNumber > 1 ? panelNumber : ''));
     this.setState({ panelNumber }, () => {
+      this.updateTitle();
       this.props.glEventHub.emit(SOURCE_OPEN_EVENT, { panelNumber } as PanelOpenClosesArgs);
     });
   }
@@ -99,6 +99,11 @@ export class SourcePanel extends React.Component<Props, State> {
     } else {
       this.setPanelNumber(catalogs[0]);
     }
+  }
+
+  private updateTitle() {
+    this.props.glContainer.setTitle(this.state.title + " " + 
+      (this.state.panelNumber > 1 ? this.state.panelNumber : ''));
   }
 
   componentWillUnmount() {
@@ -117,6 +122,12 @@ export class SourcePanel extends React.Component<Props, State> {
         frame.contentWindow!.document.addEventListener("selectionchange", debounce(this.onTextSelect.bind(this), 300));
         frame.contentWindow!.document.addEventListener("keydown", this.onFrameKeyDown);
         this.selectSourceRef(this.state.source);
+        if (this.state.sourceFile) {
+          this.state.title = this.state.sourceFile.displayName || this.state.sourceFile.name;
+        } else {
+          this.state.title = this.state.emptyTitle;
+        }
+        this.updateTitle();
       }      
     }
   }
