@@ -9,7 +9,6 @@ import { DataFileController } from '../../data-file-controller';
 import { CATALOG_CLOSE_EVENT, PanelOpenClosesArgs, SOURCE_CLOSE_EVENT, SOURCE_OPEN_EVENT } from '../../global-state/events/panel-open-close';
 import { SELECTED_SOURCE_RANGE_EVENT, ASSIGN_TO_SELECTED_NODE, ADD_AS_CHILD, ADD_AS_SIBLING } from '../../global-state/events/source-range';
 import { SelectedSourceRefArgs, SELECTED_SOURCE_REF_EVENT } from '../../global-state/events/source-ref';
-import { GLOBAL_STATE } from '../../global-state/global-state';
 import { generatePanelNumber } from '../panels-common/generatePanelNumber';
 import { selectInFrame } from './selectInFrame';
 import { createSourceRangeEventArgs } from './createSourceRangeEventArgs';
@@ -17,6 +16,7 @@ import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs } from '../../global-state
 import { SourceRefSource } from '@common/models/SourceRef';
 import { showSelectNameDialog } from './select-name-dialog';
 import { getSelectionHtml } from '../panels-common/get-selection-html';
+import { GLOBAL_STATE } from 'editor/global-state/global-state';
 
 const SourceFileSelect = Select.ofType<SourceFileInfo>();
 const LangSelect = Select.ofType<string>();
