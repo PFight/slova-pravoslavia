@@ -16,6 +16,7 @@ System.config({
     "debounce": "npm:debounce@1.2.0",
     "get-selector": "npm:get-selector@1.0.3",
     "jquery": "npm:jquery@3.3.1",
+    "location-bar": "npm:location-bar@3.0.1",
     "react": "npm:react@16.6.0",
     "react-dom": "npm:react-dom@16.6.0",
     "react-ui-tree": "npm:react-ui-tree@4.0.0",
