@@ -53,6 +53,11 @@ export class WorshipPanel extends React.Component<Props, State> {
     this.props.glEventHub.emit(WORSHIP_CLOSE_EVENT, { panelNumber: this.state.panelNumber } as PanelOpenClosesArgs)
   }
 
+  panel = styled.div`
+    height: 100%;
+    overflow-y: auto;
+  `;
+
   worshipNode = styled.div`
     border-radius: 6px;
     background-color: rgb(247, 239, 205);
@@ -101,13 +106,15 @@ export class WorshipPanel extends React.Component<Props, State> {
 
   render() {
     return (
-      this.state.panelNumber !== undefined ? (
-        this.state.worship ? 
-          this.renderWorship(this.state.worship) :
-          (this.state.loadingWorship && "Загрузка..." ||
-          this.renderNoWorshipSelected())
-      )
-      : "Одновременно может быть открыта только одна панель редактирования службы."
+      <this.panel>
+        {this.state.panelNumber !== undefined ? (
+          this.state.worship ? 
+            this.renderWorship(this.state.worship) :
+            (this.state.loadingWorship && "Загрузка..." ||
+            this.renderNoWorshipSelected())
+        )
+        : "Одновременно может быть открыта только одна панель редактирования службы."}
+      </this.panel>
     );
   }
 }
