@@ -22,6 +22,8 @@ import { findParent } from './findParent';
 import { getSourceCaption } from '../panels-common/getSourceCaption';
 import { ReactTreeNode } from './ReactTreeNode';
 import { ReactUiTreeType } from './react-ui-tree';
+import { preventDragAndDropByPrimaryMouse } from './preventDragAndDropByPrimaryMouse';
+import { syncDataWithNodeTree } from './syncDataWithNodeTree';
 
 
 var ReactUiTree = Tree as (typeof ReactUiTreeType);
@@ -337,33 +339,16 @@ export class CatalogPanel extends React.Component<Props, State> {
   applyNodesOrder = async (tree: ReactTreeNode<CatalogNode>) => {
     if (this.state.editMode) {
       this.root = tree;
-      visitDeep(this.root!.children!, "children", (node) => {
-        node.nodeData.defaultExpanded = !node.collapsed;
-        if (node.children) {
-          node.nodeData.children = node.children.map(x => x.nodeData);
-          for (let child of node.children) {
-            child.nodeData.parentId = node.nodeData.id;
-          }          
-        }
-      });
-      await this.dataFileController.saveCatalog(this.state.catalog);
+      let changed = syncDataWithNodeTree(this.root!.children!, this.state.editMode);
+      if (changed) {
+        await this.dataFileController.saveCatalog(this.state.catalog);
+      }
     }
   }
 
   attachTree = (el: ReactUiTreeType) => {
-    // Prevent drag and drop by primary mouse button and in view mode
     this.uiTree = el;
-    let that = this;
-    if (el) {
-      let dragStartOrig = (el as any).dragStart as Function;
-      (el as any).dragStart = function(id: string, dom: any, ev: MouseEvent) {
-        if (ev.button != 0 && that.state.editMode) {
-          let evCopy = {...ev};
-          evCopy.button = 0;
-          dragStartOrig.apply(this, [id, dom, evCopy]);
-        }
-      }
-    }
+    preventDragAndDropByPrimaryMouse(el, () => !this.state.editMode);    
   }
 
   updateNodeView(node: ReactTreeNode<CatalogNode>) {
