@@ -5,6 +5,9 @@ import { GLOBAL_STATE } from 'editor/global-state/global-state';
 import { DataFileController } from 'editor/data-file-controller';
 import { Worship } from '@common/models/Worship';
 import { getCurrentWorshipId, onCurrentWorshipChange } from './urlParams';
+import styled from 'styled-components';
+import { WorshipNode } from '@common/models/WorshipNode';
+import { getSpeakerTitle } from './getSpeakerTitle';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -34,6 +37,9 @@ export class WorshipPanel extends React.Component<Props, State> {
       this.setState({loadingWorship: true});
       try {
         let worship = await this.dataFileController.getWorship(worshipId);
+        if (worship) {
+          worship.nodes = worship.nodes.sort((a, b) => a.order - b.order);
+        }
         this.setState({ worship });
       } finally {
         this.setState({ loadingWorship: false });
@@ -47,8 +53,46 @@ export class WorshipPanel extends React.Component<Props, State> {
     this.props.glEventHub.emit(WORSHIP_CLOSE_EVENT, { panelNumber: this.state.panelNumber } as PanelOpenClosesArgs)
   }
 
+  worshipNode = styled.div`
+    border-radius: 6px;
+    background-color: rgb(247, 239, 205);
+    &:hover {
+      background-color: rgb(249, 235, 177);
+    }
+    &:focus {
+      border: 1px dashed blue;
+    }
+    border: 1px solid transparent;
+    margin: 2px 3px;
+    padding: 5px;
+    cursor: pointer;
+  `;
+
+  speaker = styled.span`
+    font-weight: bold;
+    color: red;
+    display: inline-block;
+    padding-right: 4px;
+  `;
+
+  nodeComment = styled.span`
+    font-style: italic;
+  `;
+
   renderWorship(worship: Worship) {
-    return worship.id;
+    return worship.nodes && worship.nodes.map(node =>
+        <this.worshipNode key={node.id} tabIndex={1}>
+          <div>
+            <this.speaker>{getSpeakerTitle(node)}:</this.speaker>
+            <span title={node.sourceRef && node.sourceRef.comment}>
+              {node.sourceRef && node.sourceRef.caption}
+            </span>
+          </div>
+          <div>
+            <this.nodeComment>{node.comment}</this.nodeComment>
+          </div>
+        </this.worshipNode> 
+      );
   }
 
   renderNoWorshipSelected() {
@@ -67,3 +111,5 @@ export class WorshipPanel extends React.Component<Props, State> {
     );
   }
 }
+
+

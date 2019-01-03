@@ -13,6 +13,7 @@ import { SELECTED_SOURCE_REF_EVENT, SelectedSourceRefArgs } from "../../global-s
 import { SELECTED_SOURCE_RANGE_EVENT } from '../../global-state/events/source-range';
 import { getSourceCaption } from '../panels-common/getSourceCaption';
 import { MessageBox } from '../../utils/message-box';
+import { SourceRefView } from '../panels-common/SourceRefView';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -79,7 +80,7 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
      } as SelectedSourceRefArgs); 
   }
 
-  onSelectedRef(ref: SourceRefSource) {
+  onSelectedRef = (ref: SourceRefSource) => {
     this.selectSourceRef(this.state.catalogItem!, ref);
   }
 
@@ -98,7 +99,7 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
     } as CatalogItemArgs);
   }
 
-  async onDeleteRefClick(ref: SourceRefSource) {
+  onDeleteRefClick = async (ref: SourceRefSource) => {
     await MessageBox.ShowConfirmation(`Удалить ссылку ${ref.caption}?`);
     let index = this.state.catalogItem!.data!.sources.findIndex(x => x == ref);
     this.state.catalogItem!.data!.sources.splice(index, 1);
@@ -116,22 +117,7 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
     margin-bottom: 5px;
   `;
 
-  sourceRef = styled(Button)`
-    text-decoration: underline;
-    color: blue;
-    flex: 1 1 0%;
-    min-width: 0;
-    justify-content: start;
-  `;
-
-  refLine = styled.div`
-    display: flex;
-    align-items: center;
-  `;
-
-  refDeleteButton = styled(Button)`
-    flex: 0 0 auto;
-  `;
+  
 
   newSourceRef = styled(Button)`
     text-decoration: underline;
@@ -164,12 +150,8 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
                 {this.state.catalogItem!.data!.caption}
               </this.itemCaption>
               {this.state.catalogItem!.data!.sources.map((ref, i) => 
-                <this.refLine key={i}>
-                  <this.sourceRef minimal title={ref.comment} onClick={() => this.onSelectedRef(ref)} >
-                    {ref.caption || getSourceCaption(this.state.catalogItem!, ref)}
-                  </this.sourceRef>
-                  <this.refDeleteButton minimal icon="small-cross" onClick={() => this.onDeleteRefClick(ref)} />
-                </this.refLine>
+                <SourceRefView key={i} onDelete={this.onDeleteRefClick} 
+                  onSelected={this.onSelectedRef} ref={ref} />
               )}
               {this.renderNewSourceRef()}
             </div>

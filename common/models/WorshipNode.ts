@@ -2,6 +2,7 @@ import { SourceRef } from './SourceRef';
 
 /** Блок богослужебного текста. */
 export interface WorshipNode {
+  id: string;
   /** Ссылка на текст в источнике */
   sourceRef: SourceRef;
   /** Ближайший узел каталога */
@@ -14,4 +15,5 @@ export interface WorshipNode {
   conditionId?: string;
   /** Комментарий составителя. */
   comment?: string;
+  speaker?: "priest" | "deacon" | "sexton" | "choir" | "people";
 }
