@@ -257,7 +257,7 @@ export class SourcePanel extends React.Component<Props, State> {
   `;
   
   render() {
-    let smthSelected = GLOBAL_STATE.SelectedNode && (this.state.selection && !!this.state.selection.toString());
+    let smthSelected = (this.state.selection && !!this.state.selection.toString());
     const langNames = {
       "chu": "Церковно-славянский",
       "chu-gr": "Церковно-славянский в гражданском начертании",
