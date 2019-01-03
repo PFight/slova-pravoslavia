@@ -9,10 +9,9 @@ import { DataFileController } from '../../data-file-controller';
 import { CATALOG_CLOSE_EVENT, PanelOpenClosesArgs, SOURCE_CLOSE_EVENT, SOURCE_OPEN_EVENT } from '../../global-state/events/panel-open-close';
 import { SELECTED_SOURCE_RANGE_EVENT, ASSIGN_TO_SELECTED_NODE, ADD_AS_CHILD, ADD_AS_SIBLING } from '../../global-state/events/source-range';
 import { SelectedSourceRefArgs, SELECTED_SOURCE_REF_EVENT } from '../../global-state/events/source-ref';
-import { generatePanelNumber } from '../panels-common/generatePanelNumber';
 import { selectInFrame } from './selectInFrame';
 import { createSourceRangeEventArgs } from './createSourceRangeEventArgs';
-import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs } from '../../global-state/events/catalog-item';
+import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_MODE_CHANGED_EVENT } from '../../global-state/events/catalog-events';
 import { SourceRefSource } from '@common/models/SourceRef';
 import { showSelectNameDialog } from './select-name-dialog';
 import { getSelectionHtml } from '../panels-common/get-selection-html';
@@ -68,6 +67,8 @@ export class SourcePanel extends React.Component<Props, State> {
         this.setItem(ev);
       }
     });
+    this.props.glEventHub.on(CATALOG_MODE_CHANGED_EVENT, () => this.forceUpdate());
+    
     this.props.glEventHub.on(CATALOG_ITEM_SELECTED_EVENT, (ev: CatalogItemArgs) => {
       this.forceUpdate();
       if (ev.panelNumber == this.state.panelNumber) {
@@ -257,7 +258,8 @@ export class SourcePanel extends React.Component<Props, State> {
   `;
   
   render() {
-    let smthSelected = (this.state.selection && !!this.state.selection.toString());
+    let smthSelected = GLOBAL_STATE.SelectedNode[this.state.panelNumber] && (this.state.selection && !!this.state.selection.toString());
+    let catalogEditMode = GLOBAL_STATE.CatalogEditMode[this.state.panelNumber];
     const langNames = {
       "chu": "Церковно-славянский",
       "chu-gr": "Церковно-славянский в гражданском начертании",
@@ -266,11 +268,12 @@ export class SourcePanel extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <Navbar>       
-          <NavbarGroup align={Alignment.LEFT} >
-            <Button icon="menu-closed" onClick={this.onAssingClick} disabled={!smthSelected}  minimal text="в текущий" title="Сопоставить с выделенным узлом"  />
-            <Button icon="git-new-branch" onClick={this.onAddChildClick} disabled={!smthSelected}  minimal text="+ подраздел" title="Добавить как дочерний узел"  />
-            <Button icon="new-link" onClick={this.onAddSiblingClick} disabled={!smthSelected}  minimal text="+ раздел" title="Добавить как соседний узел"  />
-          </NavbarGroup>          
+          {catalogEditMode && 
+            <NavbarGroup align={Alignment.LEFT} >
+              <Button icon="menu-closed" onClick={this.onAssingClick} disabled={!smthSelected}  minimal text="в текущий" title="Сопоставить с выделенным узлом"  />
+              <Button icon="git-new-branch" onClick={this.onAddChildClick} disabled={!smthSelected}  minimal text="+ подраздел" title="Добавить как дочерний узел"  />
+              <Button icon="new-link" onClick={this.onAddSiblingClick} disabled={!smthSelected}  minimal text="+ раздел" title="Добавить как соседний узел"  />
+            </NavbarGroup>}    
           { this.state.sourceFiles && 
             <NavbarGroup align={Alignment.RIGHT}>
               <SourceFileSelect

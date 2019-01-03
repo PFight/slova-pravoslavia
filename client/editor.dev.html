@@ -25,9 +25,12 @@
           "default": window.GoldenLayout
       }));       
     </script>
-    <script src="bundles/editor.min.js?v=1"></script>
+       
     <script>
-      System.import("./src/editor/index");
-    </script>    
+      SystemJS.import('systemjs-hot-reloader').then(function(connect) {
+        connect()
+        System.import("./src/editor/index");
+      });
+    </script>
   </body>
 </html>

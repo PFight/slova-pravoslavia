@@ -8,3 +8,10 @@ export interface CatalogItemArgs {
   panelNumber: number;
   node: CatalogNode | null;
 }
+
+export const CATALOG_MODE_CHANGED_EVENT = "CATALOG_MODE_CHANGED";
+
+export interface CatalogModeArgs {
+  panelNumber: number;
+  editMode: boolean;
+}

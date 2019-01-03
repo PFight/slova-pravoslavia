@@ -4,7 +4,7 @@ import { GET_GLOBAL_STATE_EVENT } from "./events/get-global-state";
 import { GLOBA_STATE_EVENT } from "./events/global-state";
 import { CATALOG_OPEN_EVENT, CATALOG_CLOSE_EVENT, PanelOpenClosesArgs, CATALOG_ITEM_DETAILS_OPEN_EVENT, CATALOG_ITEM_DETAILS_CLOSE_EVENT, SOURCE_OPEN_EVENT, SOURCE_CLOSE_EVENT } from "./events/panel-open-close";
 import { CatalogNode } from '@common/models/CatalogNode';
-import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs } from "./events/catalog-item";
+import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_MODE_CHANGED_EVENT, CatalogModeArgs } from "./events/catalog-events";
 import { SourceRange, SourceRefSource } from '@common/models/SourceRef';
 import { SELECTED_SOURCE_RANGE_EVENT, SelectedSourceRangeArgs } from "./events/source-range";
 
@@ -34,6 +34,9 @@ export class GlobalState {
     emitter.on(SELECTED_SOURCE_RANGE_EVENT, (ev: SelectedSourceRangeArgs) => {
       this.selectedRange[ev.panelNumber] = ev.source;
     });
+    emitter.on(CATALOG_MODE_CHANGED_EVENT, (ev: CatalogModeArgs) => {
+      this.catalogEditMode[ev.panelNumber] = ev.editMode;
+    });
   }
 
   private onPanelOpen(array: number[], ev: PanelOpenClosesArgs) {
@@ -62,6 +65,11 @@ export class GlobalState {
   private selectedNode: PanelValues<CatalogNode | null> = {};
   public get SelectedNode() {
     return this.selectedNode;
+  }
+
+  private catalogEditMode: PanelValues<boolean | null> = {};
+  public get CatalogEditMode() {
+    return this.catalogEditMode;
   }
 
   private selectedRange: PanelValues<SourceRefSource | null> = {};

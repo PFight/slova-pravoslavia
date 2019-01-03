@@ -5,7 +5,7 @@ import { CATALOG_ITEM_DETAILS_OPEN_EVENT, PanelOpenClosesArgs, CATALOG_ITEM_DETA
 import { generatePanelNumber } from "../panels-common/generatePanelNumber";
 import { initExtraButton, deinitExtraButton } from '../panels-common/init-extra-button';
 import { CatalogNode } from '@common/models/CatalogNode';
-import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT, CATALOG_ITEM_OPENED_EVENT } from '../../global-state/events/catalog-item';
+import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT, CATALOG_ITEM_OPENED_EVENT } from '../../global-state/events/catalog-events';
 import styled from 'styled-components';
 import { Button } from '@blueprintjs/core';
 import { SourceRefSource } from '@common/models/SourceRef';
