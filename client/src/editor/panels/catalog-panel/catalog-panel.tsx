@@ -24,6 +24,7 @@ import { ReactTreeNode } from './ReactTreeNode';
 import { ReactUiTreeType } from './react-ui-tree';
 import { preventDragAndDropByPrimaryMouse } from './preventDragAndDropByPrimaryMouse';
 import { syncDataWithNodeTree } from './syncDataWithNodeTree';
+import { findParentNode } from './findParentNode';
 
 
 var ReactUiTree = Tree as (typeof ReactUiTreeType);
@@ -315,13 +316,7 @@ export class CatalogPanel extends React.Component<Props, State> {
     }
 
     if (node.nodeData && node.nodeData.parentId) {
-      // Find parent node
-      let parent: ReactTreeNode<CatalogNode> | undefined;
-      visitDeep(this.root!.children!, "children", n => {
-        if (n.module == node.nodeData!.parentId) {
-          parent = n;
-        }
-      });
+      let parent = findParentNode(this.root!, node); 
       // remove node
       if (parent) {
         parent.children!.splice(parent.children!.indexOf(node), 1);
@@ -451,4 +446,5 @@ export class CatalogPanel extends React.Component<Props, State> {
     );
   }
 }
+
 

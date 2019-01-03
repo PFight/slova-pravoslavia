@@ -2,7 +2,7 @@ import * as GoldenLayout from "golden-layout";
 
 import { GET_GLOBAL_STATE_EVENT } from "./events/get-global-state";
 import { GLOBA_STATE_EVENT } from "./events/global-state";
-import { CATALOG_OPEN_EVENT, CATALOG_CLOSE_EVENT, PanelOpenClosesArgs, CATALOG_ITEM_DETAILS_OPEN_EVENT, CATALOG_ITEM_DETAILS_CLOSE_EVENT, SOURCE_OPEN_EVENT, SOURCE_CLOSE_EVENT } from "./events/panel-open-close";
+import { CATALOG_OPEN_EVENT, CATALOG_CLOSE_EVENT, PanelOpenClosesArgs, CATALOG_ITEM_DETAILS_OPEN_EVENT, CATALOG_ITEM_DETAILS_CLOSE_EVENT, SOURCE_OPEN_EVENT, SOURCE_CLOSE_EVENT, WORSHIP_OPEN_EVENT, WORSHIP_CLOSE_EVENT } from "./events/panel-open-close";
 import { CatalogNode } from '@common/models/CatalogNode';
 import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_MODE_CHANGED_EVENT, CatalogModeArgs } from "./events/catalog-events";
 import { SourceRange, SourceRefSource } from '@common/models/SourceRef';
@@ -14,7 +14,11 @@ export class GlobalState {
   constructor(emitter: GoldenLayout.EventEmitter) {
     emitter.on(GLOBA_STATE_EVENT, (state: GlobalState) => {
       for (let prop in state) {
-        (this as any)[prop] = (state as any)[prop];
+        try {
+          (this as any)[prop] = (state as any)[prop];
+        } catch {
+          
+        }
       }
     })
     emitter.emit(GET_GLOBAL_STATE_EVENT);
@@ -28,6 +32,8 @@ export class GlobalState {
     emitter.on(CATALOG_ITEM_DETAILS_CLOSE_EVENT, (ev: PanelOpenClosesArgs) => this.onPanelClose(this.openCatalogItemDetails, ev));
     emitter.on(SOURCE_OPEN_EVENT, (ev: PanelOpenClosesArgs) => this.onPanelOpen(this.openSources, ev));
     emitter.on(SOURCE_CLOSE_EVENT, (ev: PanelOpenClosesArgs) => this.onPanelClose(this.openSources, ev));
+    emitter.on(WORSHIP_OPEN_EVENT, (ev: PanelOpenClosesArgs) => this.onPanelOpen(this.openWorships, ev));
+    emitter.on(WORSHIP_CLOSE_EVENT, (ev: PanelOpenClosesArgs) => this.onPanelClose(this.openWorships, ev));
     emitter.on(CATALOG_ITEM_SELECTED_EVENT, (ev: CatalogItemArgs) => {
       this.selectedNode[ev.panelNumber] = ev.node;
     });
@@ -60,6 +66,11 @@ export class GlobalState {
   private openSources = [];
   public get OpenSources(): number[] {
     return this.openSources;
+  }
+
+  private openWorships = [];
+  public get OpenWorships(): number[] {
+    return this.openWorships;
   }
 
   private selectedNode: PanelValues<CatalogNode | null> = {};

@@ -7,6 +7,10 @@ export const CATALOG_CLOSE_EVENT = "CATALOG_CLOSE";
 export const SOURCE_OPEN_EVENT = "SOURCE_OPEN";
 export const SOURCE_CLOSE_EVENT = "SOURCE_CLOSE";
 
+export const WORSHIP_OPEN_EVENT = "WORSHIP_OPEN";
+export const WORSHIP_CLOSE_EVENT = "WORSHIP_CLOSE";
+
+
 export interface PanelOpenClosesArgs {
   panelNumber: number;
 }
