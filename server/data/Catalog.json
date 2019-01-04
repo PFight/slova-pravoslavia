@@ -203,7 +203,7 @@
             "id": "JBkZfC93a",
             "parentId": "B1CzG3TOf",
             "data": {
-              "caption": "зачало 1а",
+              "caption": "1а",
               "sources": [
                 {
                   "language": "ru",
@@ -217,7 +217,7 @@
                       "endNodeFinishShift": "29"
                     }
                   ],
-                  "caption": "зачало 1а (ru) / apostol-sinodaln.html"
+                  "caption": "1а (ru) / apostol-sinodaln.html"
                 },
                 {
                   "language": "chu",
@@ -235,7 +235,17 @@
                 }
               ]
             },
-            "defaultExpanded": false
+            "defaultExpanded": false,
+            "children": [
+              {
+                "id": "N0f-aWn8z",
+                "parentId": "JBkZfC93a",
+                "data": {
+                  "caption": "ewr"
+                },
+                "defaultExpanded": false
+              }
+            ]
           },
           {
             "id": "4Be4RBcnJ",
@@ -254,7 +264,7 @@
                       "endNodeFinishShift": "28"
                     }
                   ],
-                  "caption": "зачало 2а (ru) / apostol-sinodaln.html"
+                  "caption": "2а (ru) / apostol-sinodaln.html"
                 },
                 {
                   "language": "chu",
@@ -271,9 +281,23 @@
                   "caption": "зачало 2а (chu) / apostol-ucs.html"
                 }
               ],
-              "caption": "зачало 2а"
+              "caption": "2а"
             },
-            "defaultExpanded": false
+            "defaultExpanded": false,
+            "children": [
+              {
+                "id": "AEJv7HaEe",
+                "parentId": "4Be4RBcnJ",
+                "data": {},
+                "defaultExpanded": false
+              },
+              {
+                "id": "EcjclFxgb",
+                "parentId": "4Be4RBcnJ",
+                "data": {},
+                "defaultExpanded": false
+              }
+            ]
           },
           {
             "id": "TQQigEJJv",
@@ -292,7 +316,7 @@
                       "endNodeFinishShift": "21"
                     }
                   ],
-                  "caption": "зачало 3 (ru) / apostol-sinodaln.html"
+                  "caption": "3 (ru) / apostol-sinodaln.html"
                 },
                 {
                   "language": "chu-gr",
@@ -309,7 +333,7 @@
                   "caption": "зачало 3 (chu-gr) / apostol-chu-gr.html"
                 }
               ],
-              "caption": "зачало 3"
+              "caption": "3"
             },
             "defaultExpanded": false
           },
@@ -330,11 +354,12 @@
                       "endNodeFinishShift": "24"
                     }
                   ],
-                  "caption": "зачало 4 (ru) / apostol-sinodaln.html"
+                  "caption": "4 (ru) / apostol-sinodaln.html"
                 }
               ],
-              "caption": "зачало 4"
-            }
+              "caption": "4"
+            },
+            "defaultExpanded": false
           },
           {
             "id": "hOwyb_RH3",
@@ -352,11 +377,13 @@
                       "endNodeId": "{\"selector\":\"#n680\",\"childIndex\":0}",
                       "endNodeFinishShift": "14"
                     }
-                  ]
+                  ],
+                  "caption": "5 (ru) / apostol-sinodaln.html"
                 }
               ],
-              "caption": "зачало 5"
-            }
+              "caption": "5"
+            },
+            "defaultExpanded": false
           },
           {
             "id": "uSRUJl2cy",
@@ -374,11 +401,13 @@
                       "endNodeId": "{\"selector\":\"#n689\",\"childIndex\":0}",
                       "endNodeFinishShift": "14"
                     }
-                  ]
+                  ],
+                  "caption": "6 (ru) / apostol-sinodaln.html"
                 }
               ],
-              "caption": "зачало 6"
-            }
+              "caption": "6"
+            },
+            "defaultExpanded": false
           },
           {
             "id": "nSazRwA2t",
@@ -396,11 +425,13 @@
                       "endNodeId": "{\"selector\":\"#n698\",\"childIndex\":0}",
                       "endNodeFinishShift": "14"
                     }
-                  ]
+                  ],
+                  "caption": "7 (ru) / apostol-sinodaln.html"
                 }
               ],
-              "caption": "зачало 7"
-            }
+              "caption": "7"
+            },
+            "defaultExpanded": false
           },
           {
             "id": "nwn087kIe",
@@ -418,11 +449,13 @@
                       "endNodeId": "{\"selector\":\"#n704\",\"childIndex\":2}",
                       "endNodeFinishShift": "24"
                     }
-                  ]
+                  ],
+                  "caption": "8 (ru) / apostol-sinodaln.html"
                 }
               ],
-              "caption": "зачало 8"
-            }
+              "caption": "8"
+            },
+            "defaultExpanded": false
           },
           {
             "id": "I9c9rPU0M",
@@ -440,11 +473,13 @@
                       "endNodeId": "{\"selector\":\"#n711\",\"childIndex\":2}",
                       "endNodeFinishShift": "34"
                     }
-                  ]
+                  ],
+                  "caption": "9 (ru) / apostol-sinodaln.html"
                 }
               ],
-              "caption": "зачало 9"
-            }
+              "caption": "9"
+            },
+            "defaultExpanded": false
           },
           {
             "id": "8L4gOCXUv",
@@ -462,11 +497,13 @@
                       "endNodeId": "{\"selector\":\"#n718\",\"childIndex\":2}",
                       "endNodeFinishShift": "30"
                     }
-                  ]
+                  ],
+                  "caption": "10 (ru) / apostol-sinodaln.html"
                 }
               ],
-              "caption": "зачало 10"
-            }
+              "caption": "10"
+            },
+            "defaultExpanded": false
           }
         ],
         "defaultExpanded": true

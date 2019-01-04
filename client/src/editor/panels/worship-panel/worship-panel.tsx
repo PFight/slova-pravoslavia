@@ -5,7 +5,7 @@ import { GLOBAL_STATE, GlobalState } from 'editor/global-state/global-state';
 import { DataFileController } from 'editor/data-file-controller';
 import { Worship } from '@common/models/Worship';
 import { getCurrentWorshipId, onCurrentWorshipChange } from './urlParams';
-import { WorshipNode } from '@common/models/WorshipNode';
+import { WorshipNode, Speakers } from '@common/models/WorshipNode';
 import { getSpeakerTitle } from './getSpeakerTitle';
 import * as styles from './worship-panel-styles';
 import { SourceRefView, NewSourceRefButton } from '../panels-common/SourceRefView';
@@ -15,8 +15,10 @@ import { getHintText } from './getHintText';
 import { MessageBox } from 'editor/utils/message-box';
 import { SELECTED_SOURCE_RANGE_EVENT } from 'editor/global-state/events/source-range';
 import { getSourceCaption } from '../panels-common/getSourceCaption';
-import { visitDeep } from 'editor/utils/visitors';
 import { getNodeCaption } from '../panels-common/getNodeCaption';
+import { FormGroup } from '@blueprintjs/core';
+
+export var SpeakerValues: Speakers[] = ["priest", "deacon", "sexton", "choir", "people"];
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -27,6 +29,7 @@ export interface State {
   worship: Worship | undefined;
   loadingWorship: boolean;
   selectedNode: WorshipNode | undefined;
+  editingNode: WorshipNode | undefined;
 }
 export class WorshipPanel extends React.Component<Props, State> {
   state = {} as State;
@@ -108,34 +111,93 @@ export class WorshipPanel extends React.Component<Props, State> {
     await this.dataFileController.saveWorship(this.state.worship!);
   }
 
+  onEditNode(node: WorshipNode) {
+    this.setState({ editingNode: node });
+  }
+
+  onSaveNode(node: WorshipNode) {
+    if (node == this.state.editingNode) {
+      this.dataFileController.saveWorship(this.state.worship!);
+      this.setState({ editingNode: undefined });
+    }
+  }
+
   renderWorship(worship: Worship) {
+    return worship.nodes && worship.nodes.map(node =>
+        node == this.state.editingNode ?
+          this.renderWorshipNodeEdit(node) :
+          this.renderWorshipNodeView(node)
+      );
+  }
+
+  private renderWorshipNodeEdit(node: WorshipNode): JSX.Element {
+    return (
+      <styles.WorshipNodeStyle key={node.id} tabIndex={1}
+        selected={this.state.selectedNode == node}>
+        <styles.EditButton minimal icon="saved" onClick={() => this.onSaveNode(node)} text="Сохранить" />
+        <styles.FormGroupEx label="Читает:" inline>
+          <div className="bp3-select">          
+            <select onChange={(ev) => (node.speaker = ev.target.value as any) && this.forceUpdate()}
+              value={node.speaker}> 
+              {SpeakerValues.map(speaker => 
+                <option>{getSpeakerTitle(speaker)}</option>
+              )}
+            </select>
+          </div>
+        </styles.FormGroupEx>
+        { node.sourceRef && 
+          <styles.FormGroupEx label="Содержимое:">
+            <styles.textArea rows={1} className="bp3-input" value={node.sourceRef.caption}
+              placeholder="Название узла" 
+              onChange={(ev) => (node.sourceRef.caption = ev.target.value) && this.forceUpdate()} />
+          </styles.FormGroupEx>}
+        <styles.FormGroupEx label="Комментарий:">
+          <styles.textInput className="bp3-input" value={node.comment} 
+              placeholder="Комментарий" 
+              onChange={(ev) => (node.comment = ev.target.value) && this.forceUpdate()} />
+        </styles.FormGroupEx>
+        <styles.FormGroupEx label="Ссылки:">
+          {this.renderRefs(node)}
+        </styles.FormGroupEx>
+      </styles.WorshipNodeStyle>
+    )
+  }
+
+  private renderWorshipNodeView(node: WorshipNode): JSX.Element {
     let selections = this.getCurrentSelections();
 
-    return worship.nodes && worship.nodes.map(node =>
-        <styles.WorshipNodeStyle key={node.id} tabIndex={1} 
-          onClick={() => this.onNodeClick(node)} selected={this.state.selectedNode == node}>
-          <div>
-            <styles.Speaker>{getSpeakerTitle(node)}:</styles.Speaker>
-            <span title={node.sourceRef && node.sourceRef.comment}>
-              {node.sourceRef && node.sourceRef.caption + getHintText(node)}
-            </span>
-          </div>
-          <div>
-            <styles.NodeComment>{node.comment}</styles.NodeComment>
-          </div>
-          {this.state.selectedNode == node &&
-            <div>
-              {node.sourceRef && node.sourceRef.sources.map(ref =>
-                <SourceRefView sourceRef={ref} onSelected={() => this.onRefClick(node, ref)} 
-                  onDelete={() => this.onDeleteRefClick(node, ref)} />
-              )}
-              {selections.length > 0  &&
-                <NewSourceRefButton minimal onClick={this.onAddNewRefFromSelection}>
-                    Добавить выделенное
-                </NewSourceRefButton> }
-            </div>}
-        </styles.WorshipNodeStyle> 
-      );
+    return (
+      <styles.WorshipNodeStyle key={node.id} tabIndex={1} 
+        onClick={() => this.onNodeClick(node)} 
+        selected={this.state.selectedNode == node}>
+        <div>
+          <styles.EditButton minimal icon="edit" onClick={() => this.onEditNode(node)} />
+          <styles.Speaker>{getSpeakerTitle(node.speaker)}:</styles.Speaker>
+          <span title={node.sourceRef && node.sourceRef.comment}>
+            {node.sourceRef && node.sourceRef.caption + getHintText(node)}
+          </span>
+        </div>
+        <div>
+          <styles.NodeComment>{node.comment}</styles.NodeComment>
+        </div>
+        {this.state.selectedNode == node &&
+          this.renderRefs(node)}
+      </styles.WorshipNodeStyle>
+    );
+  }
+
+  private renderRefs(node: WorshipNode): React.ReactNode {
+    let selections = this.getCurrentSelections();
+
+    return (
+      <div>
+        {node.sourceRef && node.sourceRef.sources.map(ref => <SourceRefView sourceRef={ref} onSelected={() => this.onRefClick(node, ref)} onDelete={() => this.onDeleteRefClick(node, ref)} />)}
+        {selections.length > 0 &&
+          <NewSourceRefButton minimal onClick={this.onAddNewRefFromSelection}>
+            Добавить выделенное
+          </NewSourceRefButton>}
+      </div>
+    );
   }
 
   private getCurrentSelections(): SourceRefSource[] {

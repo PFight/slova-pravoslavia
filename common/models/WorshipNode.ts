@@ -15,5 +15,7 @@ export interface WorshipNode {
   conditionId?: string;
   /** Комментарий составителя. */
   comment?: string;
-  speaker?: "priest" | "deacon" | "sexton" | "choir" | "people";
+  speaker?: Speakers;
 }
+
+export type Speakers = "priest" | "deacon" | "sexton" | "choir" | "people";

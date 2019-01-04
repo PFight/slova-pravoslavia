@@ -11,14 +11,15 @@ System.config({
   map: {
     "@blueprintjs/core": "npm:@blueprintjs/core@3.7.0",
     "@blueprintjs/select": "npm:@blueprintjs/select@3.2.0",
-    "core-js": "npm:core-js@2.5.7",
+    "core-js": "npm:core-js@2.6.1",
     "css-selector-generator": "npm:css-selector-generator@1.1.0",
     "debounce": "npm:debounce@1.2.0",
     "get-selector": "npm:get-selector@1.0.3",
     "jquery": "npm:jquery@3.3.1",
     "location-bar": "npm:location-bar@3.0.1",
-    "react": "npm:react@16.6.0",
-    "react-dom": "npm:react-dom@16.6.0",
+    "react": "npm:react@16.7.0",
+    "react-dom": "npm:react-dom@16.7.0",
+    "react-sortable-hoc": "npm:react-sortable-hoc@0.8.4",
     "react-ui-tree": "npm:react-ui-tree@4.0.0",
     "shortid": "npm:shortid@2.2.13",
     "styled-components": "npm:styled-components@3.4.5",
@@ -85,8 +86,8 @@ System.config({
       "normalize.css": "npm:normalize.css@8.0.0",
       "popper.js": "npm:popper.js@1.14.4",
       "process": "github:jspm/nodelibs-process@0.1.2",
-      "react": "npm:react@16.6.0",
-      "react-dom": "npm:react-dom@16.6.0",
+      "react": "npm:react@16.7.0",
+      "react-dom": "npm:react-dom@16.7.0",
       "react-popper": "npm:react-popper@1.0.2",
       "react-transition-group": "npm:react-transition-group@2.5.0",
       "resize-observer-polyfill": "npm:resize-observer-polyfill@1.5.0",
@@ -120,7 +121,7 @@ System.config({
       "util": "npm:util@0.10.3"
     },
     "npm:babel-runtime@6.26.0": {
-      "core-js": "npm:core-js@2.5.7",
+      "core-js": "npm:core-js@2.6.1",
       "regenerator-runtime": "npm:regenerator-runtime@0.11.1"
     },
     "npm:browserify-aes@1.2.0": {
@@ -202,7 +203,7 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.2",
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
-    "npm:core-js@2.5.7": {
+    "npm:core-js@2.6.1": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
@@ -241,7 +242,7 @@ System.config({
       "gud": "npm:gud@1.0.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "prop-types": "npm:prop-types@15.6.2",
-      "react": "npm:react@16.6.0"
+      "react": "npm:react@16.7.0"
     },
     "npm:crypto-browserify@3.12.0": {
       "browserify-cipher": "npm:browserify-cipher@1.0.1",
@@ -348,6 +349,10 @@ System.config({
     },
     "npm:inherits@2.0.3": {
       "util": "github:jspm/nodelibs-util@0.1.0"
+    },
+    "npm:invariant@2.2.4": {
+      "loose-envify": "npm:loose-envify@1.4.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:isarray@1.0.0": {
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
@@ -456,13 +461,14 @@ System.config({
       "randombytes": "npm:randombytes@2.0.6",
       "safe-buffer": "npm:safe-buffer@5.1.2"
     },
-    "npm:react-dom@16.6.0": {
+    "npm:react-dom@16.7.0": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.1",
       "loose-envify": "npm:loose-envify@1.4.0",
       "object-assign": "npm:object-assign@4.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "prop-types": "npm:prop-types@15.6.2",
-      "react": "npm:react@16.6.0",
-      "scheduler": "npm:scheduler@0.10.0",
+      "react": "npm:react@16.7.0",
+      "scheduler": "npm:scheduler@0.12.0",
       "stream": "github:jspm/nodelibs-stream@0.1.0"
     },
     "npm:react-is@16.4.2": {
@@ -473,32 +479,40 @@ System.config({
       "create-react-context": "npm:create-react-context@0.2.3",
       "popper.js": "npm:popper.js@1.14.4",
       "prop-types": "npm:prop-types@15.6.2",
-      "react": "npm:react@16.6.0",
+      "react": "npm:react@16.7.0",
       "typed-styles": "npm:typed-styles@0.0.5",
       "warning": "npm:warning@3.0.0"
+    },
+    "npm:react-sortable-hoc@0.8.4": {
+      "babel-runtime": "npm:babel-runtime@6.26.0",
+      "invariant": "npm:invariant@2.2.4",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "prop-types": "npm:prop-types@15.6.2",
+      "react": "npm:react@16.7.0",
+      "react-dom": "npm:react-dom@16.7.0"
     },
     "npm:react-transition-group@2.5.0": {
       "dom-helpers": "npm:dom-helpers@3.3.1",
       "loose-envify": "npm:loose-envify@1.4.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "prop-types": "npm:prop-types@15.6.2",
-      "react": "npm:react@16.6.0",
-      "react-dom": "npm:react-dom@16.6.0",
+      "react": "npm:react@16.7.0",
+      "react-dom": "npm:react-dom@16.7.0",
       "react-lifecycles-compat": "npm:react-lifecycles-compat@3.0.4"
     },
     "npm:react-ui-tree@4.0.0": {
       "classnames": "npm:classnames@2.2.6",
       "js-tree": "npm:js-tree@2.0.1",
       "prop-types": "npm:prop-types@15.6.2",
-      "react": "npm:react@16.6.0",
-      "react-dom": "npm:react-dom@16.6.0"
+      "react": "npm:react@16.7.0",
+      "react-dom": "npm:react-dom@16.7.0"
     },
-    "npm:react@16.6.0": {
+    "npm:react@16.7.0": {
       "loose-envify": "npm:loose-envify@1.4.0",
       "object-assign": "npm:object-assign@4.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "prop-types": "npm:prop-types@15.6.2",
-      "scheduler": "npm:scheduler@0.10.0"
+      "scheduler": "npm:scheduler@0.12.0"
     },
     "npm:readable-stream@1.1.14": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.1",
@@ -538,7 +552,7 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:scheduler@0.10.0": {
+    "npm:scheduler@0.12.0": {
       "loose-envify": "npm:loose-envify@1.4.0",
       "object-assign": "npm:object-assign@4.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
@@ -577,7 +591,7 @@ System.config({
       "hoist-non-react-statics": "npm:hoist-non-react-statics@2.5.5",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "prop-types": "npm:prop-types@15.6.2",
-      "react": "npm:react@16.6.0",
+      "react": "npm:react@16.7.0",
       "react-is": "npm:react-is@16.4.2",
       "stream": "github:jspm/nodelibs-stream@0.1.0",
       "stylis": "npm:stylis@3.5.3",
