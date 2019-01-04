@@ -1,85 +1,86 @@
 [
-	{
-		"id": "test",
-		"nodes": [
-			{
-				"id": "1",
-				"order": 0,
-				"speaker": "priest",
-				"comment": "Comment for the node",
-				"sourceRef": {
-					"caption": "Апостол, зачало 3",
-					"sources": [
-						{
-						  "language": "ru",
-						  "format": "html",
-						  "ranges": [
-							{
-							  "sourceFileId": "apostol-sinodaln",
-							  "beginNodeId": "{\"selector\":\"#n11\",\"childIndex\":0}",
-							  "beginNodeStartShift": "0",
-							  "endNodeId": "{\"selector\":\"#n11568\",\"childIndex\":0}",
-							  "endNodeFinishShift": "1"
-							}
-						  ],
-						  "caption": "Апостол (ru) / apostol-sinodaln.html"
-						},
-						{
-						  "language": "chu",
-						  "format": "html",
-						  "ranges": [
-							{
-							  "sourceFileId": "apostol-ucs",
-							  "beginNodeId": "{\"selector\":\"#n11\",\"childIndex\":0}",
-							  "beginNodeStartShift": "0",
-							  "endNodeId": "{\"selector\":\"#n13170\",\"childIndex\":0}",
-							  "endNodeFinishShift": "1"
-							}
-						  ],
-						  "caption": "Апостол (chu) / apostol-ucs.html"
-						}
-					]					
-				}
-			},
-			{
-				"id": "2",
-				"order": 0,
-				"speaker": "priest",
-				"comment": "Comment for the node",
-				"sourceRef": {
-					"caption": "Апостол, зачало 2",
-					"sources": [
-						{
-						  "language": "ru",
-						  "format": "html",
-						  "ranges": [
-							{
-							  "sourceFileId": "apostol-sinodaln",
-							  "beginNodeId": "{\"selector\":\"#n11\",\"childIndex\":0}",
-							  "beginNodeStartShift": "0",
-							  "endNodeId": "{\"selector\":\"#n11568\",\"childIndex\":0}",
-							  "endNodeFinishShift": "1"
-							}
-						  ],
-						  "caption": "Апостол (ru) / apostol-sinodaln.html"
-						},
-						{
-						  "language": "chu",
-						  "format": "html",
-						  "ranges": [
-							{
-							  "sourceFileId": "apostol-ucs",
-							  "beginNodeId": "{\"selector\":\"#n11\",\"childIndex\":0}",
-							  "beginNodeStartShift": "0",
-							  "endNodeId": "{\"selector\":\"#n13170\",\"childIndex\":0}",
-							  "endNodeFinishShift": "1"
-							}
-						  ],
-						  "caption": "Апостол (chu) / apostol-ucs.html"
-						}
-					]					
-				}
-			}
-		]
-	}
+  {
+    "id": "test",
+    "nodes": [
+      {
+        "id": "1",
+        "order": 0,
+        "speaker": "priest",
+        "comment": "Comment for the node",
+        "sourceRef": {
+          "caption": "Апостол, зачало 3",
+          "sources": [
+            {
+              "language": "ru",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "apostol-sinodaln",
+                  "beginNodeId": "{\"selector\":\"#n11\",\"childIndex\":0}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"#n11568\",\"childIndex\":0}",
+                  "endNodeFinishShift": "1"
+                }
+              ],
+              "caption": "Апостол (ru) / apostol-sinodaln.html"
+            },
+            {
+              "language": "chu",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "apostol-ucs",
+                  "beginNodeId": "{\"selector\":\"#n11\",\"childIndex\":0}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"#n13170\",\"childIndex\":0}",
+                  "endNodeFinishShift": "1"
+                }
+              ],
+              "caption": "Апостол (chu) / apostol-ucs.html"
+            }
+          ]
+        }
+      },
+      {
+        "id": "2",
+        "order": 0,
+        "speaker": "priest",
+        "comment": "Comment for the node",
+        "sourceRef": {
+          "sources": [
+            {
+              "language": "ru",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "apostol-sinodaln",
+                  "beginNodeId": "{\"selector\":\"#n658\",\"childIndex\":1}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"#n663\",\"childIndex\":2}",
+                  "endNodeFinishShift": "21"
+                }
+              ],
+              "caption": "зачало 3 (ru) / apostol-sinodaln.html"
+            },
+            {
+              "language": "chu-gr",
+              "format": "html",
+              "ranges": [
+                {
+                  "sourceFileId": "apostol-chu-gr",
+                  "beginNodeId": "{\"selector\":\"#n994\",\"childIndex\":0}",
+                  "beginNodeStartShift": "0",
+                  "endNodeId": "{\"selector\":\"#n1001\"}",
+                  "endNodeFinishShift": "0"
+                }
+              ],
+              "caption": "зачало 3 (chu-gr) / apostol-chu-gr.html"
+            }
+          ],
+          "caption": "Апостол, Деяния святых Апостолов, зачало 3"
+        },
+        "catalogNodeId": "TQQigEJJv"
+      }
+    ]
+  }
 ]

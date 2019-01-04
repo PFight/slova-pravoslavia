@@ -5,26 +5,26 @@ import { Button } from "@blueprintjs/core";
 import Tree from 'react-ui-tree';
 import { DataFileController } from "../../data-file-controller";
 import { visitDeepWithResult, visitDeep } from "../../utils/visitors";
-import { createTreeNode } from "./create-tree-node";
+import { createTreeNode } from "./helpers/create-tree-node";
 import { NodeNameEditor } from '../panels-common/node-name-editor';
 import * as GoldenLayout from "golden-layout";
-import {initEditModeButton} from "./init-edit-mode-button";
+import {initEditModeButton} from "./helpers/init-edit-mode-button";
 import styled from 'styled-components';
 import shortid from 'shortid';
 import { MessageBox } from '../../utils/message-box';
 import { GLOBAL_STATE } from '../../global-state/global-state';
 import { CATALOG_OPEN_EVENT, PanelOpenClosesArgs, CATALOG_CLOSE_EVENT } from '../../global-state/events/panel-open-close';
-import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT, CATALOG_ITEM_OPENED_EVENT, CATALOG_MODE_CHANGED_EVENT, CatalogModeArgs } from '../../global-state/events/catalog-events';
+import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_ITEM_SOURCES_CHANGED_EVENT, CATALOG_ITEM_OPENED_EVENT, CATALOG_MODE_CHANGED_EVENT, CatalogModeArgs, CATALOG_CHANGED_EVENT, CatalogArgs } from '../../global-state/events/catalog-events';
 import { SourceRef } from '@common/models/SourceRef';
 import { SelectedSourceRangeArgs, ASSIGN_TO_SELECTED_NODE, ADD_AS_CHILD, ADD_AS_SIBLING } from '../../global-state/events/source-range';
-import { assignNodeSource } from './assignNodeSource';
-import { findParent } from './findParent';
+import { assignNodeSource } from './helpers/assignNodeSource';
+import { findParent } from './helpers/findParent';
 import { getSourceCaption } from '../panels-common/getSourceCaption';
-import { ReactTreeNode } from './ReactTreeNode';
-import { ReactUiTreeType } from './react-ui-tree';
-import { preventDragAndDropByPrimaryMouse } from './preventDragAndDropByPrimaryMouse';
-import { syncDataWithNodeTree } from './syncDataWithNodeTree';
-import { findParentNode } from './findParentNode';
+import { ReactTreeNode } from './helpers/ReactTreeNode';
+import { ReactUiTreeType } from './helpers/react-ui-tree';
+import { preventDragAndDropByPrimaryMouse } from './helpers/preventDragAndDropByPrimaryMouse';
+import { syncDataWithNodeTree } from './helpers/syncDataWithNodeTree';
+import { findParentNode } from './helpers/findParentNode';
 
 
 var ReactUiTree = Tree as (typeof ReactUiTreeType);
@@ -74,7 +74,7 @@ export class CatalogPanel extends React.Component<Props, State> {
             node.data!.sources = ev.node!.data!.sources;
           }
         });
-        this.dataFileController.saveCatalog(this.state.catalog);
+        this.saveCatalog()
       }
     });
     this.props.glEventHub.on(ASSIGN_TO_SELECTED_NODE, (ev: SelectedSourceRangeArgs) => this.assignNodeSource(ev));
@@ -84,6 +84,11 @@ export class CatalogPanel extends React.Component<Props, State> {
 
   componentWillUnmount() {
     this.props.glEventHub.emit(CATALOG_CLOSE_EVENT, { panelNumber: this.state.panelNumber } as PanelOpenClosesArgs)
+  }
+
+  async saveCatalog() {
+    await this.dataFileController.saveCatalog(this.state.catalog);
+    this.props.glEventHub.emit(CATALOG_CHANGED_EVENT, { catalog: this.state.catalog } as CatalogArgs);
   }
 
   onTabCreated = (tab: GoldenLayout.Tab) => {    
@@ -130,13 +135,14 @@ export class CatalogPanel extends React.Component<Props, State> {
     this.root = { module: "root", label:"Каталог", children: reactTreeNodes, nodeData: {} as any, leaf: false, collapsed: false};
     this.state.catalog = catalog;
     this.forceUpdate();    
+    this.props.glEventHub.emit(CATALOG_CHANGED_EVENT, { catalog: this.state.catalog } as CatalogArgs);
   }
 
   private async assignNodeSource(args: SelectedSourceRangeArgs) {
     if (args.panelNumber == this.state.panelNumber && this.selectedNode) {
       assignNodeSource(this.selectedNode.nodeData!, args);
       this.triggerNodeSelected(this.selectedNode);
-      await this.dataFileController.saveCatalog(this.state.catalog);
+      await this.saveCatalog()
     }
   }
 
@@ -148,7 +154,7 @@ export class CatalogPanel extends React.Component<Props, State> {
         this.updateNodeView(node);
         this.selectNode(node, true);
         this.forceUpdate();
-        this.dataFileController.saveCatalog(this.state.catalog);
+        this.saveCatalog()
       }
     }
   }
@@ -163,7 +169,7 @@ export class CatalogPanel extends React.Component<Props, State> {
           this.updateNodeView(node);
           this.selectNode(node, true);
           this.forceUpdate();
-          this.dataFileController.saveCatalog(this.state.catalog);
+          this.saveCatalog()
         }
       }
     }
@@ -246,7 +252,7 @@ export class CatalogPanel extends React.Component<Props, State> {
           node.nodeData.id = node.module;
           this.addNewNodeStub();
         } 
-        await this.dataFileController.saveCatalog(this.state.catalog);
+        await this.saveCatalog()
       }
       this.endNodeEdit(node);
     };
@@ -328,7 +334,7 @@ export class CatalogPanel extends React.Component<Props, State> {
       this.state.catalog.splice(this.state.catalog.indexOf(node.nodeData!), 1);
     }
     this.forceUpdate();
-    await this.dataFileController.saveCatalog(this.state.catalog);
+    await this.saveCatalog()
   }
 
   applyNodesOrder = async (tree: ReactTreeNode<CatalogNode>) => {
@@ -336,7 +342,7 @@ export class CatalogPanel extends React.Component<Props, State> {
       this.root = tree;
       let changed = syncDataWithNodeTree(this.root!.children!, this.state.editMode);
       if (changed) {
-        await this.dataFileController.saveCatalog(this.state.catalog);
+        await this.saveCatalog()
       }
     }
   }

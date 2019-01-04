@@ -9,13 +9,14 @@ import { DataFileController } from '../../data-file-controller';
 import { CATALOG_CLOSE_EVENT, PanelOpenClosesArgs, SOURCE_CLOSE_EVENT, SOURCE_OPEN_EVENT } from '../../global-state/events/panel-open-close';
 import { SELECTED_SOURCE_RANGE_EVENT, ASSIGN_TO_SELECTED_NODE, ADD_AS_CHILD, ADD_AS_SIBLING } from '../../global-state/events/source-range';
 import { SelectedSourceRefArgs, SELECTED_SOURCE_REF_EVENT } from '../../global-state/events/source-ref';
-import { selectInFrame } from './selectInFrame';
+import { selectInFrame, getSelectionRange } from './selectInFrame';
 import { createSourceRangeEventArgs } from './createSourceRangeEventArgs';
 import { CATALOG_ITEM_SELECTED_EVENT, CatalogItemArgs, CATALOG_MODE_CHANGED_EVENT } from '../../global-state/events/catalog-events';
 import { SourceRefSource } from '@common/models/SourceRef';
 import { showSelectNameDialog } from './select-name-dialog';
 import { getSelectionHtml } from '../panels-common/get-selection-html';
 import { GLOBAL_STATE } from 'editor/global-state/global-state';
+import { CatalogNode } from '@common/models/CatalogNode';
 
 const SourceFileSelect = Select.ofType<SourceFileInfo>();
 const LangSelect = Select.ofType<string>();
@@ -34,6 +35,7 @@ export interface State {
   lang: string;
   title: string | undefined;
   emptyTitle: string | undefined;
+  lastSelectedCatalogNode: CatalogNode | undefined;
 }
 export class SourcePanel extends React.Component<Props, State> {
   dataFileController = new DataFileController();
@@ -73,6 +75,7 @@ export class SourcePanel extends React.Component<Props, State> {
       this.forceUpdate();
       if (ev.panelNumber == this.state.panelNumber) {
         if (ev.node && ev.node.data!.sources!.length > 0) {
+          this.state.lastSelectedCatalogNode = ev.node;
           this.setItem({
             panelNumber: ev.panelNumber,
             catalogNodeId: ev.node.id,
@@ -211,8 +214,20 @@ export class SourcePanel extends React.Component<Props, State> {
   onTextSelect = (ev: Event) => {
     let selection = (ev.target as Document).getSelection();
     if (selection) {
+      let catalogNode: CatalogNode | undefined;
+      if (this.state.lastSelectedCatalogNode) {
+        let source = this.state.lastSelectedCatalogNode.data!.sources.find(x => x.ranges[0].sourceFileId == this.state.sourceFile!.id);
+        if (source) {
+          let nodeRange = getSelectionRange(this.frame!.contentDocument!, source.ranges[0]);
+          let rangeText = nodeRange.toString() || "";
+          let selectionText = selection!.getRangeAt(0).toString();
+          if (rangeText!.includes(selectionText)) {
+            catalogNode = this.state.lastSelectedCatalogNode;
+          }
+        }
+      }
       this.props.glEventHub.emit(SELECTED_SOURCE_RANGE_EVENT, createSourceRangeEventArgs(
-        this.state.panelNumber, this.state.sourceFile!, selection));
+        this.state.panelNumber, this.state.sourceFile!, selection, undefined, catalogNode));
     }
     this.setState({ selection });
   }

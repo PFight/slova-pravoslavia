@@ -13,7 +13,7 @@ import { SELECTED_SOURCE_REF_EVENT, SelectedSourceRefArgs } from "../../global-s
 import { SELECTED_SOURCE_RANGE_EVENT } from '../../global-state/events/source-range';
 import { getSourceCaption } from '../panels-common/getSourceCaption';
 import { MessageBox } from '../../utils/message-box';
-import { SourceRefView } from '../panels-common/SourceRefView';
+import { SourceRefView, NewSourceRefButton } from '../panels-common/SourceRefView';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -134,9 +134,9 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
   renderNewSourceRef() {
     let selectedRange = GLOBAL_STATE.SelectedRange[this.state.panelNumber];
     return ( selectedRange && this.state.catalogItem &&
-      <this.newSourceRef minimal onClick={() => this.onAddNewNode(selectedRange!.ranges[0].sourceFileId)}>
+      <NewSourceRefButton minimal onClick={() => this.onAddNewNode(selectedRange!.ranges[0].sourceFileId)}>
         Сопоставить с выделенным
-      </this.newSourceRef>  
+      </NewSourceRefButton>  
     )
   }
 

@@ -1,5 +1,5 @@
 import { CatalogNode } from '@common/models/CatalogNode';
-import { visitDeep } from "../../utils/visitors";
+import { visitDeep } from "../../../utils/visitors";
 import { ReactTreeNode } from './ReactTreeNode';
 
 export function syncDataWithNodeTree(children: ReactTreeNode<CatalogNode>[], updateExpadedState: boolean) {

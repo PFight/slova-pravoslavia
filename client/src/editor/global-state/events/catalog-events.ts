@@ -15,3 +15,10 @@ export interface CatalogModeArgs {
   panelNumber: number;
   editMode: boolean;
 }
+
+export const CATALOG_CHANGED_EVENT = "CATALOG_CHANGED";
+
+export interface CatalogArgs {
+  panelNumber: number;
+  catalog: CatalogNode[];
+}

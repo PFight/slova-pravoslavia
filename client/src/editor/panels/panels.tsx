@@ -1,6 +1,6 @@
 import { PanelDescription } from './panel-description';
 import React from 'react';
-import { CatalogIcon } from './catalog-panel/catalog-icon';
+import { CatalogIcon } from './catalog-panel/helpers/catalog-icon';
 import { SourceIcon } from './source-panel/source-icon';
 import { WorshipIcon } from './worship-panel/worship-icon';
 import { ConditionsIcon } from './conditions-panel/conditions-icon';

@@ -1,6 +1,6 @@
 import { CatalogNode } from '@common/models/CatalogNode';
 import { SelectedSourceRangeArgs } from 'editor/global-state/events/source-range';
-import { getSourceCaption } from '../panels-common/getSourceCaption';
+import { getSourceCaption } from '../../panels-common/getSourceCaption';
 
 export function assignNodeSource(selectedNode: CatalogNode, args: SelectedSourceRangeArgs) {
   if (!selectedNode.data!.sources) {

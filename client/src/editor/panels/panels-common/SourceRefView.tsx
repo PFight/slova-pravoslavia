@@ -37,3 +37,9 @@ export const SourceRefView = (props: Props) =>
       </local.sourceRef>
       <local.refDeleteButton minimal icon="small-cross" onClick={() => props.onDelete(props.sourceRef)} />
     </local.refLine>;
+
+export const NewSourceRefButton = styled(Button)`
+    text-decoration: underline;
+    color: blue;
+    font-style: italic;
+  `;

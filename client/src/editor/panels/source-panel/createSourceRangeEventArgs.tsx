@@ -1,7 +1,8 @@
 import { SourceFileInfo } from '@common/models/SourceFileInfo';
 import { SelectedSourceRangeArgs } from '../../global-state/events/source-range';
 import { getNodeId } from './nodeSelector';
-export function createSourceRangeEventArgs(panelNumber: number, sourceFile: SourceFileInfo, selection: Selection, header?: string): SelectedSourceRangeArgs {
+import { CatalogNode } from '@common/models/CatalogNode';
+export function createSourceRangeEventArgs(panelNumber: number, sourceFile: SourceFileInfo, selection: Selection, header?: string, catalogNode?: CatalogNode): SelectedSourceRangeArgs {
   return {
     panelNumber,
     header,
@@ -17,6 +18,7 @@ export function createSourceRangeEventArgs(panelNumber: number, sourceFile: Sour
           endNodeFinishShift: selection.extentOffset.toString()
         }
       ]
-    }
+    },
+    catalogNode
   } as SelectedSourceRangeArgs;
 }

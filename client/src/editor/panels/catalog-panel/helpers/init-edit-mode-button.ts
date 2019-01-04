@@ -1,5 +1,5 @@
 import * as GoldenLayout from "golden-layout";
-import { initExtraButton } from "../panels-common/init-extra-button";
+import { initExtraButton } from "../../panels-common/init-extra-button";
 
 
 export function initEditModeButton(tab: GoldenLayout.Tab, mainClass: string) {

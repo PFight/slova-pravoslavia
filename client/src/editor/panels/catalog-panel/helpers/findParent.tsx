@@ -1,5 +1,5 @@
 import { CatalogNode } from '@common/models/CatalogNode';
-import { visitDeep } from "../../utils/visitors";
+import { visitDeep } from "../../../utils/visitors";
 import { ReactTreeNode } from './ReactTreeNode';
 
 export function findParent(treeNodes: ReactTreeNode<CatalogNode>[], selectedNode: ReactTreeNode<CatalogNode>) {
