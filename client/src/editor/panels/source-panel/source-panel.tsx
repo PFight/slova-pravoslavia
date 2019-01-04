@@ -63,7 +63,7 @@ export class SourcePanel extends React.Component<Props, State> {
     }
     
     this.props.glEventHub.on(SELECTED_SOURCE_REF_EVENT, (ev: SelectedSourceRefArgs) => {
-      if (ev.panelNumber == this.state.panelNumber) {
+      if (ev.panelNumber === undefined || ev.panelNumber == this.state.panelNumber) {
         this.setItem(ev);
       }
     });

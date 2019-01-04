@@ -6,7 +6,7 @@ import { getSourceCaption } from './getSourceCaption';
 import { CatalogNode } from '@common/models/CatalogNode';
 
 export interface Props {
-    ref: SourceRefSource;
+    sourceRef: SourceRefSource;
     catalogItem?: CatalogNode;
     onSelected: (ref: SourceRefSource) => void;
     onDelete: (ref: SourceRefSource) => void;
@@ -32,8 +32,8 @@ const local = {
 
 export const SourceRefView = (props: Props) =>
     <local.refLine>
-      <local.sourceRef minimal title={props.ref.comment} onClick={() => props.onSelected(props.ref)}>
-        {props.ref.caption || props.catalogItem && getSourceCaption(props.catalogItem, props.ref) || "..."}
+      <local.sourceRef minimal title={props.sourceRef.comment} onClick={() => props.onSelected(props.sourceRef)}>
+        {props.sourceRef.caption || props.catalogItem && getSourceCaption(props.catalogItem, props.sourceRef) || "..."}
       </local.sourceRef>
-      <local.refDeleteButton minimal icon="small-cross" onClick={() => props.onDelete(props.ref)} />
+      <local.refDeleteButton minimal icon="small-cross" onClick={() => props.onDelete(props.sourceRef)} />
     </local.refLine>;

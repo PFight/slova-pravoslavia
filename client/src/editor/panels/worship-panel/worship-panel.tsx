@@ -5,9 +5,14 @@ import { GLOBAL_STATE } from 'editor/global-state/global-state';
 import { DataFileController } from 'editor/data-file-controller';
 import { Worship } from '@common/models/Worship';
 import { getCurrentWorshipId, onCurrentWorshipChange } from './urlParams';
-import styled from 'styled-components';
 import { WorshipNode } from '@common/models/WorshipNode';
 import { getSpeakerTitle } from './getSpeakerTitle';
+import * as styles from './worship-panel-styles';
+import { SourceRefView } from '../panels-common/SourceRefView';
+import { SourceRefSource } from '@common/models/SourceRef';
+import { SELECTED_SOURCE_REF_EVENT, SelectedSourceRefArgs } from 'editor/global-state/events/source-ref';
+import { getHintText } from './getHintText';
+import { MessageBox } from 'editor/utils/message-box';
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -17,6 +22,7 @@ export interface State {
   panelNumber: number;
   worship: Worship | undefined;
   loadingWorship: boolean;
+  selectedNode: WorshipNode | undefined;
 }
 export class WorshipPanel extends React.Component<Props, State> {
   state = {} as State;
@@ -53,50 +59,51 @@ export class WorshipPanel extends React.Component<Props, State> {
     this.props.glEventHub.emit(WORSHIP_CLOSE_EVENT, { panelNumber: this.state.panelNumber } as PanelOpenClosesArgs)
   }
 
-  panel = styled.div`
-    height: 100%;
-    overflow-y: auto;
-  `;
-
-  worshipNode = styled.div`
-    border-radius: 6px;
-    background-color: rgb(247, 239, 205);
-    &:hover {
-      background-color: rgb(249, 235, 177);
+  onNodeClick(node: WorshipNode) {
+    if (this.state.selectedNode != node) {
+      this.setState({ selectedNode: node });
+      this.props.glEventHub.trigger(SELECTED_SOURCE_REF_EVENT, { 
+        catalogNodeId: node.catalogNodeId,  
+        ref: node.sourceRef
+       } as SelectedSourceRefArgs); 
     }
-    &:focus {
-      border: 1px dashed blue;
-    }
-    border: 1px solid transparent;
-    margin: 2px 3px;
-    padding: 5px;
-    cursor: pointer;
-  `;
-
-  speaker = styled.span`
-    font-weight: bold;
-    color: red;
-    display: inline-block;
-    padding-right: 4px;
-  `;
-
-  nodeComment = styled.span`
-    font-style: italic;
-  `;
+  }
+  onRefClick = (node: WorshipNode, ref: SourceRefSource) => {
+    this.props.glEventHub.trigger(SELECTED_SOURCE_REF_EVENT, { 
+      catalogNodeId: node.catalogNodeId,
+      sourceIndex: node.sourceRef!.sources.indexOf(ref),
+      ref: node.sourceRef
+     } as SelectedSourceRefArgs); 
+  }
+  onDeleteRefClick = async (node: WorshipNode, ref: SourceRefSource) => {
+    await MessageBox.ShowConfirmation(`Удалить ссылку ${ref.caption}?`);
+    let index = node.sourceRef!.sources.indexOf(ref);
+    node.sourceRef!.sources.splice(index, 1);
+    this.dataFileController.saveWorship(this.state.worship!);
+    this.forceUpdate();
+  }
 
   renderWorship(worship: Worship) {
     return worship.nodes && worship.nodes.map(node =>
-        <this.worshipNode key={node.id} tabIndex={1}>
+        <styles.WorshipNodeStyle key={node.id} tabIndex={1} 
+          onClick={() => this.onNodeClick(node)} selected={this.state.selectedNode == node}>
           <div>
-            <this.speaker>{getSpeakerTitle(node)}:</this.speaker>
+            <styles.Speaker>{getSpeakerTitle(node)}:</styles.Speaker>
             <span title={node.sourceRef && node.sourceRef.comment}>
-              {node.sourceRef && node.sourceRef.caption}
+              {node.sourceRef && node.sourceRef.caption + getHintText(node)}
             </span>
           </div>
           <div>
-            <this.nodeComment>{node.comment}</this.nodeComment>
+            <styles.NodeComment>{node.comment}</styles.NodeComment>
           </div>
-        </this.worshipNode> 
+          {this.state.selectedNode == node &&
+            <div>
+              {node.sourceRef && node.sourceRef.sources.map(ref =>
+                <SourceRefView sourceRef={ref} onSelected={() => this.onRefClick(node, ref)} 
+                  onDelete={() => this.onDeleteRefClick(node, ref)} />
+              )}
+            </div>}
+        </styles.WorshipNodeStyle> 
       );
   }
 
@@ -106,7 +113,7 @@ export class WorshipPanel extends React.Component<Props, State> {
 
   render() {
     return (
-      <this.panel>
+      <styles.Panel>
         {this.state.panelNumber !== undefined ? (
           this.state.worship ? 
             this.renderWorship(this.state.worship) :
@@ -114,9 +121,10 @@ export class WorshipPanel extends React.Component<Props, State> {
             this.renderNoWorshipSelected())
         )
         : "Одновременно может быть открыта только одна панель редактирования службы."}
-      </this.panel>
+      </styles.Panel>
     );
   }
 }
 
+  
 

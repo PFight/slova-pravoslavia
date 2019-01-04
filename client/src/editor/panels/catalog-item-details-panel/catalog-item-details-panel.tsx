@@ -151,7 +151,7 @@ export class CatalogItemDetailsPanel extends React.Component<Props, State> {
               </this.itemCaption>
               {this.state.catalogItem!.data!.sources.map((ref, i) => 
                 <SourceRefView key={i} onDelete={this.onDeleteRefClick} 
-                  onSelected={this.onSelectedRef} ref={ref} />
+                  onSelected={this.onSelectedRef} sourceRef={ref} />
               )}
               {this.renderNewSourceRef()}
             </div>
