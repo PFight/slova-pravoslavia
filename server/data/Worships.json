@@ -44,7 +44,7 @@
       {
         "id": "2",
         "order": 0,
-        "speaker": "Клирос",
+        "speaker": "Не выбрано",
         "comment": "Comment for the node!!",
         "sourceRef": {
           "sources": [
@@ -80,6 +80,15 @@
           "caption": "Апостолов, 3"
         },
         "catalogNodeId": "TQQigEJJv"
+      },
+      {
+        "id": "5VUeS8HbT",
+        "sourceRef": {
+          "sources": [],
+          "caption": "dfge"
+        },
+        "order": 2,
+        "speaker": "Не выбрано"
       }
     ]
   }

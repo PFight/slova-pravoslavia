@@ -16,9 +16,10 @@ import { MessageBox } from 'editor/utils/message-box';
 import { SELECTED_SOURCE_RANGE_EVENT } from 'editor/global-state/events/source-range';
 import { getSourceCaption } from '../panels-common/getSourceCaption';
 import { getNodeCaption } from '../panels-common/getNodeCaption';
-import { FormGroup } from '@blueprintjs/core';
+import shortid = require('shortid');
+import { H3, H5, H4 } from '@blueprintjs/core';
 
-export var SpeakerValues: Speakers[] = ["priest", "deacon", "sexton", "choir", "people"];
+export var SpeakerValues: (Speakers | undefined)[] = ["priest", "deacon", "sexton", "choir", "people", undefined];
 
 export interface Props {
   glContainer: GoldenLayout.Container;
@@ -30,6 +31,7 @@ export interface State {
   loadingWorship: boolean;
   selectedNode: WorshipNode | undefined;
   editingNode: WorshipNode | undefined;
+  newNode: WorshipNode | undefined;
 }
 export class WorshipPanel extends React.Component<Props, State> {
   state = {} as State;
@@ -55,7 +57,7 @@ export class WorshipPanel extends React.Component<Props, State> {
         if (worship) {
           worship.nodes = worship.nodes.sort((a, b) => a.order - b.order);
         }
-        this.setState({ worship });
+        this.setState({ worship }, () => this.openNewNode());
       } finally {
         this.setState({ loadingWorship: false });
       }
@@ -66,6 +68,21 @@ export class WorshipPanel extends React.Component<Props, State> {
 
   componentWillUnmount() {
     this.props.glEventHub.emit(WORSHIP_CLOSE_EVENT, { panelNumber: this.state.panelNumber } as PanelOpenClosesArgs)
+  }
+
+  openNewNode() {
+    if (!this.state.newNode) {
+      this.state.newNode = { 
+        id: shortid.generate(), 
+        sourceRef: { sources: []},
+        catalogNodeId: undefined,
+        basis: undefined,
+        order: this.state.worship!.nodes.length,
+      };
+    }
+    this.setState({
+      editingNode: this.state.newNode
+    });
   }
 
   onNodeClick(node: WorshipNode) {
@@ -112,18 +129,28 @@ export class WorshipPanel extends React.Component<Props, State> {
   }
 
   onEditNode(node: WorshipNode) {
-    this.setState({ editingNode: node });
+    this.setState({ editingNode: node, selectedNode: node });
   }
 
   onSaveNode(node: WorshipNode) {
     if (node == this.state.editingNode) {
+      if (node == this.state.newNode) {
+        this.state.worship!.nodes.push(node);
+        this.state.newNode = undefined;
+      }
       this.dataFileController.saveWorship(this.state.worship!);
       this.setState({ editingNode: undefined });
+      this.openNewNode();
     }
   }
 
   renderWorship(worship: Worship) {
-    return worship.nodes && worship.nodes.map(node =>
+    let nodes = [...worship.nodes];
+    if (this.state.newNode && this.state.newNode == this.state.editingNode) {
+      nodes.push(this.state.newNode!);
+    }
+    nodes.sort((a, b) => a.order - b.order);
+    return nodes.map(node =>
         node == this.state.editingNode ?
           this.renderWorshipNodeEdit(node) :
           this.renderWorshipNodeView(node)
@@ -135,12 +162,13 @@ export class WorshipPanel extends React.Component<Props, State> {
       <styles.WorshipNodeStyle key={node.id} tabIndex={1}
         selected={this.state.selectedNode == node}>
         <styles.EditButton minimal icon="saved" onClick={() => this.onSaveNode(node)} text="Сохранить" />
+        <H4>{node == this.state.newNode ? "Новый узел": "Редактирование"}</H4>        
         <styles.FormGroupEx label="Читает:" inline>
           <div className="bp3-select">          
-            <select onChange={(ev) => (node.speaker = ev.target.value as any) && this.forceUpdate()}
-              value={node.speaker}> 
+            <select onChange={(ev) => (node.speaker = ev.target.value == "none" ? null : (ev.target.value as any)) && this.forceUpdate()}
+              value={node.speaker || "none"}> 
               {SpeakerValues.map(speaker => 
-                <option>{getSpeakerTitle(speaker)}</option>
+                <option key={speaker || "none"} value={speaker || "none"}>{getSpeakerTitle(speaker) || "Не выбрано"}</option>
               )}
             </select>
           </div>
